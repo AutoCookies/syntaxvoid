@@ -7,15 +7,15 @@ const REQUIRED_PACKAGES = [
   'status-bar',
   'find-and-replace',
   'tabs',
-  'syntaxvoid-project-map'
+  'syntaxvoid-project-map',
+  'welcome',
+  'about'
 ];
 
 const OPTIONAL_DISABLED_BY_DEFAULT = [
   'exception-reporting',
   'pulsar-updater',
-  'welcome',
   'background-tips',
-  'about',
   'styleguide',
   'dev-live-reload'
 ];
