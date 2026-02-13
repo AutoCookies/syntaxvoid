@@ -188,6 +188,7 @@
     "whitespace": "file:./packages/whitespace",
     "winreg": "^1.2.1",
     "wrap-guide": "file:./packages/wrap-guide",
+    "x-terminal-reloaded": "file:./packages/x-terminal-reloaded",
     "yaml-front-matter": "^4.1.1",
     "yargs": "17.6.2"
   },
@@ -254,6 +255,7 @@
     "welcome": "file:./packages/welcome",
     "whitespace": "file:./packages/whitespace",
     "wrap-guide": "file:./packages/wrap-guide",
+    "x-terminal-reloaded": "file:./packages/x-terminal-reloaded",
     "language-c": "file:./packages/language-c",
     "language-clojure": "file:./packages/language-clojure",
     "language-coffee-script": "file:./packages/language-coffee-script",

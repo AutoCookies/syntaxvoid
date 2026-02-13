@@ -9,7 +9,8 @@ const REQUIRED_PACKAGES = [
   'tabs',
   'syntaxvoid-project-map',
   'welcome',
-  'about'
+  'about',
+  'x-terminal-reloaded'
 ];
 
 const OPTIONAL_DISABLED_BY_DEFAULT = [

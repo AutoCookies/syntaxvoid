@@ -671,21 +671,21 @@ module.exports = class AtomApplication extends EventEmitter {
       });
     }
 
-    this.openPathOnEvent('application:about', 'atom://about');
-    this.openPathOnEvent('application:show-settings', 'atom://config');
-    this.openPathOnEvent('application:open-your-config', 'atom://.pulsar/config');
+    this.openPathOnEvent('application:about', 'syntaxvoid://about');
+    this.openPathOnEvent('application:show-settings', 'syntaxvoid://config');
+    this.openPathOnEvent('application:open-your-config', 'syntaxvoid://.syntaxvoid/config');
     this.openPathOnEvent(
       'application:open-your-init-script',
-      'atom://.pulsar/init-script'
+      'syntaxvoid://.syntaxvoid/init-script'
     );
-    this.openPathOnEvent('application:open-your-keymap', 'atom://.pulsar/keymap');
+    this.openPathOnEvent('application:open-your-keymap', 'syntaxvoid://.syntaxvoid/keymap');
     this.openPathOnEvent(
       'application:open-your-snippets',
-      'atom://.pulsar/snippets'
+      'syntaxvoid://.syntaxvoid/snippets'
     );
     this.openPathOnEvent(
       'application:open-your-stylesheet',
-      'atom://.pulsar/stylesheet'
+      'syntaxvoid://.syntaxvoid/stylesheet'
     );
     this.openPathOnEvent(
       'application:open-license',
