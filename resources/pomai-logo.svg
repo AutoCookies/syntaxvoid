@@ -1,0 +1,26 @@
+<svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M250 120C170 120 110 180 110 270C110 370 180 440 250 440C320 440 390 370 390 270C390 180 330 120 250 120Z" stroke="#D96666" stroke-width="8"/>
+
+  <path d="M210 125L230 100L250 120L270 100L290 125" stroke="#D96666" stroke-width="6" stroke-linejoin="round"/>
+
+  <g fill="#F48888">
+    <path d="M240 260C220 180 160 190 145 260C140 320 190 335 240 260Z"/>
+    <path d="M260 260C280 180 340 190 355 260C360 320 310 335 260 260Z"/>
+    <path d="M240 280C180 280 160 380 240 410C300 390 280 280 240 280Z"/>
+    <path d="M260 280C320 280 340 380 260 410C200 390 220 280 260 280Z"/>
+    <path d="M250 250C220 250 220 200 250 180C280 200 280 250 250 250Z"/>
+  </g>
+
+  <g fill="#99B898">
+    <path d="M210 110C160 110 130 70 180 50C210 70 210 90 210 110Z" opacity="0.8"/>
+    <path d="M290 110C340 110 370 70 320 50C290 70 290 90 290 110Z" opacity="0.8"/>
+    <path d="M250 90C250 40 280 10 310 40C280 60 250 60 250 90Z"/>
+  </g>
+
+  <defs>
+    <path id="textPath" d="M150 460Q250 520 350 460" />
+  </defs>
+  <text fill="#5E7D7E" font-family="Serif" font-size="45" font-weight="bold" letter-spacing="10">
+    <textPath href="#textPath" startOffset="50%" text-anchor="middle">POMAI</textPath>
+  </text>
+</svg>

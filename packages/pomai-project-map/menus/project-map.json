@@ -1,0 +1,18 @@
+{
+    "menu": [
+        {
+            "label": "Packages",
+            "submenu": [
+                {
+                    "label": "Tree Graph",
+                    "submenu": [
+                        {
+                            "label": "Toggle Tree Graph",
+                            "command": "pomai-project-map:toggle"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,119 @@
+/** @babel */
+/** @jsx etch.dom */
+
+import etch from 'etch';
+import path from 'path';
+
+export default class WelcomeView {
+  constructor(props) {
+    this.props = props;
+    this.brand = atom.branding.name;
+    etch.initialize(this);
+  }
+
+  didChangeShowOnStartup() {
+    atom.config.set('welcome.showOnStartup', this.checked);
+  }
+
+  update() { }
+
+  serialize() {
+    return {
+      deserializer: 'WelcomeView',
+      uri: this.props.uri
+    };
+  }
+
+  render() {
+    return (
+      <div className="welcome">
+        <div className="welcome-container">
+          <header className="welcome-header">
+            <a href={atom.branding.urlWeb} style={{ display: 'flex', 'flex-direction': 'column', 'align-items': 'center' }}>
+              <img
+                className='welcome-logo'
+                src={`file://${path.join(__dirname, '..', '..', '..', 'resources', 'pomai.png')}`}
+                width="200"
+                height="200"
+              />
+              <h1 className="welcome-title">
+                A Community-led Hyper-Hackable Text Editor
+              </h1>
+            </a>
+          </header>
+
+          <section className="welcome-panel">
+            <p>For help, please visit</p>
+            <ul>
+              <li>
+                The{' '}
+                <a
+                  href={atom.branding.urlWeb + "docs"}
+                  dataset={{ event: 'atom-docs' }}
+                >
+                  {this.brand} docs
+                </a>{' '}
+                for Guides and the API reference.
+              </li>
+              <li>
+                The {this.brand} forum at{' '}
+                <a
+                  href={atom.branding.urlForum}
+                  dataset={{ event: 'discussions' }}
+                >
+                  Github Discussions
+                </a>
+              </li>
+              <li>
+                The{' '}
+                <a
+                  href={atom.branding.urlGH}
+                  dataset={{ event: 'atom-org' }}
+                >
+                  {this.brand} org
+                </a>
+                . This is where all {this.brand} org packages can be found.
+              </li>
+            </ul>
+          </section>
+
+          <section className="welcome-panel">
+            <label>
+              <input
+                className="input-checkbox"
+                type="checkbox"
+                checked={atom.config.get('welcome.showOnStartup')}
+                onchange={this.didChangeShowOnStartup}
+              />
+              Show Welcome Guide when opening {this.brand}
+            </label>
+          </section>
+
+          <footer className="welcome-footer">
+            <a href={atom.branding.urlWeb} dataset={{ event: 'footer-atom-io' }}>
+              {this.brand}
+            </a>{' '}
+            <span className="text-subtle">×</span>{' '}
+            <a
+              className="icon icon-heart"
+              href={atom.branding.urlWeb + "community"}
+              dataset={{ event: 'footer-octocat' }}
+            />
+          </footer>
+        </div>
+      </div>
+    );
+  }
+
+  getURI() {
+    return this.props.uri;
+  }
+
+  getTitle() {
+    return 'Welcome';
+  }
+
+  isEqual(other) {
+    return other instanceof WelcomeView;
+  }
+}

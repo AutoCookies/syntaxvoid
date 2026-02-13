@@ -1,0 +1,18 @@
+name: 'CSS'
+scopeName: 'source.css'
+type: 'modern-tree-sitter'
+parser: 'tree-sitter-css'
+
+fileTypes: [
+  'css'
+]
+
+treeSitter:
+  parserSource: 'github:tree-sitter/tree-sitter-css#5b24cbe3301a81b00c85d6c38db3bf2561e9ca41'
+  grammar: 'tree-sitter/tree-sitter-css.wasm'
+  highlightsQuery: 'tree-sitter/queries/highlights.scm'
+  foldsQuery: 'tree-sitter/queries/folds.scm'
+  tagsQuery: 'tree-sitter/queries/tags.scm'
+  indentsQuery: 'tree-sitter/queries/indents.scm'
+
+injectionRegex: '^(css|CSS)$'

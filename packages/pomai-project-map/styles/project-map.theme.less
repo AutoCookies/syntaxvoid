@@ -1,0 +1,48 @@
+// @import "ui-variables"; // Imported by main file
+
+// ─── Scoped Design System ────────────────────────────────────────────
+
+.pomai-project-map {
+    // Default (Clean Mode)
+    --pm-bg: @tool-panel-background-color;
+    --pm-surface: lighten(@tool-panel-background-color, 3%);
+    --pm-border: @base-border-color;
+    --pm-text: @text-color;
+    --pm-muted: @text-color-subtle;
+    --pm-accent: @background-color-info;
+    --pm-danger: @text-color-error;
+    --pm-radius: 6px;
+    --pm-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    --pm-font-family: 'Inter', system-ui, sans-serif;
+    --pm-header-height: 48px;
+
+    // Pixel Mode Overrides
+    &.pm-pixel {
+        --pm-bg: #1a1a1a;
+        --pm-surface: #262626;
+        --pm-border: #444;
+        --pm-text: #e0e0e0;
+        --pm-muted: #888;
+        --pm-accent: #3498db;
+        --pm-danger: #e74c3c;
+        --pm-radius: 0px; // Hard edges
+        --pm-shadow: none;
+        --pm-font-family: 'Press Start 2P', monospace; // Fallback to monospace if unavailable
+
+        // PC-98 / CRT vibes
+        &::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 4px;
+            z-index: 999;
+            pointer-events: none;
+            opacity: 0.15;
+        }
+    }
+}
