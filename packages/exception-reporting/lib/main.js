@@ -14,6 +14,8 @@ function getReporter() {
 
 export default {
   activate() {
+    console.info("[pomai] exception-reporting disabled by default");
+    return;
     this.subscriptions = new CompositeDisposable();
 
     if (!atom.config.get('exception-reporting.userId')) {

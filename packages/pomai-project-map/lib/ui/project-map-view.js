@@ -8,6 +8,9 @@ const TreemapRenderer = require('./treemap-renderer');
 const FileGraphRenderer = require('./file-graph-renderer'); // New
 const DependencyOverlay = require('./dependency-overlay');
 const InspectorPanel = require('./inspector-panel');
+const settings = require('../../../../core/platform/settings');
+const panels = require('../../../../core/platform/panels');
+const paths = require('../../../../core/platform/paths');
 
 const PROJECT_MAP_URI = 'atom://pomai-project-map';
 
@@ -39,8 +42,8 @@ class ProjectMapView {
         this.lastMouse = { x: 0, y: 0 };
 
         this.overlay = new DependencyOverlay({
-            showLinks: atom.config.get('pomai-project-map.showDependencyLinks'),
-            circularOnly: atom.config.get('pomai-project-map.circularOnly')
+            showLinks: settings.get('pomai-project-map.showDependencyLinks'),
+            circularOnly: settings.get('pomai-project-map.circularOnly')
         });
 
         this.rectMap = new Map();
@@ -290,14 +293,14 @@ class ProjectMapView {
         this.btnLinks.addEventListener('click', () => {
             this.overlay.showLinks = !this.overlay.showLinks;
             this.btnLinks.classList.toggle('active', this.overlay.showLinks);
-            atom.config.set('pomai-project-map.showDependencyLinks', this.overlay.showLinks);
+            settings.set('pomai-project-map.showDependencyLinks', this.overlay.showLinks);
             this._render();
         });
 
         this.btnCircular.addEventListener('click', () => {
             this.overlay.circularOnly = !this.overlay.circularOnly;
             this.btnCircular.classList.toggle('active', this.overlay.circularOnly);
-            atom.config.set('pomai-project-map.circularOnly', this.overlay.circularOnly);
+            settings.set('pomai-project-map.circularOnly', this.overlay.circularOnly);
             this._render();
         });
 
@@ -356,7 +359,7 @@ class ProjectMapView {
 
         // File save -> incremental rebuild
         this.subscriptions.add(
-            atom.workspace.observeTextEditors((editor) => {
+            panels.observeTextEditors((editor) => {
                 const sub = editor.onDidSave(() => {
                     this._debouncedRebuild();
                 });
@@ -372,12 +375,12 @@ class ProjectMapView {
 
         // Config changes
         this.subscriptions.add(
-            atom.config.observe('pomai-project-map.showDependencyLinks', (val) => {
+            settings.observe('pomai-project-map.showDependencyLinks', (val) => {
                 this.overlay.showLinks = val;
                 this.btnLinks.classList.toggle('active', val);
                 this._render();
             }),
-            atom.config.observe('pomai-project-map.circularOnly', (val) => {
+            settings.observe('pomai-project-map.circularOnly', (val) => {
                 this.overlay.circularOnly = val;
                 this.btnCircular.classList.toggle('active', val);
                 this._render();
@@ -399,12 +402,12 @@ class ProjectMapView {
     // ─── Build & Render ──────────────────────────────────────────────
 
     _getProjectRoot() {
-        const dirs = atom.project.getDirectories();
+        const dirs = paths.getProjectDirectories();
         return dirs.length > 0 ? dirs[0].getPath() : null;
     }
 
     _getIgnoredDirs() {
-        const raw = atom.config.get('pomai-project-map.ignoredDirectories') || '';
+        const raw = settings.get('pomai-project-map.ignoredDirectories') || '';
         return new Set(raw.split(',').map(s => s.trim()).filter(Boolean));
     }
 
@@ -416,7 +419,7 @@ class ProjectMapView {
         }
 
         const opts = {
-            maxFiles: atom.config.get('pomai-project-map.maxFiles'),
+            maxFiles: settings.get('pomai-project-map.maxFiles'),
             ignoredDirs: this._getIgnoredDirs()
         };
 
@@ -430,10 +433,10 @@ class ProjectMapView {
     _debouncedRebuild() {
         const root = this._getProjectRoot();
         if (!root) return;
-        const debounceMs = atom.config.get('pomai-project-map.debounceMs');
+        const debounceMs = settings.get('pomai-project-map.debounceMs');
 
         const opts = {
-            maxFiles: atom.config.get('pomai-project-map.maxFiles'),
+            maxFiles: settings.get('pomai-project-map.maxFiles'),
             ignoredDirs: this._getIgnoredDirs()
         };
 

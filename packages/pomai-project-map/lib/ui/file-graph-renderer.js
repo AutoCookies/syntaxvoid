@@ -1,5 +1,7 @@
 'use strict';
 
+const settings = require('../../../../core/platform/settings');
+
 /**
  * Renders the file dependency graph using a Force-Directed Layout.
  * - Nodes: Circles
@@ -257,7 +259,7 @@ class FileGraphRenderer {
 
                 // Draw Label
                 ctx.font = '12px sans-serif';
-                ctx.fillStyle = atom.config.get('pomai-project-map.themeMode') === 'pixel' ? '#0f0' : '#333';
+                ctx.fillStyle = settings.get('pomai-project-map.themeMode') === 'pixel' ? '#0f0' : '#333';
                 ctx.globalAlpha = 1.0;
                 ctx.fillText(n.name, n.x + n.r + 4, n.y + 4);
             }

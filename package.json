@@ -3,7 +3,7 @@
   "author": "Pomai <admin@pomai.dev>",
   "productName": "Pomai",
   "version": "1.130.1-dev",
-  "description": "A Community-led Hyper-Hackable Text Editor",
+  "description": "Pomai-owned extensible IDE platform core.",
   "branding": {
     "id": "pomai",
     "name": "Pomai",
@@ -298,7 +298,10 @@
     "js-docs": "jsdoc2md --files src --configure docs/.jsdoc.json > ./docs/Pulsar-API-Documentation.md",
     "private-js-docs": "jsdoc2md --private --files src --configure docs/.jsdoc.json > ./docs/Source-Code-Documentation.md",
     "test:editor": "yarn test:only spec",
-    "test:only": "yarn start --test"
+    "test:only": "yarn start --test",
+    "dev": "yarn install && yarn build && yarn start",
+    "check:build": "yarn build",
+    "check:smoke-launch": "yarn start --help"
   },
   "devDependencies": {
     "@electron/notarize": "^1.2.3",

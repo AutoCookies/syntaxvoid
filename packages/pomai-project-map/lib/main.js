@@ -2,6 +2,9 @@
 
 const { CompositeDisposable } = require('atom');
 const ProjectMapView = require('./ui/project-map-view');
+const commands = require('../../../core/platform/commands');
+const panels = require('../../../core/platform/panels');
+const logger = require('../../../core/platform/logging');
 
 module.exports = {
     subscriptions: null,
@@ -11,14 +14,14 @@ module.exports = {
         this.subscriptions = new CompositeDisposable();
 
         this.subscriptions.add(
-            atom.commands.add('atom-workspace', {
+            commands.add('atom-workspace', {
                 'pomai-project-map:toggle': () => this.toggle()
             })
         );
 
         // URI opener for dock integration
         this.subscriptions.add(
-            atom.workspace.addOpener((uri) => {
+            panels.addOpener((uri) => {
                 if (uri === ProjectMapView.URI) {
                     return this._getOrCreateView();
                 }
@@ -27,6 +30,7 @@ module.exports = {
     },
 
     deactivate() {
+        logger.info('Deactivating pomai-project-map');
         if (this.subscriptions) {
             this.subscriptions.dispose();
         }
@@ -37,7 +41,7 @@ module.exports = {
     },
 
     toggle() {
-        atom.workspace.toggle(ProjectMapView.URI);
+        panels.toggle(ProjectMapView.URI);
     },
 
     deserializeView(_serialized) {

@@ -1,6 +1,8 @@
 // This is loaded by atom-environment.coffee. See
 // https://atom.io/docs/api/latest/Config for more information about config TODO: Link to Pomai API site when documented
 // schemas.
+const { OPTIONAL_DISABLED_BY_DEFAULT } = require('./pomai-default-package-set');
+
 const configSchema = {
   core: {
     type: 'object',
@@ -37,7 +39,7 @@ const configSchema = {
       },
       disabledPackages: {
         type: 'array',
-        default: [],
+        default: OPTIONAL_DISABLED_BY_DEFAULT,
 
         items: {
           type: 'string'
