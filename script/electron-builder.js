@@ -109,7 +109,7 @@ const ARGS = yargs(hideBin(process.argv))
 // Same for `ppm-next`; it's identical to `ppm`, but the name of the script
 // tells it where to install packages.
 const displayName = ARGS.next ? 'SyntaxVoidNext' : 'SyntaxVoid';
-const baseName = ARGS.next ? 'pulsar-next' : 'pulsar';
+const baseName = ARGS.next ? 'syntaxvoid-next' : 'syntaxvoid';
 const ppmBaseName = ARGS.next ? 'ppm-next' : 'ppm';
 const iconName = ARGS.next ? 'beta-next' : 'beta';
 
@@ -205,7 +205,7 @@ let options = {
   ],
 
   extraResources: [
-    { from: 'pulsar.sh', to: `${baseName}.sh` },
+    { from: 'syntaxvoid.sh', to: `${baseName}.sh` },
     {
       // Be selective in what we copy over to PPM’s `bin` directory. On
       // Windows, the contents of this entire folder will be available on the
@@ -308,8 +308,8 @@ let options = {
     icon: ICONS.ico,
     extraResources: [
       { from: ICONS.ico, to: 'pulsar.ico' },
-      { from: 'resources/win/pulsar.cmd', to: `${baseName}.cmd` },
-      { from: 'resources/win/pulsar.js', to: `${baseName}.js` },
+      { from: 'resources/win/syntaxvoid.cmd', to: `${baseName}.cmd` },
+      { from: 'resources/win/syntaxvoid.js', to: `${baseName}.js` },
       { from: 'resources/win/modifyWindowsPath.ps1', to: 'modifyWindowsPath.ps1' },
       // Copy `ppm.cmd` to the `ppm/bin` directory, possibly renaming it
       // `ppm-next.cmd` depending on release channel.

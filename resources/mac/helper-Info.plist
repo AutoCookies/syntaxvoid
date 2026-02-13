@@ -5,15 +5,15 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Pulsar Helper</string>
+	<string>SyntaxVoid Helper</string>
 	<key>CFBundleExecutable</key>
-	<string>Pulsar Helper</string>
+	<string>SyntaxVoid Helper</string>
 	<key>CFBundleIdentifier</key>
-	<string>dev.pulsar-edit.pulsar.helper</string>
+	<string>dev.syntaxvoid-edit.syntaxvoid.helper</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Pulsar Helper</string>
+	<string>SyntaxVoid Helper</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

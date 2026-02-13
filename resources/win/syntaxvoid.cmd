@@ -45,15 +45,15 @@ set PPM_NAME=
 REM Use the name of the executable to infer a release channel.
 set ATOM_BASE_NAME=%~n0
 
-if "%ATOM_BASE_NAME%"=="pulsar-next" (
+if "%ATOM_BASE_NAME%"=="syntaxvoid-next" (
   set ATOM_CHANNEL=next
-  set EXE_NAME=PulsarNext
+  set EXE_NAME=SyntaxVoidNext
   set PPM_NAME=ppm-next
 )
 
-if "%ATOM_BASE_NAME%"=="pulsar" (
+if "%ATOM_BASE_NAME%"=="syntaxvoid" (
   set ATOM_CHANNEL=stable
-  set EXE_NAME=Pulsar
+  set EXE_NAME=SyntaxVoid
   set PPM_NAME=ppm
 )
 
@@ -64,7 +64,7 @@ IF "%ATOM_ADD%"=="YES" (
 )
 if "%PACKAGE_MODE%"=="YES" (
   REM In package mode, we should shell out directly to `ppm` instead of
-  REM invoking `Pulsar.exe` at all. But first we need to assemble a list of
+  REM invoking `SyntaxVoid.exe` at all. But first we need to assemble a list of
   REM arguments that `ppm.cmd` will understand.
 
   REM Since batch files don't have `while` loops, we've got to fake them with

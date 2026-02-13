@@ -30,6 +30,8 @@ fi
 # Install dependencies
 echo "Installing dependencies..."
 yarn install --ignore-engines
+echo "Patching dependencies..."
+node script/patch-dependencies.js
 
 # Build the project
 echo "Building project..."

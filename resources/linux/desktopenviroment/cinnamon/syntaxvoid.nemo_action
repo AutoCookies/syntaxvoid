@@ -1,9 +1,9 @@
 [Nemo Action]
 Active=true
-Name=Open in Pulsar
-Comment=Open in Pulsar
+Name=Open in SyntaxVoid
+Comment=Open in SyntaxVoid
 #%U is the current selected file, this will also work on current directory
-Exec=pulsar -n %U
+Exec=syntaxvoid -n %U
 Icon-Name=pulsar
 Selection=any
 Extensions=any
