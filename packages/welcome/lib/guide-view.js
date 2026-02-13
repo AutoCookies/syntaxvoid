@@ -344,7 +344,7 @@ export default class GuideView {
 
   getApplicationMenuName() {
     if (process.platform === 'darwin') {
-      return 'Pomai';
+      return 'SyntaxVoid';
     } else if (process.platform === 'linux') {
       return 'Edit';
     } else {

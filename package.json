@@ -1,23 +1,23 @@
 {
-  "name": "pomai",
-  "author": "Pomai <admin@pomai.dev>",
-  "productName": "Pomai",
+  "name": "syntaxvoid",
+  "author": "SyntaxVoid <admin@syntaxvoid.dev>",
+  "productName": "SyntaxVoid",
   "version": "1.130.1-dev",
-  "description": "A Community-led Hyper-Hackable Text Editor",
+  "description": "A community-led, hyper-hackable text editor.",
   "branding": {
-    "id": "pomai",
-    "name": "Pomai",
-    "urlWeb": "https://pomai.dev/",
-    "urlGH": "https://github.com/pomai-edit",
-    "urlForum": "https://github.com/orgs/pomai-edit/discussions"
+    "id": "syntaxvoid",
+    "name": "SyntaxVoid",
+    "urlWeb": "https://syntaxvoid.dev/",
+    "urlGH": "https://github.com/syntaxvoid-edit",
+    "urlForum": "https://github.com/orgs/syntaxvoid-edit/discussions"
   },
   "main": "./src/main-process/main.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pomai-edit/pomai"
+    "url": "https://github.com/syntaxvoid-edit/syntaxvoid"
   },
   "bugs": {
-    "url": "https://github.com/pomai-edit/pomai/issues"
+    "url": "https://github.com/syntaxvoid-edit/syntaxvoid/issues"
   },
   "engines": {
     "node": ">=14"
@@ -177,7 +177,7 @@
     "tabs": "file:packages/tabs",
     "temp": "0.9.4",
     "timecop": "file:./packages/timecop",
-    "pomai-project-map": "file:./packages/pomai-project-map",
+    "syntaxvoid-project-map": "file:./packages/syntaxvoid-project-map",
     "tree-view": "file:./packages/tree-view",
     "typescript": "^5.8.3",
     "underscore-plus": "^1.7.0",
@@ -248,7 +248,7 @@
     "symbols-view": "file:./packages/symbols-view",
     "tabs": "file:./packages/tabs",
     "timecop": "file:./packages/timecop",
-    "pomai-project-map": "file:./packages/pomai-project-map",
+    "syntaxvoid-project-map": "file:./packages/syntaxvoid-project-map",
     "tree-view": "file:./packages/tree-view",
     "update-package-dependencies": "file:./packages/update-package-dependencies",
     "welcome": "file:./packages/welcome",
@@ -298,7 +298,10 @@
     "js-docs": "jsdoc2md --files src --configure docs/.jsdoc.json > ./docs/Pulsar-API-Documentation.md",
     "private-js-docs": "jsdoc2md --private --files src --configure docs/.jsdoc.json > ./docs/Source-Code-Documentation.md",
     "test:editor": "yarn test:only spec",
-    "test:only": "yarn start --test"
+    "test:only": "yarn start --test",
+    "dev": "yarn install && yarn build && yarn start",
+    "check:build": "yarn build",
+    "check:smoke-launch": "yarn start --help"
   },
   "devDependencies": {
     "@electron/notarize": "^1.2.3",

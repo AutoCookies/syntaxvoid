@@ -793,6 +793,10 @@ module.exports = class AtomApplication extends EventEmitter {
       })
     );
 
+    app.on('web-contents-created', (event, webContents) => {
+      require('@electron/remote/main').enable(webContents);
+    });
+
     this.disposable.add(
       ipcHelpers.on(ipcMain, 'restart-application', () => {
         this.restart();
@@ -1375,7 +1379,7 @@ module.exports = class AtomApplication extends EventEmitter {
             )
           );
           resourcePath = this.devResourcePath;
-        } catch (error) {}
+        } catch (error) { }
       }
 
       if (!windowInitializationScript) {
@@ -1458,8 +1462,7 @@ module.exports = class AtomApplication extends EventEmitter {
     } catch (error) {
       if (error.code !== 'ESRCH') {
         console.log(
-          `Killing process ${pid} failed: ${
-            error.code != null ? error.code : error.message
+          `Killing process ${pid} failed: ${error.code != null ? error.code : error.message
           }`
         );
       }
@@ -1604,7 +1607,7 @@ module.exports = class AtomApplication extends EventEmitter {
             )
           );
           resourcePath = this.devResourcePath;
-        } catch (error) {}
+        } catch (error) { }
       }
 
       if (!windowInitializationScript) {
@@ -1812,8 +1815,7 @@ module.exports = class AtomApplication extends EventEmitter {
     }
 
     process.stderr.write(
-      `Error: Could not resolve test runner path '${
-        packageMetadata.atomTestRunner
+      `Error: Could not resolve test runner path '${packageMetadata.atomTestRunner
       }'`
     );
     process.exit(1);

@@ -14,6 +14,8 @@ function getReporter() {
 
 export default {
   activate() {
+    console.info("[syntaxvoid] exception-reporting disabled by default");
+    return;
     this.subscriptions = new CompositeDisposable();
 
     if (!atom.config.get('exception-reporting.userId')) {
@@ -31,7 +33,7 @@ export default {
               secondaryException
             );
             getReporter().reportUncaughtException(secondaryException);
-          } catch (error) {}
+          } catch (error) { }
         }
       })
     );
@@ -48,7 +50,7 @@ export default {
                 secondaryException
               );
               getReporter().reportUncaughtException(secondaryException);
-            } catch (error) {}
+            } catch (error) { }
           }
         })
       );

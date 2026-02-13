@@ -1,4 +1,4 @@
 ## Welcome package
 
-Opens a welcome editor with helpful information the very first time Pomai is
+Opens a welcome editor with helpful information the very first time SyntaxVoid is
 opened.

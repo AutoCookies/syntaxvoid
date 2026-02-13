@@ -2,9 +2,9 @@
 
 <div align="center">
 
-<img src="resources/pomai.png" alt="Pomai logo" width="260" />
+<img src="resources/syntaxvoid.png" alt="SyntaxVoid logo" width="260" />
 
-# Pomai
+# SyntaxVoid
 
 *A community-led, hyper-hackable text editor,*
 *forked from [Atom], built on [Electron].*
@@ -13,9 +13,9 @@
 
 ## About
 
-Pomai is a rebranded codebase focused on the same customizable editor experience with a refreshed identity.
+SyntaxVoid is a rebranded codebase focused on the same customizable editor experience with a refreshed identity.
 
-## Run Pomai locally
+## Run SyntaxVoid locally
 
 ### Prerequisites
 
@@ -78,7 +78,7 @@ chmod +x verified_build.sh
 4. **Start the editor**:
    ```bash
    # Use the wrapper script for best results
-   ./pomai.sh
+   ./syntaxvoid.sh
    # Or directly via yarn
    yarn start
    ```

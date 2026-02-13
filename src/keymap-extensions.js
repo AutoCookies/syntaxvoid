@@ -52,7 +52,7 @@ KeymapManager.prototype.loadUserKeymap = function () {
     return;
   }
   try {
-    this.loadKeymap(userKeymapPath, {watch: true, suppressErrors: true, priority: 100});
+    this.loadKeymap(userKeymapPath, { watch: true, suppressErrors: true, priority: 100 });
   }
   catch (error) {
     if (error.message.indexOf('Unable to watch path') > -1) {
@@ -61,13 +61,13 @@ KeymapManager.prototype.loadUserKeymap = function () {
 
         On linux there are currently problems with watch sizes. See \
         [this document][watches] for more info. \
-        [watches]:https://pulsar-edit.dev/docs/atom-archive/hacking-atom/#typeerror-unable-to-watch-path`; //TODO: Update the above to Pulsar docs if we choose to add this
-      this.notificationManager.addError(message, {dismissable: true});
+        [watches]:https://pulsar-edit.dev/docs/atom-archive/hacking-atom/#typeerror-unable-to-watch-path`; //TODO: Update the above to SyntaxVoid docs if we choose to add this
+      this.notificationManager.addError(message, { dismissable: true });
     }
     else {
       const detail = error.path;
       const stack = error.stack;
-      this.notificationManager.addFatalError(error.message, {detail,stack,dismissable: true});
+      this.notificationManager.addFatalError(error.message, { detail, stack, dismissable: true });
     }
   }
   return this.emitter.emit('did-load-user-keymap');
@@ -78,7 +78,7 @@ KeymapManager.prototype.subscribeToFileReadFailure = function () {
     const userKeymapPath = this.getUserKeymapPath();
     const message = `Failed to load \`${userKeymapPath}\``;
     const detail = error.location != null ? error.stack : error.message;
-    this.notificationManager.addError(message, {detail, dismissable: true});
+    this.notificationManager.addError(message, { detail, dismissable: true });
   });
 };
 

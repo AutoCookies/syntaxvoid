@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-# Build script for Pomai Pulsar
+# Build script for SyntaxVoid Pulsar
 # Usage: ./verified_build.sh
 
 echo "Starting verified build process..."
@@ -29,7 +29,9 @@ fi
 
 # Install dependencies
 echo "Installing dependencies..."
-yarn install
+yarn install --ignore-engines
+echo "Patching dependencies..."
+node script/patch-dependencies.js
 
 # Build the project
 echo "Building project..."

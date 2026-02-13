@@ -214,8 +214,8 @@ module.exports = class PackageManager {
     if (configPath || this.apmPath) {
       return configPath || this.apmPath;
     } else {
-       this.apmPath = PackageManager.possibleApmPaths();
-       return this.apmPath;
+      this.apmPath = PackageManager.possibleApmPaths();
+      return this.apmPath;
     }
   }
 
@@ -905,7 +905,7 @@ module.exports = class PackageManager {
     return Promise.all([symlinkPromise, dirPromise]).then(values => {
       const [isSymLink, isDir] = values;
       if (!isSymLink && isDir) {
-        return fs.remove(directory, function() {});
+        return fs.remove(directory, function () { });
       }
     });
   }

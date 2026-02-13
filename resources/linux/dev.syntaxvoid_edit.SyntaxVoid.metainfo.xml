@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>dev.syntaxvoid_edit.SyntaxVoid</id>
+  <name>SyntaxVoid</name>
+  <developer_name>SyntaxVoid Edit</developer_name>
+  <developer id="dev.syntaxvoid_edit">
+    <name translatable="no">SyntaxVoid Edit</name>
+  </developer>
+  <summary>Community-led hyper-hackable editor</summary>
+  <launchable type="desktop-id">dev.syntaxvoid_edit.SyntaxVoid.desktop</launchable>
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+  <url type="homepage">https://syntaxvoid-edit.dev</url>
+  <url type="bugtracker">https://github.com/syntaxvoid-edit/syntaxvoid/issues/</url>
+  <url type="faq">https://syntaxvoid-edit.dev/docs/launch-manual/sections/faq/</url>
+  <url type="vcs-browser">https://github.com/syntaxvoid-edit/syntaxvoid</url>
+  <url type="donation">https://syntaxvoid-edit.dev/donate.html</url>
+  <branding>
+  <color type="primary" scheme_preference="light">#c061cb</color>
+  <color type="primary" scheme_preference="dark">#613583</color>
+  </branding>
+  <update_contact>admin@syntaxvoid-edit.dev</update_contact>
+  <description>
+    <p>SyntaxVoid aims to not only reach feature parity with the original Atom, but to bring SyntaxVoid into the 21st century by updating the underlying architecture, and supporting modern features.</p>
+  </description>
+  <screenshots>
+    <screenshot type="default">
+      <image type="source">https://raw.githubusercontent.com/pulsar-edit/pulsar/master/resources/linux/linux-screenshot.png</image>
+      <caption>SyntaxVoid welcome window in the middle, an open file on the right, and project on the left</caption>
+    </screenshot>
+    <screenshot>
+      <image type="source">https://raw.githubusercontent.com/pulsar-edit/pulsar/master/resources/readme.png</image>
+      <caption>Pulsar welcome window with an open project</caption>
+    </screenshot>
+  </screenshots>
+  <keywords>
+    <keyword>atom</keyword>
+  </keywords>
+  <releases>
+  </releases>
+  <kudos>
+    <kudo>HiDpiIcon</kudo>
+  </kudos>
+  <content_rating type="oars-1.1"/>
+</component>

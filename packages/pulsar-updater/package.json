@@ -21,7 +21,7 @@
   "configSchema": {
     "checkForUpdatesOnLaunch": {
       "type": "boolean",
-      "default": true,
+      "default": false,
       "description": "If Pulsar Updater should check for an update to Pulsar as soon as Pulsar launches."
     }
   }

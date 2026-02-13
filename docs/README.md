@@ -1,8 +1,8 @@
-# Pomai Docs
+# SyntaxVoid Docs
 
-![Pomai](../resources/pomai-logo.svg)
+![SyntaxVoid](../resources/syntaxvoid-logo.svg)
 
-Most user and developer documentation for Pomai is available in this repository and evolving alongside the rebrand.
+Most user and developer documentation for SyntaxVoid is available in this repository and evolving alongside the rebrand.
 
 - API docs: [Pulsar-API-Documentation.md](./Pulsar-API-Documentation.md)
 - Architecture docs: [architecture/README.md](./architecture/README.md)
@@ -10,7 +10,7 @@ Most user and developer documentation for Pomai is available in this repository 
 
 ## Build documentation
 
-Instructions for building Pomai from source are available in:
+Instructions for building SyntaxVoid from source are available in:
 
 - [build-instructions/linux.md](./build-instructions/linux.md)
 - [build-instructions/macOS.md](./build-instructions/macOS.md)

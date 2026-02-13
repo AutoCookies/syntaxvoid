@@ -95,21 +95,21 @@ const ARGS = yargs(hideBin(process.argv))
   .option('next', {
     alias: 'n',
     type: 'boolean',
-    description: 'Builds a "canary" with a separate bundle identifier and app name so it can run alongside ordinary Pomai.'
+    description: 'Builds a "canary" with a separate bundle identifier and app name so it can run alongside ordinary SyntaxVoid.'
   })
   .parse();
 
 
 // The difference in base name matters for the app ID (which helps the OS
-// understand that PomaiNext is not the same as Pomai), but also for other
+// understand that SyntaxVoidNext is not the same as SyntaxVoid), but also for other
 // reasons.
 //
 // The `pulsar-next` executable name is how it knows it's a canary release
 // channel and should use a different home directory from the stable release.
 // Same for `ppm-next`; it's identical to `ppm`, but the name of the script
 // tells it where to install packages.
-const displayName = ARGS.next ? 'PomaiNext' : 'Pomai';
-const baseName = ARGS.next ? 'pulsar-next' : 'pulsar';
+const displayName = ARGS.next ? 'SyntaxVoidNext' : 'SyntaxVoid';
+const baseName = ARGS.next ? 'syntaxvoid-next' : 'syntaxvoid';
 const ppmBaseName = ARGS.next ? 'ppm-next' : 'ppm';
 const iconName = ARGS.next ? 'beta-next' : 'beta';
 
@@ -122,7 +122,7 @@ const ICONS = {
 
 
 let options = {
-  appId: `dev.pulsar-edit.${baseName}`,
+  appId: `dev.syntaxvoid-edit.${baseName}`,
   npmRebuild: false,
   publish: null,
   files: [
@@ -205,7 +205,7 @@ let options = {
   ],
 
   extraResources: [
-    { from: 'pulsar.sh', to: `${baseName}.sh` },
+    { from: 'syntaxvoid.sh', to: `${baseName}.sh` },
     {
       // Be selective in what we copy over to PPM’s `bin` directory. On
       // Windows, the contents of this entire folder will be available on the
@@ -223,7 +223,7 @@ let options = {
       // intact.
       to: 'app'
     },
-    { from: ICONS.png, to: 'pomai.png' },
+    { from: ICONS.png, to: 'syntaxvoid.png' },
     { from: 'LICENSE.md', to: 'LICENSE.md' }
   ],
   compression: 'normal',
@@ -308,8 +308,8 @@ let options = {
     icon: ICONS.ico,
     extraResources: [
       { from: ICONS.ico, to: 'pulsar.ico' },
-      { from: 'resources/win/pulsar.cmd', to: `${baseName}.cmd` },
-      { from: 'resources/win/pulsar.js', to: `${baseName}.js` },
+      { from: 'resources/win/syntaxvoid.cmd', to: `${baseName}.cmd` },
+      { from: 'resources/win/syntaxvoid.js', to: `${baseName}.js` },
       { from: 'resources/win/modifyWindowsPath.ps1', to: 'modifyWindowsPath.ps1' },
       // Copy `ppm.cmd` to the `ppm/bin` directory, possibly renaming it
       // `ppm-next.cmd` depending on release channel.
@@ -335,12 +335,12 @@ let options = {
     // AppID 'dev.pulsar-edit.pulsar'. If this value ever changes, a PR to
     // GitHub Desktop must be made with the updated value.
     //
-    // We delete this value when building PomaiNext so that it’s regenerated
+    // We delete this value when building SyntaxVoidNext so that it’s regenerated
     // based on the app ID. Otherwise the OS might consider it equivalent to
-    // stable Pomai in some ways.
+    // stable SyntaxVoid in some ways.
     //
     // TODO: On first look, this installer script seems not to need any
-    // updating for PomaiNext, but we should make sure.
+    // updating for SyntaxVoidNext, but we should make sure.
     include: "resources/win/installer.nsh",
     warningsAsErrors: false
   },
@@ -357,7 +357,7 @@ let options = {
 };
 
 if (ARGS.next) {
-  // TODO: Should PomaiNext have its own guid? `electron-builder` docs suggest
+  // TODO: Should SyntaxVoidNext have its own guid? `electron-builder` docs suggest
   // it will be generated from the `appId` if omitted, so I think this is fine.
   delete options.nsis.guid;
 }
@@ -384,7 +384,7 @@ function generateVersionNumber(existingVersion, channel = '') {
 
 async function main() {
   if (ARGS.next) {
-    console.log('Building PomaiNext!');
+    console.log('Building SyntaxVoidNext!');
   }
   let pack = await FS.readFile('package.json', 'utf-8');
   let options = whatToBuild();
@@ -426,7 +426,7 @@ async function main() {
     });
     await Promise.all(promises);
   } catch (error) {
-    console.error(`Error building Pomai:`);
+    console.error(`Error building SyntaxVoid:`);
     console.error(error);
 
     process.exit(1);

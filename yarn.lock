@@ -8028,7 +8028,7 @@ plist@^3.0.1, plist@^3.0.4:
     base64-js "^1.5.1"
     xmlbuilder "^15.1.1"
 
-"pomai-project-map@file:./packages/pomai-project-map":
+"syntaxvoid-project-map@file:./packages/syntaxvoid-project-map":
   version "1.0.0"
 
 possible-typed-array-names@^1.0.0:

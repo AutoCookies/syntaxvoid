@@ -13,7 +13,7 @@ XPStyle on
   ${ifNot} ${isUpdated}
     ; Only run uninstall steps if truly uninstalling. Prevents this step from
     ; running during an upgrade, where it technically runs after the upgrade's
-    ; install steps, ultimately removing Pulsar from the PATH
+    ; install steps, ultimately removing SyntaxVoid from the PATH
     ${un.EnvVarUpdate} $0 "PATH" "R" "HKCU" "$INSTDIR\resources"
     ${un.EnvVarUpdate} $0 "PATH" "R" "HKCU" "$INSTDIR\resources\app\ppm\bin"
   ${endIf}
@@ -23,13 +23,13 @@ XPStyle on
 
   ; Define our variables
   Var Dialog
-  Var PulsarPathCheckbox_Label
-  Var PulsarPathCheckbox
-  Var PulsarPathCheckbox_State
+  Var SyntaxVoidPathCheckbox_Label
+  Var SyntaxVoidPathCheckbox
+  Var SyntaxVoidPathCheckbox_State
   Var PpmPathCheckbox
   Var PpmPathCheckbox_State
 
-  Var PulsarPathAdd_Status
+  Var SyntaxVoidPathAdd_Status
   Var PpmPathAdd_Status
 
   Page custom AddToPathPage AddToPathFunction ; Call our page with creator_function leave_function
@@ -46,23 +46,23 @@ XPStyle on
     ${EndIf}
 
     ; Enter our custom dialog controls
-    ${NSD_CreateLabel} 0 0 100% 24u "You can choose to add the 'pulsar' and 'ppm' commands to your PATH. This allows you to easily invoke Pulsar and PPM (Pulsar Package Manager) from the shell."
-    Pop $PulsarPathCheckbox_Label
+    ${NSD_CreateLabel} 0 0 100% 24u "You can choose to add the 'pulsar' and 'ppm' commands to your PATH. This allows you to easily invoke SyntaxVoid and PPM (SyntaxVoid Package Manager) from the shell."
+    Pop $SyntaxVoidPathCheckbox_Label
 
-    ${NSD_CreateCheckbox} 0 30u 100% 10u "&Add Pulsar to the User PATH"
-    Pop $PulsarPathCheckbox
+    ${NSD_CreateCheckbox} 0 30u 100% 10u "&Add SyntaxVoid to the User PATH"
+    Pop $SyntaxVoidPathCheckbox
 
     ${NSD_CreateCheckbox} 0 45u 100% 10u "&Add PPM to the User PATH"
     Pop $PpmPathCheckbox
 
     ; Check the boxes by default
-    ${NSD_Check} $PulsarPathCheckbox
+    ${NSD_Check} $SyntaxVoidPathCheckbox
     ${NSD_Check} $PpmPathCheckbox
 
     ; The below 'If's add memory to the selection. Meaning if the user clicks
     ; forward then returns, their selection will be remembered.
-    ${If} $PulsarPathCheckbox_State == ${BST_UNCHECKED}
-      ${NSD_Uncheck} $PulsarPathCheckbox
+    ${If} $SyntaxVoidPathCheckbox_State == ${BST_UNCHECKED}
+      ${NSD_Uncheck} $SyntaxVoidPathCheckbox
     ${EndIf}
 
     ${If} $PpmPathCheckbox_State == ${BST_UNCHECKED}
@@ -75,12 +75,12 @@ XPStyle on
 
   Function AddToPathFunction
     ; Here we set the memory of the users selection after leaving the page.
-    ${NSD_GetState} $PulsarPathCheckbox $PulsarPathCheckbox_State
+    ${NSD_GetState} $SyntaxVoidPathCheckbox $SyntaxVoidPathCheckbox_State
     ${NSD_GetState} $PpmPathCheckbox $PpmPathCheckbox_State
 
     ; Now to add this data to the User PATH
-    ${If} $PulsarPathCheckbox_State == ${BST_CHECKED}
-      ${EnvVarUpdate} $PulsarPathAdd_Status "PATH" "A" "HKCU" "$INSTDIR\resources"
+    ${If} $SyntaxVoidPathCheckbox_State == ${BST_CHECKED}
+      ${EnvVarUpdate} $SyntaxVoidPathAdd_Status "PATH" "A" "HKCU" "$INSTDIR\resources"
     ${EndIf}
 
     ${If} $PpmPathCheckbox_State == ${BST_CHECKED}

@@ -7,6 +7,6 @@ Section: devel
 Priority: optional
 Architecture: <%= arch %>
 Installed-Size: <%= installedSize %>
-Maintainer: Pulsar-Edit <admin@pulsar-edit.dev>
+Maintainer: SyntaxVoid Edit <admin@syntaxvoid-edit.dev>
 Description: <%= description %>
- Pulsar is a free and open source text editor that is modern, approachable, and hackable to the core.
+ SyntaxVoid is a free and open source text editor that is modern, approachable, and hackable to the core.

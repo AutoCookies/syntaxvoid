@@ -1,0 +1,18 @@
+{
+    "menu": [
+        {
+            "label": "Packages",
+            "submenu": [
+                {
+                    "label": "Tree Graph",
+                    "submenu": [
+                        {
+                            "label": "Toggle Tree Graph",
+                            "command": "syntaxvoid-project-map:toggle"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

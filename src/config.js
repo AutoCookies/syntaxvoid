@@ -13,7 +13,7 @@ const ScopeDescriptor = require('./scope-descriptor');
 
 const schemaEnforcers = {};
 
-// Essential: Used to access all of Pulsar's configuration details.
+// Essential: Used to access all of SyntaxVoid's configuration details.
 //
 // An instance of this class is always available as the `atom.config` global.
 //
