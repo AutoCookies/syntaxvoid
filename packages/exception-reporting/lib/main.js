@@ -14,7 +14,7 @@ function getReporter() {
 
 export default {
   activate() {
-    console.info("[pomai] exception-reporting disabled by default");
+    console.info("[syntaxvoid] exception-reporting disabled by default");
     return;
     this.subscriptions = new CompositeDisposable();
 
@@ -33,7 +33,7 @@ export default {
               secondaryException
             );
             getReporter().reportUncaughtException(secondaryException);
-          } catch (error) {}
+          } catch (error) { }
         }
       })
     );
@@ -50,7 +50,7 @@ export default {
                 secondaryException
               );
               getReporter().reportUncaughtException(secondaryException);
-            } catch (error) {}
+            } catch (error) { }
           }
         })
       );

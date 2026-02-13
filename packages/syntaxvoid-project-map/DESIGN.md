@@ -1,7 +1,7 @@
-# Pomai Project Map: Design & Architecture
+# SyntaxVoid Project Map: Design & Architecture
 
 ## Overview
-`pomai-project-map` is a visualization tool for Atom/Pulsar that renders the project file structure as a **Squarified Treemap**. It highlights dependency relationships using curved links and provides a "Heatmap" mode to visualize file density.
+`syntaxvoid-project-map` is a visualization tool for Atom/Pulsar that renders the project file structure as a **Squarified Treemap**. It highlights dependency relationships using curved links and provides a "Heatmap" mode to visualize file density.
 
 ## Design System
 The UI follows a scoped design system (`.pm-clean` and `.pm-pixel` modes) defined in `styles/project-map.theme.less`.

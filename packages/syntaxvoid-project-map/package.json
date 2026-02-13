@@ -1,5 +1,5 @@
 {
-    "name": "pomai-project-map",
+    "name": "syntaxvoid-project-map",
     "version": "1.0.0",
     "description": "Project topology visualization — treemap and dependency graph as a cognition tool.",
     "main": "./lib/main",
@@ -9,7 +9,7 @@
     },
     "activationCommands": {
         "atom-workspace": [
-            "pomai-project-map:toggle"
+            "syntaxvoid-project-map:toggle"
         ]
     },
     "configSchema": {

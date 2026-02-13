@@ -1,11 +1,11 @@
-# Pomai Carveout Report
+# SyntaxVoid Carveout Report
 
 ## Phase 0 — Baseline
 - Captured install/build/run attempts in `BASELINE.md`.
 - Baseline blocker identified: git dependency fetch over current network/proxy path.
 
 ## Phase 1 — Identity
-- Confirmed Pomai root metadata and tightened package description/repository metadata.
+- Confirmed SyntaxVoid root metadata and tightened package description/repository metadata.
 - Added architecture vision doc at `docs/architecture/VISION.md`.
 - Added `CODEOWNERS`.
 
@@ -16,7 +16,7 @@
   - `core/platform/panels.{js,ts}`
   - `core/platform/logging.{js,ts}`
   - `core/platform/paths.{js,ts}`
-- Updated `packages/pomai-project-map` to consume façade wrappers for commands/settings/panels/path access.
+- Updated `packages/syntaxvoid-project-map` to consume façade wrappers for commands/settings/panels/path access.
 
 ## Phase 3 — Legacy subsystem reduction
 - Disabled updater checks by default.
@@ -24,9 +24,9 @@
 - Documented removals in `CLEANUP_REMOVALS.md`.
 
 ## Phase 4 — Default package set
-- Added authoritative package SOT in `src/pomai-default-package-set.js`.
+- Added authoritative package SOT in `src/syntaxvoid-default-package-set.js`.
 - Wired `core.disabledPackages` default to optional disabled list.
-- Kept `pomai-project-map` in required package set.
+- Kept `syntaxvoid-project-map` in required package set.
 
 ## Phase 5 — Build/runtime stabilization
 - Added deterministic developer entrypoint script:

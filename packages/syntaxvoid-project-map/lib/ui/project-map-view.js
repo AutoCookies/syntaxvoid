@@ -12,11 +12,11 @@ const settings = require('../../../../core/platform/settings');
 const panels = require('../../../../core/platform/panels');
 const paths = require('../../../../core/platform/paths');
 
-const PROJECT_MAP_URI = 'atom://pomai-project-map';
+const PROJECT_MAP_URI = 'atom://syntaxvoid-project-map';
 
 /**
  * Dock panel view for the project topology visualization.
- * Refactored for "Pomai Polish" with 3-pane layout and design system.
+ * Refactored for "SyntaxVoid Polish" with 3-pane layout and design system.
  */
 class ProjectMapView {
     constructor(serializedState) {
@@ -42,8 +42,8 @@ class ProjectMapView {
         this.lastMouse = { x: 0, y: 0 };
 
         this.overlay = new DependencyOverlay({
-            showLinks: settings.get('pomai-project-map.showDependencyLinks'),
-            circularOnly: settings.get('pomai-project-map.circularOnly')
+            showLinks: settings.get('syntaxvoid-project-map.showDependencyLinks'),
+            circularOnly: settings.get('syntaxvoid-project-map.circularOnly')
         });
 
         this.rectMap = new Map();
@@ -87,7 +87,7 @@ class ProjectMapView {
 
     _createDOM() {
         this.element = document.createElement('div');
-        this.element.classList.add('pomai-project-map');
+        this.element.classList.add('syntaxvoid-project-map');
         // Theme class added by _applyTheme
 
         // 1. Header
@@ -293,14 +293,14 @@ class ProjectMapView {
         this.btnLinks.addEventListener('click', () => {
             this.overlay.showLinks = !this.overlay.showLinks;
             this.btnLinks.classList.toggle('active', this.overlay.showLinks);
-            settings.set('pomai-project-map.showDependencyLinks', this.overlay.showLinks);
+            settings.set('syntaxvoid-project-map.showDependencyLinks', this.overlay.showLinks);
             this._render();
         });
 
         this.btnCircular.addEventListener('click', () => {
             this.overlay.circularOnly = !this.overlay.circularOnly;
             this.btnCircular.classList.toggle('active', this.overlay.circularOnly);
-            settings.set('pomai-project-map.circularOnly', this.overlay.circularOnly);
+            settings.set('syntaxvoid-project-map.circularOnly', this.overlay.circularOnly);
             this._render();
         });
 
@@ -375,12 +375,12 @@ class ProjectMapView {
 
         // Config changes
         this.subscriptions.add(
-            settings.observe('pomai-project-map.showDependencyLinks', (val) => {
+            settings.observe('syntaxvoid-project-map.showDependencyLinks', (val) => {
                 this.overlay.showLinks = val;
                 this.btnLinks.classList.toggle('active', val);
                 this._render();
             }),
-            settings.observe('pomai-project-map.circularOnly', (val) => {
+            settings.observe('syntaxvoid-project-map.circularOnly', (val) => {
                 this.overlay.circularOnly = val;
                 this.btnCircular.classList.toggle('active', val);
                 this._render();
@@ -407,7 +407,7 @@ class ProjectMapView {
     }
 
     _getIgnoredDirs() {
-        const raw = settings.get('pomai-project-map.ignoredDirectories') || '';
+        const raw = settings.get('syntaxvoid-project-map.ignoredDirectories') || '';
         return new Set(raw.split(',').map(s => s.trim()).filter(Boolean));
     }
 
@@ -419,7 +419,7 @@ class ProjectMapView {
         }
 
         const opts = {
-            maxFiles: settings.get('pomai-project-map.maxFiles'),
+            maxFiles: settings.get('syntaxvoid-project-map.maxFiles'),
             ignoredDirs: this._getIgnoredDirs()
         };
 
@@ -433,10 +433,10 @@ class ProjectMapView {
     _debouncedRebuild() {
         const root = this._getProjectRoot();
         if (!root) return;
-        const debounceMs = settings.get('pomai-project-map.debounceMs');
+        const debounceMs = settings.get('syntaxvoid-project-map.debounceMs');
 
         const opts = {
-            maxFiles: settings.get('pomai-project-map.maxFiles'),
+            maxFiles: settings.get('syntaxvoid-project-map.maxFiles'),
             ignoredDirs: this._getIgnoredDirs()
         };
 

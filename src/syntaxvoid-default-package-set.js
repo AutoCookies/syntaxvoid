@@ -7,7 +7,7 @@ const REQUIRED_PACKAGES = [
   'status-bar',
   'find-and-replace',
   'tabs',
-  'pomai-project-map'
+  'syntaxvoid-project-map'
 ];
 
 const OPTIONAL_DISABLED_BY_DEFAULT = [

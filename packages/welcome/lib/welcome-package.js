@@ -50,7 +50,7 @@ export default class WelcomePackage {
 
     if (atom.config.get('welcome.showChangeLog')) {
       // Use new `.versionSatisfies()` API to see if last viewed changelog is
-      // less than the current Pomai version
+      // less than the current SyntaxVoid version
       if (atom.versionSatisfies(`> ${atom.config.get('welcome.lastViewedChangeLog')}`)) {
         await this.showChangeLog();
       }

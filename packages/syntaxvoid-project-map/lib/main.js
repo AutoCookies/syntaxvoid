@@ -15,7 +15,7 @@ module.exports = {
 
         this.subscriptions.add(
             commands.add('atom-workspace', {
-                'pomai-project-map:toggle': () => this.toggle()
+                'syntaxvoid-project-map:toggle': () => this.toggle()
             })
         );
 
@@ -30,7 +30,7 @@ module.exports = {
     },
 
     deactivate() {
-        logger.info('Deactivating pomai-project-map');
+        logger.info('Deactivating syntaxvoid-project-map');
         if (this.subscriptions) {
             this.subscriptions.dispose();
         }

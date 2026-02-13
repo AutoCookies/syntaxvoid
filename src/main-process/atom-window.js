@@ -15,9 +15,9 @@ const url = require('url');
 const { EventEmitter } = require('events');
 const StartupTime = require('../startup-time');
 
-let ICON_PATH = path.resolve(process.resourcesPath, 'pomai.png');
+let ICON_PATH = path.resolve(process.resourcesPath, 'syntaxvoid.png');
 if (!fs.existsSync(ICON_PATH)) {
-  ICON_PATH = path.resolve(__dirname, '..', '..', 'resources', 'pomai.png');
+  ICON_PATH = path.resolve(__dirname, '..', '..', 'resources', 'syntaxvoid.png');
 }
 
 let includeShellLoadTime = true;

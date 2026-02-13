@@ -14,7 +14,7 @@ fi
 ATOM_BASE_NAME=$(basename $0)
 ATOM_BASE_NAME=${ATOM_BASE_NAME%.*}
 case $ATOM_BASE_NAME in
-  pomai-next)
+  syntaxvoid-next)
     CHANNEL=next
     ;;
   *)
@@ -141,12 +141,12 @@ if [ $OS == 'Mac' ]; then
     if [ "$CHANNEL" == 'next' ]; then
       ATOM_EXECUTABLE_NAME="PomaiNext"
     else
-      ATOM_EXECUTABLE_NAME="Pomai"
+      ATOM_EXECUTABLE_NAME="SyntaxVoid"
     fi
     ATOM_APP_NAME="${ATOM_EXECUTABLE_NAME}.app"
   fi
 
-  if [ -z "${POMAI_PATH}" ]; then
+  if [ -z "${SYNTAXVOID_PATH}" ]; then
     # If PULSAR_PATH isn't set, check /Applications and then ~/Applications for
     # Pulsar.app.
     if [ -x "/Applications/${ATOM_APP_NAME}" ]; then
@@ -156,19 +156,19 @@ if [ $OS == 'Mac' ]; then
     else
       # We still haven't found it. Let's try searching for it via
       # Spotlight.
-      POMAI_APP_SEARCH_RESULT="$(mdfind "kMDItemCFBundleIdentifier == 'dev.pomai-edit.${BASENAME}'" | grep -v ShipIt | head -1)"
-      if [ ! -z "$POMAI_APP_SEARCH_RESULT" ]; then
-        POMAI_PATH="$(dirname "$POMAI_APP_SEARCH_RESULT")"
-        ATOM_APP_NAME="$(basename "$POMAI_APP_SEARCH_RESULT")"
+      SYNTAXVOID_APP_SEARCH_RESULT="$(mdfind "kMDItemCFBundleIdentifier == 'dev.syntaxvoid-edit.${BASENAME}'" | grep -v ShipIt | head -1)"
+      if [ ! -z "$SYNTAXVOID_APP_SEARCH_RESULT" ]; then
+        SYNTAXVOID_PATH="$(dirname "$SYNTAXVOID_APP_SEARCH_RESULT")"
+        ATOM_APP_NAME="$(basename "$SYNTAXVOID_APP_SEARCH_RESULT")"
       fi
     fi
   fi
 
-  POMAI_EXECUTABLE="$POMAI_PATH/$ATOM_APP_NAME/Contents/MacOS/$ATOM_EXECUTABLE_NAME"
-  PPM_EXECUTABLE="$POMAI_PATH/$ATOM_APP_NAME/Contents/Resources/app/ppm/bin/ppm"
+  SYNTAXVOID_EXECUTABLE="$SYNTAXVOID_PATH/$ATOM_APP_NAME/Contents/MacOS/$ATOM_EXECUTABLE_NAME"
+  PPM_EXECUTABLE="$SYNTAXVOID_PATH/$ATOM_APP_NAME/Contents/Resources/app/ppm/bin/ppm"
 
   # Exit if Pulsar can't be found.
-  if [ ! -x "${POMAI_EXECUTABLE}" ]; then
+  if [ ! -x "${SYNTAXVOID_EXECUTABLE}" ]; then
     echoerr "Cannot locate ${ATOM_APP_NAME}; it is usually located in /Applications. Set the PULSAR_PATH environment variable to the directory containing ${ATOM_APP_NAME}."
     exit 1
   fi
@@ -181,7 +181,7 @@ if [ $OS == 'Mac' ]; then
   fi
 
   if [ $EXPECT_OUTPUT ]; then
-    "$POMAI_EXECUTABLE" --executed-from="$(pwd)" --pid=$$ "$@"
+    "$SYNTAXVOID_EXECUTABLE" --executed-from="$(pwd)" --pid=$$ "$@"
     ATOM_EXIT=$?
     if [ ${ATOM_EXIT} -eq 0 ] && [ -n "${EXIT_CODE_OVERRIDE}" ]; then
       exit "${EXIT_CODE_OVERRIDE}"
@@ -189,7 +189,7 @@ if [ $OS == 'Mac' ]; then
       exit ${ATOM_EXIT}
     fi
   else
-    open -a "$POMAI_PATH/$ATOM_APP_NAME" -n -g --args --executed-from="$(pwd)" --pid=$$ --path-environment="$PATH" "$@"
+    open -a "$SYNTAXVOID_PATH/$ATOM_APP_NAME" -n -g --args --executed-from="$(pwd)" --pid=$$ --path-environment="$PATH" "$@"
   fi
 elif [ $OS == 'Linux' ]; then
 
@@ -207,56 +207,56 @@ elif [ $OS == 'Linux' ]; then
   if [ "$CHANNEL" == 'next' ]; then
     ATOM_APP_NAME="PomaiNext"
   else
-    ATOM_APP_NAME="Pomai"
+    ATOM_APP_NAME="SyntaxVoid"
   fi
 
-  # If `POMAI_PATH` is set by the user, we'll assume they know what they're
+  # If `SYNTAXVOID_PATH` is set by the user, we'll assume they know what they're
   # doing. Otherwise we should try to find it ourselves.
-  if [ -z "${POMAI_PATH}" ]; then
-    # Attempt to infer the installation directory of Pomai from the location
+  if [ -z "${SYNTAXVOID_PATH}" ]; then
+    # Attempt to infer the installation directory of SyntaxVoid from the location
     # of this script. When symlinked to a common location like
     # `/usr/local/bin`, this approach should find the true location of the
-    # Pomai installation.
+    # SyntaxVoid installation.
     if [ -L "$0" ]; then
       SCRIPT="$(readlink -f "$0")"
     else
       SCRIPT="$0"
     fi
 
-    # The `pomai.sh` file lives one directory deeper than the root directory
-    # that contains the `pomai` binary.
+    # The `syntaxvoid.sh` file lives one directory deeper than the root directory
+    # that contains the `syntaxvoid` binary.
     ATOM_APP="$(dirname "$(dirname "$SCRIPT")")"
-    POMAI_PATH="$(realpath "$ATOM_APP")"
+    SYNTAXVOID_PATH="$(realpath "$ATOM_APP")"
 
-    if [ ! -f "$POMAI_PATH/${ATOM_EXECUTABLE_NAME}" ]; then
-      # If that path doesn't contain a `pomai` executable, then it's not a
+    if [ ! -f "$SYNTAXVOID_PATH/${ATOM_EXECUTABLE_NAME}" ]; then
+      # If that path doesn't contain a `syntaxvoid` executable, then it's not a
       # valid path. We'll try something else.
       unset ATOM_APP
-      unset POMAI_PATH
+      unset SYNTAXVOID_PATH
     fi
 
-    if [ -z "${POMAI_PATH}" ]; then
+    if [ -z "${SYNTAXVOID_PATH}" ]; then
       if [ -f "/opt/${ATOM_APP_NAME}/${ATOM_EXECUTABLE_NAME}" ]; then
         # Check the default installation directory for RPM and DEB
         # distributions.
-        POMAI_PATH="/opt/${ATOM_APP_NAME}"
-      elif [ -f "$TMPDIR/pomai-build/${ATOM_APP_NAME}/${ATOM_EXECUTABLE_NAME}" ]; then
-        # This is where Pomai can be found during some CI build tasks.
-        POMAI_PATH="$TMPDIR/pomai-build/${ATOM_APP_NAME}"
+        SYNTAXVOID_PATH="/opt/${ATOM_APP_NAME}"
+      elif [ -f "$TMPDIR/syntaxvoid-build/${ATOM_APP_NAME}/${ATOM_EXECUTABLE_NAME}" ]; then
+        # This is where SyntaxVoid can be found during some CI build tasks.
+        SYNTAXVOID_PATH="$TMPDIR/syntaxvoid-build/${ATOM_APP_NAME}"
       else
-        echoerr "Cannot locate ${ATOM_APP_NAME}. Set the POMAI_PATH environment variable to the directory containing the \`${ATOM_BASE_NAME}\` executable."
+        echoerr "Cannot locate ${ATOM_APP_NAME}. Set the SYNTAXVOID_PATH environment variable to the directory containing the \`${ATOM_BASE_NAME}\` executable."
         exit 1
       fi
     fi
   fi
 
-  POMAI_EXECUTABLE="$POMAI_PATH/$ATOM_EXECUTABLE_NAME"
+  SYNTAXVOID_EXECUTABLE="$SYNTAXVOID_PATH/$ATOM_EXECUTABLE_NAME"
 
   # The name of the `ppm` binary we should run will be named according to the
   # same convention as this script; that's how PPM itself knows which release
   # channel it's using.
   case $ATOM_BASE_NAME in
-    pomai-next)
+    syntaxvoid-next)
       PPM_EXECUTABLE_NAME="ppm-next"
       ;;
     *)
@@ -264,7 +264,7 @@ elif [ $OS == 'Linux' ]; then
       ;;
   esac
 
-  PPM_EXECUTABLE="$POMAI_PATH/resources/app/ppm/bin/$PPM_EXECUTABLE_NAME"
+  PPM_EXECUTABLE="$SYNTAXVOID_PATH/resources/app/ppm/bin/$PPM_EXECUTABLE_NAME"
 
   # If `-p` or `--package` was specified, call `ppm` with all the arguments
   # that followed it instead of calling the Pulsar executable directly.
@@ -274,7 +274,7 @@ elif [ $OS == 'Linux' ]; then
   fi
 
   if [ $EXPECT_OUTPUT ]; then
-    "$POMAI_EXECUTABLE" --executed-from="$(pwd)" --pid=$$ "$@" --no-sandbox
+    "$SYNTAXVOID_EXECUTABLE" --executed-from="$(pwd)" --pid=$$ "$@" --no-sandbox
     ATOM_EXIT=$?
     if [ ${ATOM_EXIT} -eq 0 ] && [ -n "${EXIT_CODE_OVERRIDE}" ]; then
       exit "${EXIT_CODE_OVERRIDE}"
@@ -283,7 +283,7 @@ elif [ $OS == 'Linux' ]; then
     fi
   else
     (
-    nohup "$POMAI_EXECUTABLE" --executed-from="$(pwd)" --pid=$$ "$@" --no-sandbox > "$ATOM_HOME/nohup.out" 2>&1
+    nohup "$SYNTAXVOID_EXECUTABLE" --executed-from="$(pwd)" --pid=$$ "$@" --no-sandbox > "$ATOM_HOME/nohup.out" 2>&1
     if [ $? -ne 0 ]; then
       cat "$ATOM_HOME/nohup.out"
       exit $?
@@ -292,13 +292,13 @@ elif [ $OS == 'Linux' ]; then
   fi
 fi
 
-# Exits this process when Pomai is used as $EDITOR
+# Exits this process when SyntaxVoid is used as $EDITOR
 on_die() {
   exit 0
 }
 trap 'on_die' SIGQUIT SIGTERM
 
-# If the wait flag is set, don't exit this process until Pomai kills it.
+# If the wait flag is set, don't exit this process until SyntaxVoid kills it.
 if [ $WAIT ]; then
   WAIT_FIFO="$ATOM_HOME/.wait_fifo"
 

@@ -259,7 +259,7 @@ class FileGraphRenderer {
 
                 // Draw Label
                 ctx.font = '12px sans-serif';
-                ctx.fillStyle = settings.get('pomai-project-map.themeMode') === 'pixel' ? '#0f0' : '#333';
+                ctx.fillStyle = settings.get('syntaxvoid-project-map.themeMode') === 'pixel' ? '#0f0' : '#333';
                 ctx.globalAlpha = 1.0;
                 ctx.fillText(n.name, n.x + n.r + 4, n.y + 4);
             }

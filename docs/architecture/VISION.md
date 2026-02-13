@@ -1,10 +1,10 @@
-# Pomai Platform Vision
+# SyntaxVoid Platform Vision
 
-Pomai is a **first-party platform** composed of:
+SyntaxVoid is a **first-party platform** composed of:
 
 - **Core editor runtime** (existing editor engine and shell)
 - **Platform surface** (`core/platform/*`) for package-safe integration
-- **Packages** (bundled + first-party such as `pomai-project-map`)
+- **Packages** (bundled + first-party such as `syntaxvoid-project-map`)
 - **Future daemons/services** for background indexing, sync, and automation
 
 ## Principles

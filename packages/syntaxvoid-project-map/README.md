@@ -1,6 +1,6 @@
-# Pomai Project Map
+# SyntaxVoid Project Map
 
-A **project topology visualization** package for Pomai — a cognition tool that replaces the traditional file-tree mental model with a spatial treemap and dependency graph.
+A **project topology visualization** package for SyntaxVoid — a cognition tool that replaces the traditional file-tree mental model with a spatial treemap and dependency graph.
 
 ## What It Does
 

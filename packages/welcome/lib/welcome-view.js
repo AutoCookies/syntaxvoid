@@ -32,7 +32,7 @@ export default class WelcomeView {
             <a href={atom.branding.urlWeb} style={{ display: 'flex', 'flex-direction': 'column', 'align-items': 'center' }}>
               <img
                 className='welcome-logo'
-                src={`file://${path.join(__dirname, '..', '..', '..', 'resources', 'pomai.png')}`}
+                src={`file://${path.join(__dirname, '..', '..', '..', 'resources', 'syntaxvoid.png')}`}
                 width="200"
                 height="200"
               />

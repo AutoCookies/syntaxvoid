@@ -8,7 +8,7 @@
                     "submenu": [
                         {
                             "label": "Toggle Tree Graph",
-                            "command": "pomai-project-map:toggle"
+                            "command": "syntaxvoid-project-map:toggle"
                         }
                     ]
                 }
