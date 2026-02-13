@@ -12,6 +12,13 @@
             "syntaxvoid-project-map:toggle"
         ]
     },
+    "providedServices": {
+        "syntaxvoid-project-map.graph": {
+            "versions": {
+                "1.0.0": "provideGraphService"
+            }
+        }
+    },
     "configSchema": {
         "maxFiles": {
             "type": "integer",

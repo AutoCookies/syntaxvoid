@@ -1,0 +1,25 @@
+{
+    "name": "syntaxvoid-impact",
+    "version": "0.1.0",
+    "description": "Visualize upstream and downstream dependencies for the active file.",
+    "main": "./lib/index",
+    "engines": {
+        "atom": ">=1.0.0 <2.0.0"
+    },
+    "dependencies": {
+        "etch": "0.14.1"
+    },
+    "consumedServices": {
+        "syntaxvoid-project-map.graph": {
+            "versions": {
+                "1.0.0": "consumeGraphService"
+            }
+        }
+    },
+    "activationCommands": {
+        "atom-workspace": [
+            "syntaxvoid-impact:toggle",
+            "syntaxvoid-impact:show-for-active-file"
+        ]
+    }
+}

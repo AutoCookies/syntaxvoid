@@ -399,6 +399,17 @@ class ProjectMapView {
         }
     }
 
+    /**
+     * Highlights specific nodes in the view.
+     * @param {string[]} nodeIds - Array of file paths to highlight
+     * @param {string} [style='impact'] - 'impact' | 'search'
+     */
+    highlightNodes(nodeIds, style = 'impact') {
+        this.highlightedNodes = new Set(nodeIds);
+        this.highlightStyle = style;
+        this._render();
+    }
+
     // ─── Build & Render ──────────────────────────────────────────────
 
     _getProjectRoot() {
@@ -606,18 +617,40 @@ class ProjectMapView {
 
         // Fill
         ctx.fillStyle = rect.color;
-        if (isDimmed) {
-            ctx.globalAlpha = 0.05; // Very dim
+
+        // Highlight logic
+        const isHighlighted = this.highlightedNodes && this.highlightedNodes.has(rect.folder.path);
+
+        if (this.highlightedNodes && this.highlightedNodes.size > 0) {
+            // Dim everything else if there are highlights
+            if (isHighlighted) {
+                ctx.globalAlpha = 0.95;
+                if (this.highlightStyle === 'impact') {
+                    ctx.shadowColor = '#e74c3c';
+                    ctx.shadowBlur = 10;
+                }
+            } else {
+                ctx.globalAlpha = 0.1; // Dim unrelated
+            }
+        } else if (isDimmed) {
+            ctx.globalAlpha = 0.05; // Very dim (search filter)
         } else {
             ctx.globalAlpha = isHovered ? 0.9 : 0.25 + (rect.depth * 0.1);
         }
+
         ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
+        ctx.shadowBlur = 0; // Reset shadow
 
         // Border
         ctx.globalAlpha = 1;
         // Theme aware border?
-        ctx.strokeStyle = isHovered ? '#ecf0f1' : 'rgba(255,255,255,0.15)';
-        ctx.lineWidth = isHovered ? 2 : 1;
+        if (isHighlighted) {
+            ctx.strokeStyle = '#e74c3c';
+            ctx.lineWidth = 2;
+        } else {
+            ctx.strokeStyle = isHovered ? '#ecf0f1' : 'rgba(255,255,255,0.15)';
+            ctx.lineWidth = isHovered ? 2 : 1;
+        }
 
         // Round corners in Clean mode
         if (this.themeMode === 'clean' && rect.w > 10 && rect.h > 10) {

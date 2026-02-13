@@ -53,5 +53,31 @@ module.exports = {
             this.view = new ProjectMapView();
         }
         return this.view;
+    },
+
+    provideGraphService() {
+        return {
+            getGraph: () => {
+                const view = this._getOrCreateView();
+                // Ensure view is initialized to have the builder
+                if (view && view.builder) {
+                    return view.builder.getGraph();
+                }
+                return null;
+            },
+            onDidUpdateGraph: (callback) => {
+                const view = this._getOrCreateView();
+                if (view && view.builder) {
+                    return view.builder.onDidUpdate(callback);
+                }
+                return new Disposable(() => { }); // No-op if not ready
+            },
+            highlightNodes: (nodeIds, styles) => {
+                const view = this._getOrCreateView();
+                if (view) {
+                    view.highlightNodes(nodeIds, styles);
+                }
+            }
+        };
     }
 };

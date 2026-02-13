@@ -7,6 +7,10 @@ const sessions = new Map();
 function initialize() {
     console.log('[SyntaxVoid Terminal] Initializing Main Process...');
 
+    ipcMain.handle('syntaxvoid-terminal:log', (event, message) => {
+        console.log(`[TerminalView Debug] ${message}`);
+    });
+
     ipcMain.handle('syntaxvoid-terminal:create', (event, { shell, args, cwd, env, cols, rows } = {}) => {
         const defaultShell = shell || (os.platform() === 'win32' ? 'powershell.exe' : 'bash');
         const ptyProcess = pty.spawn(defaultShell, args || [], {
@@ -20,7 +24,7 @@ function initialize() {
         const pid = ptyProcess.pid;
         sessions.set(pid, ptyProcess);
 
-        console.log(`[SyntaxVoid Terminal] Created session ${pid}`);
+        console.log(`[SyntaxVoid Terminal] Created session ${pid} with CWD: ${cwd}`);
 
         ptyProcess.onData((data) => {
             if (!event.sender.isDestroyed()) {

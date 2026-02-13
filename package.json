@@ -256,6 +256,7 @@
     "whitespace": "file:./packages/whitespace",
     "wrap-guide": "file:./packages/wrap-guide",
     "syntaxvoid-terminal": "file:./packages/syntaxvoid-terminal",
+    "syntaxvoid-impact": "file:./packages/syntaxvoid-impact",
     "language-c": "file:./packages/language-c",
     "language-clojure": "file:./packages/language-clojure",
     "language-coffee-script": "file:./packages/language-coffee-script",
