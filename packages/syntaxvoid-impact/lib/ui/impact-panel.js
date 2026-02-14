@@ -87,7 +87,7 @@ export default class ImpactPanel {
                     <div className="message">
                         {isBuilding
                             ? <span className="loading loading-spinner-small">Building graph...</span>
-                            : 'Select a file to see its impact.'
+                            : <span>Select a file to see its impact.</span>
                         }
                     </div>
                     <div className="graph-info">{graphInfo}</div>
@@ -102,6 +102,36 @@ export default class ImpactPanel {
         const upstreamCount = this.impactData ? this.impactData.upstream.length : 0;
         const downstreamCount = this.impactData ? this.impactData.downstream.length : 0;
         const hubScore = this.impactData ? this.impactData.hubScore : 0;
+
+        // Build children array for results-container (etch needs real nodes, not false)
+        const resultChildren = [];
+
+        if (!this.impactData && !isBuilding) {
+            resultChildren.push(
+                <div className="message warning">File not found in graph. Try rebuilding.</div>
+            );
+        }
+
+        if (isBuilding) {
+            resultChildren.push(
+                <div className="message">
+                    <span className="loading loading-spinner-small">Building graph...</span>
+                </div>
+            );
+        }
+
+        if (this.impactData) {
+            const listChildren = [];
+            if (this.showUpstream) {
+                listChildren.push(this._renderList('↑ Upstream (who imports this)', this.impactData.upstream, 'upstream'));
+            }
+            if (this.showDownstream) {
+                listChildren.push(this._renderList('↓ Downstream (imported by this)', this.impactData.downstream, 'downstream'));
+            }
+            resultChildren.push(
+                <div className="impact-lists">{listChildren}</div>
+            );
+        }
 
         return (
             <div className="syntaxvoid-impact-panel">
@@ -123,60 +153,60 @@ export default class ImpactPanel {
                     <div className="control-group toggles">
                         <label className={this.showUpstream ? 'active' : ''}>
                             <input type="checkbox" checked={this.showUpstream} onclick={() => this._toggleUpstream()} />
-                            ↑ Upstream ({upstreamCount})
+                            <span>↑ Upstream ({upstreamCount})</span>
                         </label>
                         <label className={this.showDownstream ? 'active' : ''}>
                             <input type="checkbox" checked={this.showDownstream} onclick={() => this._toggleDownstream()} />
-                            ↓ Downstream ({downstreamCount})
+                            <span>↓ Downstream ({downstreamCount})</span>
                         </label>
                     </div>
                 </section>
 
                 <div className="results-container">
-                    {!this.impactData && !isBuilding && (
-                        <div className="message warning">
-                            File not found in graph. Try rebuilding.
-                        </div>
-                    )}
-                    {isBuilding && (
-                        <div className="message">
-                            <span className="loading loading-spinner-small">Building graph...</span>
-                        </div>
-                    )}
-                    {this.impactData && (
-                        <div className="impact-lists">
-                            {this.showUpstream && this._renderList('↑ Upstream (who imports this)', this.impactData.upstream, 'upstream')}
-                            {this.showDownstream && this._renderList('↓ Downstream (imported by this)', this.impactData.downstream, 'downstream')}
-                        </div>
-                    )}
+                    {resultChildren}
                 </div>
             </div>
         );
     }
 
     _renderList(title, nodes, type) {
+        const items = [];
+
+        if (!nodes || nodes.length === 0) {
+            items.push(
+                <div className="empty-hint">No {type} dependencies found.</div>
+            );
+        } else {
+            const fileItems = nodes.map(node => {
+                const children = [
+                    <span className="file-icon icon icon-file-text"></span>,
+                    <span className="file-name">{node.name}</span>,
+                    <span className="file-rel-path">{node.relPath}</span>,
+                    <span className="file-meta">↑{node.inDegree} ↓{node.outDegree}</span>
+                ];
+
+                if (node.isCircular) {
+                    children.push(<span className="badge badge-warning">Circular</span>);
+                }
+
+                return (
+                    <li className={`file-item depth-${node.impactDepth}`}
+                        onclick={() => this._openFile(node.path)}
+                        title={node.path}>
+                        {children}
+                    </li>
+                );
+            });
+
+            items.push(
+                <ul className="file-list">{fileItems}</ul>
+            );
+        }
+
         return (
             <div className={`impact-section ${type}`}>
                 <div className="section-title">{title}</div>
-                {(!nodes || nodes.length === 0) ? (
-                    <div className="empty-hint">No {type} dependencies found.</div>
-                ) : (
-                    <ul className="file-list">
-                        {nodes.map(node => (
-                            <li className={`file-item depth-${node.impactDepth}`}
-                                onclick={() => this._openFile(node.path)}
-                                title={node.path}>
-                                <span className="file-icon icon icon-file-text"></span>
-                                <span className="file-name">{node.name}</span>
-                                <span className="file-rel-path">{node.relPath}</span>
-                                <span className="file-meta">
-                                    ↑{node.inDegree} ↓{node.outDegree}
-                                </span>
-                                {node.isCircular && <span className="badge badge-warning">Circular</span>}
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                {items}
             </div>
         );
     }
