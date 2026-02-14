@@ -18,5 +18,8 @@
     },
     "engines": {
         "atom": ">=1.0.0 <2.0.0"
+    },
+    "devDependencies": {
+        "syntaxvoid-ui-kit": "file:../syntaxvoid-ui-kit"
     }
 }

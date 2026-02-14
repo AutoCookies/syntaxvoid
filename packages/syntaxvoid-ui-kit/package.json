@@ -1,0 +1,22 @@
+{
+    "name": "syntaxvoid-ui-kit",
+    "version": "0.1.0",
+    "description": "Design System for SyntaxVoid",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist",
+        "styles"
+    ],
+    "scripts": {
+        "build": "tsc"
+    },
+    "engines": {
+        "atom": ">=1.0.0 <2.0.0"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "typescript": "^5.0.0",
+        "@types/node": "^14.0.0"
+    }
+}

@@ -68,7 +68,7 @@ export default class ProjectMapView {
     constructor(serializedState?: ProjectMapViewOptions);
     _updateUIState(): void;
     _createDOM(): void;
-    _createButton(iconClass: string, text: string, isIconOnly?: boolean): HTMLButtonElement;
+    _createSvButton(text: string, _iconOnly?: boolean): HTMLButtonElement;
     _createSeparator(): HTMLDivElement;
     _bindEvents(): void;
     _applyTheme(): void;

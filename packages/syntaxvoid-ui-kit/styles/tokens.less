@@ -1,0 +1,45 @@
+@import "ui-variables";
+
+// Root scope for SyntaxVoid UI
+.syntaxvoid-ui {
+    // ── Colors (bridges to theme) ──────────────────────────────
+    --sv-bg: @tool-panel-background-color;
+    --sv-surface: @base-background-color;
+    --sv-surface-2: @inset-panel-background-color;
+
+    --sv-border: @base-border-color;
+    --sv-border-2: @panel-heading-border-color;
+
+    --sv-text: @text-color;
+    --sv-muted: @text-color-subtle;
+    --sv-faint: fade(@text-color, 30%);
+
+    --sv-accent: @background-color-info;
+    --sv-accent-text: @text-color-info;
+
+    --sv-danger: @background-color-error;
+    --sv-warning: @background-color-warning;
+    --sv-success: @background-color-success;
+
+    // ── Layout & Typography ──────────────────────────────────
+    --sv-radius-sm: 2px;
+    --sv-radius-md: 4px;
+    --sv-radius-lg: 8px;
+
+    --sv-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+    --sv-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.16);
+    --sv-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.2);
+
+    --sv-space-1: 4px;
+    --sv-space-2: 8px;
+    --sv-space-3: 12px;
+    --sv-space-4: 16px;
+    --sv-space-5: 20px;
+    --sv-space-6: 24px;
+
+    --sv-font-sm: 11px;
+    --sv-font-md: 13px; // Standard UI font
+    --sv-font-lg: 16px;
+
+    --sv-header-h: 40px; // Slightly tighter than 48px for Atom density
+}

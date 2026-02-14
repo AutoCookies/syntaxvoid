@@ -1,368 +1,72 @@
-@import "ui-variables";
-
-// ─── Scoped Design System ────────────────────────────────────────────
+@import "syntaxvoid-ui-kit/styles/index.less";
 
 .syntaxvoid-project-map {
-  // Default (Clean Mode)
-  --pm-bg: @tool-panel-background-color;
-  --pm-surface: lighten(@tool-panel-background-color, 3%);
-  --pm-border: @base-border-color;
-  --pm-text: @text-color;
-  --pm-muted: @text-color-subtle;
-  --pm-accent: @background-color-info;
-  --pm-danger: @text-color-error;
-  --pm-radius: 6px;
-  --pm-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  --pm-font-family: 'Inter', system-ui, sans-serif;
-  --pm-header-height: 48px;
+  .sv-panel; // Inherit panel styles
 
-  // Pixel Mode Overrides
-  &.pm-pixel {
-    --pm-bg: #1a1a1a;
-    --pm-surface: #262626;
-    --pm-border: #444;
-    --pm-text: #e0e0e0;
-    --pm-muted: #888;
-    --pm-accent: #3498db;
-    --pm-danger: #e74c3c;
-    --pm-radius: 0px; // Hard edges
-    --pm-shadow: none;
-    --pm-font-family: 'Press Start 2P', monospace; // Fallback to monospace if unavailable
-
-    // PC-98 / CRT vibes
-    // PC-98 / CRT vibes
-    &::after {
-      content: " ";
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
-      background-size: 100% 4px;
-      z-index: 999;
-      pointer-events: none;
-      opacity: 0.15;
-    }
-  }
-
-  // merged content
-
-
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  background: var(--pm-bg);
-  color: var(--pm-text);
-  font-family: var(--pm-font-family);
-  overflow: hidden;
-  position: relative; // Context context
-
-  // ─── Header ────────────────────────────────────────────────────────
-  .project-map-header {
-    flex: 0 0 32px;
+  // Override specific to graph
+  .graph-container {
+    .sv-body; // Inherit body styles
+    padding: 0; // Graphs usually need full width
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 8px;
-    border-bottom: 1px solid var(--pm-border);
-    background: var(--pm-bg-header);
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .header-title {
-      font-weight: 600;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .search-input {
-      background: var(--pm-input-bg);
-      border: 1px solid var(--pm-border);
-      color: var(--pm-text);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 11px;
-      width: 140px;
-
-      &:focus {
-        border-color: var(--pm-accent);
-      }
-
-      &::placeholder {
-        color: var(--pm-text-subtle);
-      }
-    }
-
-    .header-controls {
-      display: flex;
-      gap: 4px;
-      align-items: center;
-
-      .btn-control {
-        background: transparent;
-        border: 1px solid transparent;
-        color: var(--pm-text);
-        padding: 2px 6px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 11px;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-
-        &:hover {
-          background: rgba(255, 255, 255, 0.05);
-        }
-
-        &.active {
-          background: var(--pm-accent);
-          color: #fff;
-        }
-
-        &.btn-icon {
-          padding: 4px;
-        }
-
-        .icon {
-          margin-right: 0;
-        }
-      }
-    }
-  }
-
-  // ─── Main Content Area ─────────────────────────────────────────────
-  .project-map-body {
-    flex: 1;
-    display: flex; // Canvas + Inspector
     position: relative;
-    overflow: hidden;
+    background-color: var(--sv-bg);
 
-    .project-map-canvas-container {
-      flex: 1;
-      position: relative;
-      background: var(--pm-bg-canvas);
-      overflow: hidden; // Canvas handles its own pan/zoom
-      cursor: grab;
-
-      &:active {
-        cursor: grabbing;
-      }
-
-      canvas {
-        display: block;
-        // Size handled by JS
-      }
-
-      .zoom-overlay {
-        position: absolute;
-        bottom: 16px;
-        right: 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-
-        button {
-          width: 28px;
-          height: 28px;
-          border-radius: 4px;
-          background: var(--pm-bg-header);
-          border: 1px solid var(--pm-border);
-          color: var(--pm-text);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          opacity: 0.8;
-
-          &:hover {
-            opacity: 1;
-            background: var(--pm-accent);
-            color: white;
-            border-color: var(--pm-accent);
-          }
-        }
-      }
+    canvas {
+      display: block;
     }
+  }
 
-    // ─── Inspector Panel ─────────────────────────────────────────────
-    .project-map-inspector {
-      width: 250px;
-      background: var(--pm-bg-inspector);
-      border-left: 1px solid var(--pm-border);
+  // Toolbar / Controls
+  .controls {
+    .sv-footer; // Use footer style for controls or create a sub-header
+    justify-content: flex-start;
+    border-top: 1px solid var(--sv-border);
+
+    label {
       display: flex;
-      flex-direction: column;
-      font-size: 11px;
-      z-index: 5;
+      align-items: center;
+      gap: var(--sv-space-2);
+      font-size: var(--sv-font-sm);
+      color: var(--sv-muted);
 
-      .inspector-header {
-        padding: 8px;
-        border-bottom: 1px solid var(--pm-border);
-        font-weight: 600;
-        font-size: 10px;
-        text-transform: uppercase;
-        color: var(--pm-text-subtle);
-      }
-
-      .inspector-content {
-        padding: 12px;
-        overflow-y: auto;
-        flex: 1;
-
-        .inspector-placeholder {
-          padding: 20px;
-          text-align: center;
-        }
-      }
-
-      .folder-name {
-        font-size: 14px;
-        font-weight: 600;
-        margin: 0 0 4px 0;
-        color: var(--pm-text-highlight);
-        word-break: break-all;
-      }
-
-      .folder-path {
-        font-family: monospace;
-        color: var(--pm-text-subtle);
-        margin-bottom: 8px;
-      }
-
-      .folder-stats {
-        display: flex;
-        gap: 6px;
-        margin-bottom: 16px;
-
-        .badge {
-          border-radius: 3px;
-          padding: 2px 6px;
-          font-size: 10px;
-          font-weight: 600;
-        }
-
-        .badge-info {
-          background: rgba(52, 152, 219, 0.2);
-          color: #3498db;
-        }
-
-        .badge-success {
-          background: rgba(46, 204, 113, 0.2);
-          color: #2ecc71;
-        }
-      }
-
-      .section-title {
-        font-weight: 600;
-        margin: 12px 0 6px 0;
-        color: var(--pm-text-subtle);
-        text-transform: uppercase;
-        font-size: 10px;
-      }
-
-      .dep-list {
-        list-style: none;
-        padding: 0;
+      input[type="checkbox"] {
         margin: 0;
-
-        li {
-          padding: 4px 0;
-          border-bottom: 1px solid var(--pm-border);
-          display: flex;
-          justify-content: space-between;
-
-          &:last-child {
-            border-bottom: none;
-          }
-
-          .dep-name {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-width: 140px;
-          }
-
-          .dep-count {
-            color: var(--pm-text-subtle);
-          }
-        }
-      }
-
-      .inspector-actions {
-        margin-top: 20px;
-        display: flex;
-        justify-content: center;
-
-        .btn {
-          width: 100%;
-        }
       }
     }
   }
 
-  // ─── Footer ────────────────────────────────────────────────────────
-  .project-map-footer {
-    flex: 0 0 24px;
-    background: var(--pm-bg-header);
-    border-top: 1px solid var(--pm-border);
-    display: flex;
-    align-items: center;
-    padding: 0 8px;
-    font-size: 10px;
-    color: var(--pm-text-subtle);
+  // Node styles (Project Map specific)
+  .node {
+    fill: var(--sv-surface-2);
+    stroke: var(--sv-border);
 
-    .footer-stat {
-      display: flex;
-      gap: 12px;
+    &.selected {
+      stroke: var(--sv-accent);
+      stroke-width: 2px;
+    }
+
+    &.circular {
+      stroke: var(--sv-warning);
     }
   }
 
-  // ─── Tooltip ───────────────────────────────────────────────────────
-  .project-map-tooltip {
-    position: absolute;
-    pointer-events: none;
-    background: rgba(0, 0, 0, 0.9);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    padding: 8px 12px;
-    font-size: 11px;
-    color: #ecf0f1;
-    z-index: 100;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.1s;
+  .link {
+    stroke: var(--sv-border-2);
 
-    &.visible {
-      opacity: 1;
+    &.circular {
+      stroke: var(--sv-warning);
+      stroke-dasharray: 4;
     }
+  }
 
-    .tooltip-header {
-      font-weight: 700;
-      margin-bottom: 2px;
-      color: #fff;
-    }
+  .text {
+    fill: var(--sv-text);
+    font-size: var(--sv-font-sm);
 
-    .tooltip-path {
-      color: #7f8c8d;
-      margin-bottom: 4px;
-      font-size: 10px;
-      font-family: monospace;
-      max-width: 300px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .tooltip-stat {
-      font-weight: 600;
-      color: #3498db;
+    &.faint {
+      fill: var(--sv-faint);
     }
   }
 }

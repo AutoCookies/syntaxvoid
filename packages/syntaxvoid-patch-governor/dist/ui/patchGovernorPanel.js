@@ -4,47 +4,66 @@ exports.PatchGovernorPanel = void 0;
 class PatchGovernorPanel {
     constructor() {
         this.element = document.createElement('div');
-        this.element.classList.add('syntaxvoid-patch-governor-panel');
-        this.element.innerHTML = `
-            <div class="header">
-                <span class="icon icon-shield">Patch Governor</span>
-            </div>
-            <div class="content">
-                <div class="message">No active patch proposal.</div>
-            </div>
-        `;
+        this.element.className = 'syntaxvoid-ui sv-panel sv-skin-clean syntaxvoid-patch-governor-panel';
+        // Header
+        const header = document.createElement('header');
+        header.className = 'sv-header';
+        header.innerHTML = '<div class="title"><span class="icon icon-shield"></span> Patch Governor</div>';
+        this.element.appendChild(header);
+        // Content Body
+        const content = document.createElement('div');
+        content.className = 'content sv-body';
+        content.innerHTML = '<div class="message" style="padding: 20px; color: var(--sv-muted); text-align: center;">No active patch proposal.</div>';
+        this.element.appendChild(content);
     }
     showProposal(proposal, onApply, onReject) {
         const content = this.element.querySelector('.content');
         if (!content)
             return;
         const risk = proposal.risk;
-        const riskClass = (risk && risk.riskScore > 10) ? 'text-error' : 'text-info';
+        // riskScore > 10 is high risk
+        const isHighRisk = (risk?.riskScore || 0) > 10;
+        const riskClass = isHighRisk ? 'text-error' : 'text-info';
         content.innerHTML = `
-            <h3>${proposal.title}</h3>
-            <div class="meta text-subtle">ID: ${proposal.id} · Source: ${proposal.source}</div>
+            <div class="sv-section">
+                <div class="section-title">${proposal.title}</div>
+                <div class="sv-kv-row">
+                    <span class="key">ID</span>
+                    <span class="value">${proposal.id}</span>
+                </div>
+                <div class="sv-kv-row">
+                    <span class="key">Source</span>
+                    <span class="value">${proposal.source}</span>
+                </div>
+            </div>
             
-            <div class="risk-summary inset-panel padded">
-                <div class="risk-score ${riskClass}">Risk Score: ${risk?.riskScore || 0}</div>
+            <div class="risk-summary">
+                <div class="risk-score ${riskClass}">
+                    <div style="font-size: 10px; color: var(--sv-muted); text-transform: uppercase;">Risk Score</div>
+                    ${risk?.riskScore || 0}
+                </div>
                 <div class="risk-details">
-                    <div>Upstream Impact: ${risk?.impactUpstream || 0}</div>
-                    <div>Downstream Impact: ${risk?.impactDownstream || 0}</div>
-                    <div>Circular: ${risk?.circular ? 'Yes' : 'No'}</div>
+                    <div class="sv-kv-row" style="gap: 12px">
+                        <span class="key">Upstream</span> <span class="value">${risk?.impactUpstream || 0}</span>
+                    </div>
+                    <div class="sv-kv-row" style="gap: 12px">
+                        <span class="key">Downstream</span> <span class="value">${risk?.impactDownstream || 0}</span>
+                    </div>
                 </div>
             </div>
 
             <div class="file-list">
                 ${proposal.files.map(f => `
                     <div class="file-change">
-                        <span class="badge badge-${f.kind === 'delete' ? 'error' : (f.kind === 'create' ? 'success' : 'info')}">${f.kind}</span>
-                        <span class="path">${f.path}</span>
+                        <span class="sv-badge ${f.kind === 'delete' ? 'error' : (f.kind === 'create' ? 'success' : 'info')}">${f.kind}</span>
+                        <span class="path" title="${f.path}">${f.path}</span>
                     </div>
                 `).join('')}
             </div>
 
-            <div class="actions">
-                <button class="btn btn-error btn-reject">Reject</button>
-                <button class="btn btn-primary btn-apply">Apply Patch</button>
+            <div class="actions sv-footer">
+                <button class="sv-btn danger btn-reject">Reject</button>
+                <button class="sv-btn primary btn-apply">${isHighRisk ? 'Confirm & Apply' : 'Apply Patch'}</button>
             </div>
         `;
         const btnApply = content.querySelector('.btn-apply');

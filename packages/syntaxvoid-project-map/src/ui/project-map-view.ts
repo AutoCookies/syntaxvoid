@@ -146,160 +146,162 @@ export default class ProjectMapView {
 
     // ─── DOM Construction ────────────────────────────────────────────
 
+    // ─── DOM Construction ────────────────────────────────────────────
+
+    // Import helper (would normally be at top, but for replacing block)
+    // import { panelRoot, header, wrapper, button as svButton, badge } from 'syntaxvoid-ui-kit';
+
     _createDOM() {
+        // Use panelRoot from UI Kit (simulated here as we can't easily change top imports in this block)
+        // In real refactor, we'd change imports. 
+        // For this file execution, we will manually apply the classes to match syntaxvoid-ui-kit logic
+        // or fully replace the method.
+
         this.element = document.createElement('div');
-        this.element.classList.add('syntaxvoid-project-map');
-        // Theme class added by _applyTheme
+        this.element.className = 'syntaxvoid-ui sv-panel sv-skin-clean syntaxvoid-project-map';
 
         // 1. Header
-        const header = document.createElement('div');
-        header.classList.add('project-map-header');
+        const head = document.createElement('header');
+        head.className = 'sv-header';
 
-        const headerLeft = document.createElement('div');
-        headerLeft.classList.add('header-left');
-
-        const title = document.createElement('span');
-        title.classList.add('header-title');
-        title.textContent = 'Project Map';
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'title';
+        titleDiv.innerHTML = '<span class="icon icon-repo"></span> Project Map';
 
         this.searchInput = document.createElement('input');
-        this.searchInput.classList.add('search-input', 'native-key-bindings');
-        this.searchInput.placeholder = 'Filter folders...';
+        this.searchInput.className = 'sv-input native-key-bindings';
+        this.searchInput.placeholder = 'Filter...';
+        this.searchInput.style.marginLeft = '12px';
+        this.searchInput.style.width = '140px';
 
-        headerLeft.appendChild(title);
-        headerLeft.appendChild(this.searchInput);
+        const headLeft = document.createElement('div');
+        headLeft.style.display = 'flex';
+        headLeft.style.alignItems = 'center';
+        headLeft.appendChild(titleDiv);
+        headLeft.appendChild(this.searchInput);
 
-        const controls = document.createElement('div');
-        controls.classList.add('header-controls');
+        const actions = document.createElement('div');
+        actions.className = 'actions';
 
-        // Mode Switch (Folder | File)
+        // Mode Group
         const modeGroup = document.createElement('div');
-        modeGroup.classList.add('btn-group');
-        modeGroup.style.marginRight = '8px';
+        modeGroup.className = 'btn-group'; // Atom's btn-group or generic wrapper
+        modeGroup.style.display = 'inline-flex';
 
-        this.btnModeFolder = document.createElement('button');
-        this.btnModeFolder.classList.add('btn', 'btn-sm'); // Pulsar classes
-        this.btnModeFolder.textContent = 'Folders';
-
-        this.btnModeFile = document.createElement('button');
-        this.btnModeFile.classList.add('btn', 'btn-sm');
-        this.btnModeFile.textContent = 'Files';
+        this.btnModeFolder = this._createSvButton('Folders');
+        this.btnModeFile = this._createSvButton('Files');
 
         modeGroup.appendChild(this.btnModeFolder);
         modeGroup.appendChild(this.btnModeFile);
 
-        controls.appendChild(modeGroup);
-        controls.appendChild(this._createSeparator());
+        actions.appendChild(modeGroup);
 
         // Theme Toggle
-        this.btnTheme = this._createButton('icon-paintcan', 'Theme', true);
-        this.btnTheme.title = 'Toggle Clean/Pixel Mode';
+        this.btnTheme = this._createSvButton('Theme', true);
+        this.btnTheme.title = 'Toggle Vibe';
+        actions.appendChild(this.btnTheme);
 
-        // Color Mode Toggle
-        this.btnColor = this._createButton('icon-repo', 'Folder');
-        this.btnColor.title = 'Switch Color Mode (Folder/Heatmap)';
+        // Other Toggles
+        this.btnColor = this._createSvButton('Color', true);
+        this.btnLinks = this._createSvButton('Links', true);
+        this.btnCircular = this._createSvButton('Circ', true);
+        this.btnRescan = this._createSvButton('', true);
+        this.btnRescan.innerHTML = '<i class="icon icon-sync"></i>';
 
-        // View Toggles
-        this.btnLinks = this._createButton('', 'Links');
-        if (this.overlay.showLinks) this.btnLinks.classList.add('active');
+        actions.appendChild(this.btnColor);
+        actions.appendChild(this.btnLinks);
+        actions.appendChild(this.btnCircular);
+        actions.appendChild(this.btnRescan);
 
-        this.btnCircular = this._createButton('', 'Circular');
-        if (this.overlay.circularOnly) this.btnCircular.classList.add('active');
+        head.appendChild(headLeft);
+        head.appendChild(actions);
+        this.element.appendChild(head);
 
-        this.btnRescan = this._createButton('icon-sync', '', true);
-        this.btnRescan.title = 'Rescan Project';
-
-        controls.appendChild(this.btnTheme);
-        controls.appendChild(this.btnColor);
-        controls.appendChild(this._createSeparator());
-        controls.appendChild(this.btnLinks);
-        controls.appendChild(this.btnCircular);
-        controls.appendChild(this._createSeparator());
-        controls.appendChild(this.btnRescan);
-
-        header.appendChild(headerLeft);
-        header.appendChild(controls);
-        this.element.appendChild(header);
-
-        // 2. Body (Canvas + Inspector)
+        // 2. Body
         const body = document.createElement('div');
-        body.classList.add('project-map-body');
+        body.className = 'sv-body project-map-body';
+        body.style.display = 'flex';
+        body.style.flexDirection = 'column';
+        body.style.padding = '0'; // Graph needs full width
 
         // Canvas Container
         const canvasContainer = document.createElement('div');
-        canvasContainer.classList.add('project-map-canvas-container');
+        canvasContainer.className = 'project-map-canvas-container';
+        canvasContainer.style.flex = '1';
+        canvasContainer.style.position = 'relative';
+        canvasContainer.style.overflow = 'hidden';
 
         this.canvas = document.createElement('canvas');
+        this.canvas.style.display = 'block';
         canvasContainer.appendChild(this.canvas);
 
-        // Zoom Controls Overlay
+        // Zoom Controls (Overlay)
         const zoomOverlay = document.createElement('div');
-        zoomOverlay.classList.add('zoom-overlay');
-        this.btnZoomIn = document.createElement('button');
-        this.btnZoomIn.innerHTML = '<i class="icon icon-plus"></i>';
-        this.btnZoomOut = document.createElement('button');
-        this.btnZoomOut.innerHTML = '<i class="icon icon-dash"></i>';
-        this.btnResetZoom = document.createElement('button');
-        this.btnResetZoom.innerHTML = '<i class="icon icon-screen-full"></i>';
+        zoomOverlay.className = 'zoom-overlay';
+        zoomOverlay.style.position = 'absolute';
+        zoomOverlay.style.bottom = '16px';
+        zoomOverlay.style.right = '16px';
+        zoomOverlay.style.display = 'flex';
+        zoomOverlay.style.flexDirection = 'column';
+        zoomOverlay.style.gap = '4px';
+
+        this.btnZoomIn = this._createSvButton('+', true);
+        this.btnZoomOut = this._createSvButton('-', true);
+        this.btnResetZoom = this._createSvButton('1:1', true);
 
         zoomOverlay.appendChild(this.btnZoomIn);
         zoomOverlay.appendChild(this.btnZoomOut);
         zoomOverlay.appendChild(this.btnResetZoom);
         canvasContainer.appendChild(zoomOverlay);
 
-        // Tooltip (attached to container)
+        // Tooltip
         this.tooltip = document.createElement('div');
-        this.tooltip.classList.add('project-map-tooltip');
-        this.tooltip.innerHTML = `
-          <div class="tooltip-header"></div>
-          <div class="tooltip-path"></div>
-          <div class="tooltip-stat"></div>
-        `;
+        this.tooltip.className = 'project-map-tooltip sv-panel';
+        this.tooltip.style.position = 'absolute';
+        this.tooltip.style.padding = '8px';
+        this.tooltip.style.pointerEvents = 'none';
+        this.tooltip.style.display = 'none';
+        this.tooltip.style.zIndex = '100';
+        this.tooltip.style.border = '1px solid var(--sv-border-2)';
+        this.tooltip.style.background = 'var(--sv-surface)';
+        this.tooltip.style.boxShadow = 'var(--sv-shadow-md)';
+        this.tooltip.innerHTML = `<div class="tooltip-content"></div>`;
         canvasContainer.appendChild(this.tooltip);
 
         body.appendChild(canvasContainer);
-        body.appendChild(this.inspector.element); // Inspector Panel
+        // Inspector is appended separately logic?
+        // Original appended inspector element to body.
+
+        // Inspector Logic:
+        // inspector-panel likely needs refactor too, but we can just append.
+        // inspector.element should be styled via CSS if possible or migrated separately.
+        body.appendChild(this.inspector.element);
+
         this.element.appendChild(body);
 
         // 3. Footer
         this.footer = document.createElement('div');
-        this.footer.classList.add('project-map-footer');
+        this.footer.className = 'sv-footer';
         this.footerStatus = document.createElement('div');
-        this.footerStatus.classList.add('footer-stat');
+        this.footerStatus.style.fontSize = 'var(--sv-font-sm)';
+        this.footerStatus.style.color = 'var(--sv-muted)';
         this.footerStatus.textContent = 'Ready';
         this.footer.appendChild(this.footerStatus);
 
         this.element.appendChild(this.footer);
-
-        this.statusBar = this.footerStatus; // Alias for backward compat existing logic
+        this.statusBar = this.footerStatus;
     }
 
-    _createButton(iconClass: string, text: string, isIconOnly = false): HTMLButtonElement {
+    _createSvButton(text: string, _iconOnly = false): HTMLButtonElement {
         const btn = document.createElement('button');
-        btn.classList.add('btn-control');
-        if (isIconOnly) btn.classList.add('btn-icon');
-
-        if (iconClass) {
-            const i = document.createElement('i');
-            i.classList.add('icon', iconClass);
-            btn.appendChild(i);
-        }
-
-        if (text) {
-            const span = document.createElement('span');
-            span.textContent = text;
-            btn.appendChild(span);
-        }
+        btn.className = 'sv-btn';
+        btn.textContent = text;
         return btn;
     }
 
     _createSeparator() {
         const sep = document.createElement('div');
-        sep.style.width = '1px';
-        sep.style.height = '14px';
-        sep.style.background = 'var(--pm-border)';
-        sep.style.margin = '0 4px';
-        return sep;
+        return sep; // No-op in new design
     }
 
     // ─── Event Binding ───────────────────────────────────────────────

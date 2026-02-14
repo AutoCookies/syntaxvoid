@@ -6,10 +6,45 @@ const path = require('path');
 class TerminalView {
     constructor(uri) {
         this.uri = uri;
+
+        // 1. Root Panel
         this.element = document.createElement('div');
-        this.element.classList.add('syntaxvoid-terminal-view');
+        this.element.classList.add('syntaxvoid-ui', 'sv-panel', 'sv-skin-clean', 'syntaxvoid-terminal');
         this.element.style.height = '100%';
         this.element.style.width = '100%';
+
+        // 2. Header
+        const header = document.createElement('div');
+        header.className = 'sv-header';
+
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'title';
+        titleDiv.innerHTML = '<span class="icon icon-terminal"></span> Terminal';
+
+        const actions = document.createElement('div');
+        actions.className = 'actions';
+
+        const btnNew = document.createElement('button');
+        btnNew.className = 'sv-btn ghost';
+        btnNew.textContent = 'New';
+        btnNew.onclick = () => atom.workspace.open('syntaxvoid://terminal', { split: 'down' });
+
+        const btnKill = document.createElement('button');
+        btnKill.className = 'sv-btn danger';
+        btnKill.textContent = 'Kill';
+        btnKill.onclick = () => this.destroy();
+
+        actions.appendChild(btnNew);
+        actions.appendChild(btnKill);
+        header.appendChild(titleDiv);
+        header.appendChild(actions);
+
+        this.element.appendChild(header);
+
+        // 3. Body (Terminal Container)
+        this.terminalContainer = document.createElement('div');
+        this.terminalContainer.className = 'sv-body terminal-view';
+        this.element.appendChild(this.terminalContainer);
 
         this.title = 'Terminal';
         this.pid = null;
@@ -19,14 +54,15 @@ class TerminalView {
             fontFamily: 'Menlo, Consolas, "DejaVu Sans Mono", monospace',
             fontSize: 14,
             theme: {
-                background: '#1e1e1e'
+                background: '#1e1e1e' // Should match --sv-bg or similar?
             }
         });
 
         this.fitAddon = new FitAddon();
         this.term.loadAddon(this.fitAddon);
 
-        this.term.open(this.element);
+        // Open in container, not root
+        this.term.open(this.terminalContainer);
         this.fitAddon.fit();
 
         this.handleData = this.handleData.bind(this);
@@ -35,11 +71,21 @@ class TerminalView {
         // Initialize session
         this.initializeSession();
 
-        // Resize observer
+        // Resize observer on container
         this.resizeObserver = new ResizeObserver(() => {
             this.fit();
         });
-        this.resizeObserver.observe(this.element);
+        this.resizeObserver.observe(this.terminalContainer);
+
+        // Config Observer for Skin
+        this.configSub = atom.config.observe('syntaxvoid.ui.skin', (val) => {
+            this.element.classList.remove('sv-skin-clean', 'sv-skin-pixel');
+            if (val === 'pixel') {
+                this.element.classList.add('sv-skin-pixel');
+            } else {
+                this.element.classList.add('sv-skin-clean');
+            }
+        });
 
         // Input handling
         this.term.onData(data => {
@@ -183,6 +229,7 @@ class TerminalView {
     }
 
     destroy() {
+        if (this.configSub) this.configSub.dispose();
         if (this.pid) {
             ipcRenderer.send('syntaxvoid-terminal:kill', this.pid);
         }

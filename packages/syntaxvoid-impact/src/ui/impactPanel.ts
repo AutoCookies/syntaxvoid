@@ -55,54 +55,103 @@ export class ImpactPanel {
     }
 
     _renderBase() {
-        this.element.innerHTML = `
-            <header class="impact-header">
-                <span class="title icon icon-zap">Impact Analysis</span>
-                <div class="file-path" title=""></div>
-                <div class="graph-info"></div>
-            </header>
+        // Reset classes to match UI Kit
+        this.element.className = 'syntaxvoid-ui sv-panel sv-skin-clean syntaxvoid-impact-panel native-key-bindings';
 
-            <section class="controls">
-                <div class="control-group">
-                    <label class="depth-label">Depth: 1</label>
-                    <input type="range" class="depth-slider input-range" min="1" max="5" value="1">
-                </div>
-                <div class="control-group toggles">
-                    <label class="toggle-control upstream-toggle active">
-                        <input type="checkbox" checked>
-                        <span class="label-text">↑ Upstream</span>
-                    </label>
-                    <label class="toggle-control downstream-toggle active">
-                        <input type="checkbox" checked>
-                        <span class="label-text">↓ Downstream</span>
-                    </label>
-                </div>
-            </section>
+        // 1. Header
+        const head = document.createElement('header');
+        head.className = 'sv-header';
 
-            <div class="results-container">
-                <div class="impact-placeholder">
-                    <div class="message">Select a file to see its impact.</div>
-                    <button class="btn btn-primary btn-check-active">Check Active File</button>
-                </div>
+        const titleGroup = document.createElement('div');
+        titleGroup.className = 'title';
+        titleGroup.innerHTML = '<span class="icon icon-zap"></span> Impact';
+
+        this.headerPath = document.createElement('div');
+        this.headerPath.className = 'header-path';
+        titleGroup.appendChild(this.headerPath);
+
+        this.headerInfo = document.createElement('div');
+        this.headerInfo.className = 'stats';
+        this.headerInfo.style.fontSize = 'var(--sv-font-sm)';
+        this.headerInfo.style.color = 'var(--sv-muted)';
+
+        head.appendChild(titleGroup);
+        head.appendChild(this.headerInfo as Node);
+        this.element.appendChild(head);
+
+        // 2. Body
+        const body = document.createElement('div');
+        body.className = 'sv-body';
+
+        // Controls Section
+        const controls = document.createElement('section');
+        controls.className = 'controls';
+
+        // Depth Slider
+        const depthGroup = document.createElement('div');
+        depthGroup.className = 'control-group';
+        this.depthLabel = document.createElement('label');
+        this.depthLabel.className = 'depth-label';
+        this.depthLabel.textContent = 'Depth: 1';
+
+        this.depthInput = document.createElement('input');
+        this.depthInput.type = 'range';
+        this.depthInput.className = 'depth-slider input-range sv-input'; // sv-input might not fit range well? range usually custom
+        this.depthInput.min = '1';
+        this.depthInput.max = '5';
+        this.depthInput.value = '1';
+
+        depthGroup.appendChild(this.depthLabel);
+        depthGroup.appendChild(this.depthInput);
+        controls.appendChild(depthGroup);
+
+        // Toggles
+        const toggleGroup = document.createElement('div');
+        toggleGroup.className = 'control-group toggles';
+
+        // Upstream
+        const upLabel = document.createElement('label');
+        upLabel.className = 'toggle-control upstream-toggle';
+        this.upstreamCheckbox = document.createElement('input');
+        this.upstreamCheckbox.type = 'checkbox';
+        this.upstreamCheckbox.checked = true;
+        this.upstreamLabel = document.createElement('span');
+        this.upstreamLabel.className = 'label-text';
+        this.upstreamLabel.textContent = '↑ Upstream';
+        upLabel.append(this.upstreamCheckbox, this.upstreamLabel);
+
+        // Downstream
+        const downLabel = document.createElement('label');
+        downLabel.className = 'toggle-control downstream-toggle';
+        this.downstreamCheckbox = document.createElement('input');
+        this.downstreamCheckbox.type = 'checkbox';
+        this.downstreamCheckbox.checked = true;
+        this.downstreamLabel = document.createElement('span');
+        this.downstreamLabel.className = 'label-text';
+        this.downstreamLabel.textContent = '↓ Downstream';
+        downLabel.append(this.downstreamCheckbox, this.downstreamLabel);
+
+        toggleGroup.appendChild(upLabel);
+        toggleGroup.appendChild(downLabel);
+        controls.appendChild(toggleGroup);
+
+        this.element.appendChild(controls); // Controls technically part of body or separate? 
+        // In UI kit, body scrolls. Controls usually sticky?
+        // Let's put controls OUTSIDE the scrollable body, or stickied inside.
+        // I'll put controls between header and body.
+
+        // Re-structure: Header -> Controls -> Body
+        this.element.appendChild(body);
+
+        this.contentContainer = body; // Body IS the container now
+
+        // Placeholder
+        this.contentContainer.innerHTML = `
+            <div class="impact-placeholder">
+                <div class="message">Select a file.</div>
+                <button class="sv-btn primary btn-check-active">Check Active File</button>
             </div>
         `;
-
-        this.headerPath = this.element.querySelector('.file-path');
-        this.headerInfo = this.element.querySelector('.graph-info');
-        this.contentContainer = this.element.querySelector('.results-container');
-
-        this.depthInput = this.element.querySelector('.depth-slider');
-        this.depthLabel = this.element.querySelector('.depth-label');
-
-        this.upstreamCheckbox = this.element.querySelector('.upstream-toggle input');
-        this.downstreamCheckbox = this.element.querySelector('.downstream-toggle input');
-
-        // Store labels for count updates
-        const upLabel = this.element.querySelector('.upstream-toggle .label-text');
-        if (upLabel) this.upstreamLabel = upLabel as HTMLElement;
-
-        const downLabel = this.element.querySelector('.downstream-toggle .label-text');
-        if (downLabel) this.downstreamLabel = downLabel as HTMLElement;
     }
 
     _bindEvents() {
