@@ -36,6 +36,9 @@ export class ProjectMapAdapter {
                 } else if (this.state.mode === 'client') {
                     this.client.send(msg);
                 }
+
+                // Log local action for feedback
+                this.state.addLog(`You focused ${event.path}`);
             })
         );
 
