@@ -68,7 +68,8 @@ module.exports = class AtomWindow extends EventEmitter {
         // node support in threads
         nodeIntegrationInWorker: true
       },
-      simpleFullscreen: this.getSimpleFullscreen()
+      simpleFullscreen: this.getSimpleFullscreen(),
+      autoHideMenuBar: this.atomApplication.config.get('core.autoHideMenuBar')
     };
 
     // Don't set icon on Windows so the exe's ico will be used as window and

@@ -2,7 +2,11 @@
     "name": "syntaxvoid-project-map",
     "version": "1.0.0",
     "description": "Project topology visualization — treemap and dependency graph as a cognition tool.",
-    "main": "./lib/main",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "tsc -p tsconfig.json"
+    },
     "license": "MIT",
     "engines": {
         "atom": ">=1.0.0"
@@ -11,6 +15,13 @@
         "atom-workspace": [
             "syntaxvoid-project-map:toggle"
         ]
+    },
+    "providedServices": {
+        "syntaxvoid-project-map.graph": {
+            "versions": {
+                "1.0.0": "provideGraphService"
+            }
+        }
     },
     "configSchema": {
         "maxFiles": {
@@ -39,9 +50,31 @@
             "type": "string",
             "default": "node_modules,.git,dist,build,out,.next,.cache,vendor,coverage",
             "description": "Comma-separated list of directory names to skip during scan."
+        },
+        "ui": {
+            "type": "object",
+            "properties": {
+                "skin": {
+                    "type": "string",
+                    "default": "clean",
+                    "enum": [
+                        "clean",
+                        "pixel"
+                    ],
+                    "title": "UI Skin",
+                    "description": "Choose between Clean (Modern) and Pixel (Retro) vibes."
+                }
+            }
         }
     },
     "deserializers": {
         "ProjectMapView": "deserializeView"
-    }
+    },
+    "devDependencies": {
+        "@types/atom": "^1.40.18",
+        "@types/node": "^24.6.0",
+        "syntaxvoid-ui-kit": "file:../syntaxvoid-ui-kit",
+        "typescript": "^5.0.0"
+    },
+    "consumedServices": {}
 }

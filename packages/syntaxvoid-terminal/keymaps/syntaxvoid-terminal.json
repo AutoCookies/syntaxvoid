@@ -1,0 +1,7 @@
+{
+    "atom-workspace": {
+        "ctrl-`": "syntaxvoid-terminal:toggle",
+        "ctrl-shift-~": "syntaxvoid-terminal:toggle",
+        "ctrl-shift-`": "syntaxvoid-terminal:toggle"
+    }
+}

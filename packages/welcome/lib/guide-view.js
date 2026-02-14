@@ -38,7 +38,7 @@ export default class GuideView {
                 <p>
                   <img
                     className="welcome-img"
-                    src="atom://welcome/assets/project.svg"
+                    src="syntaxvoid://welcome/assets/project.svg"
                   />
                 </p>
                 <p>
@@ -148,7 +148,7 @@ export default class GuideView {
                 <p>
                   <img
                     className="welcome-img"
-                    src="atom://welcome/assets/theme.svg"
+                    src="syntaxvoid://welcome/assets/theme.svg"
                   />
                 </p>
                 <p>{this.brand} comes with preinstalled themes. Let's try a few.</p>
@@ -293,7 +293,7 @@ export default class GuideView {
                 <p>
                   <img
                     className="welcome-img"
-                    src="atom://welcome/assets/shortcut.svg"
+                    src="syntaxvoid://welcome/assets/shortcut.svg"
                   />
                 </p>
                 <p>
@@ -408,14 +408,14 @@ export default class GuideView {
   }
 
   didClickStylingButton() {
-    atom.workspace.open('atom://.pulsar/stylesheet', { split: 'left' });
+    atom.workspace.open('syntaxvoid://.syntaxvoid/stylesheet', { split: 'left' });
   }
 
   didClickInitScriptButton() {
-    atom.workspace.open('atom://.pulsar/init-script', { split: 'left' });
+    atom.workspace.open('syntaxvoid://.syntaxvoid/init-script', { split: 'left' });
   }
 
   didClickSnippetsButton() {
-    atom.workspace.open('atom://.pulsar/snippets', { split: 'left' });
+    atom.workspace.open('syntaxvoid://.syntaxvoid/snippets', { split: 'left' });
   }
 }
