@@ -1,0 +1,58 @@
+/* Motion System */
+
+@full-fade-duration: 300ms;
+@slide-duration: 150ms;
+
+.syntaxvoid-fade-in {
+    animation: fadeIn @full-fade-duration ease-in-out;
+}
+
+.syntaxvoid-slide-in {
+    animation: slideIn @slide-duration ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-10px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Panel Overrides - Enforce UI Kit feel */
+.tool-panel {
+    border-right: 1px solid fade(var(--syntaxvoid-ui-border, #444), 50%) !important;
+}
+
+atom-dock.left {
+    border-right: 1px solid fade(var(--syntaxvoid-ui-border, #444), 50%);
+}
+
+atom-dock.right {
+    border-left: 1px solid fade(var(--syntaxvoid-ui-border, #444), 50%);
+}
+
+/* Status Bar Tile */
+.syntaxvoid-identity-tile {
+    font-family: 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.05);
+        cursor: pointer;
+    }
+}

@@ -1,0 +1,37 @@
+{
+    "name": "syntaxvoid-dashboard",
+    "version": "0.1.0",
+    "description": "Structure-First Project Dashboard for SyntaxVoid.",
+    "main": "dist/index.js",
+    "activationHooks": [
+        "core:loaded-shell-environment"
+    ],
+    "engines": {
+        "atom": ">=1.0.0 <2.0.0"
+    },
+    "scripts": {
+        "build": "tsc"
+    },
+    "results": [
+        "syntaxvoid-workspace-mode"
+    ],
+    "consumedServices": {
+        "syntaxvoid-risk-overlay": {
+            "versions": {
+                "^1.0.0": "consumeRiskOverlay"
+            }
+        },
+        "syntaxvoid-patch-governor": {
+            "versions": {
+                "^1.0.0": "consumePatchGovernor"
+            }
+        }
+    },
+    "dependencies": {
+        "syntaxvoid-ui-kit": "file:../syntaxvoid-ui-kit"
+    },
+    "devDependencies": {
+        "@types/node": "^18.0.0",
+        "typescript": "^4.9.0"
+    }
+}

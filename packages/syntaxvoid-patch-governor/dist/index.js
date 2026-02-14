@@ -8,6 +8,7 @@ exports.activate = activate;
 exports.deactivate = deactivate;
 exports.consumeImpactService = consumeImpactService;
 exports.consumeConsole = consumeConsole;
+exports.providePatchGovernorService = providePatchGovernorService;
 const atom_1 = require("atom");
 const proposalStore_1 = require("./proposalStore");
 const transactionEngine_1 = require("./transactionEngine");
@@ -87,4 +88,17 @@ function registerConsoleCommands() {
 function showActiveProposal() {
     // Logic to show latest pending proposal?
     atom.workspace.open(GOVERNOR_URI);
+}
+// Service Provider
+function providePatchGovernorService() {
+    return {
+        getRecentActivity: () => {
+            if (!proposalStore)
+                return [];
+            // Return last 10 proposals, reversed (newest first)
+            // Assuming listProposals returns in insertion order (Map iteration order)
+            const proposals = proposalStore.listProposals();
+            return proposals.reverse().slice(0, 10);
+        }
+    };
 }

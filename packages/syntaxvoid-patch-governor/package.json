@@ -22,6 +22,13 @@
             }
         }
     },
+    "providedServices": {
+        "syntaxvoid-patch-governor": {
+            "versions": {
+                "1.0.0": "providePatchGovernorService"
+            }
+        }
+    },
     "devDependencies": {
         "@types/node": "^25.2.3",
         "@types/uuid": "^10.0.0",
