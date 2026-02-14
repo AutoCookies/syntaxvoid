@@ -67,6 +67,8 @@ export default class ProjectMapView {
     highlightStyle: string;
     _resizeObserver: ResizeObserver | null;
     renderNodes: any[] | null;
+    emitter: CompositeDisposable;
+    private eventEmitter;
     constructor(serializedState?: ProjectMapViewOptions);
     getTitle(): string;
     getURI(): string;
@@ -95,6 +97,12 @@ export default class ProjectMapView {
     _onWheel(e: WheelEvent): void;
     _onMouseDown(e: MouseEvent): void;
     _onMouseUp(): void;
+    _onClick(e: MouseEvent): void;
+    onDidSelectNode(callback: (event: {
+        path: string;
+        source: string;
+        viewMode: string;
+    }) => void): any;
     _onDoubleClick(e: MouseEvent): void;
     _doPaint(): void;
     _drawRect(ctx: CanvasRenderingContext2D, rect: Rect): void;

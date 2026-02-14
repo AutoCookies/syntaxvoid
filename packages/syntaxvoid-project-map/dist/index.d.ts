@@ -8,4 +8,5 @@ export declare function provideGraphService(): {
     onDidUpdateGraph: (callback: any) => any;
     highlightNodes: (nodeIds: string[], styles: any) => void;
     registerOverlay: (overlay: any) => any;
+    onDidSelectNode: (callback: any) => any;
 };

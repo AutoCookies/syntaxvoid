@@ -262,6 +262,7 @@
     "syntaxvoid-terminal": "file:./packages/syntaxvoid-terminal",
     "syntaxvoid-ui-kit": "file:./packages/syntaxvoid-ui-kit",
     "syntaxvoid-impact": "file:./packages/syntaxvoid-impact",
+    "syntaxvoid-collab-struct": "file:./packages/syntaxvoid-collab-struct",
     "language-c": "file:./packages/language-c",
     "language-clojure": "file:./packages/language-clojure",
     "language-coffee-script": "file:./packages/language-coffee-script",

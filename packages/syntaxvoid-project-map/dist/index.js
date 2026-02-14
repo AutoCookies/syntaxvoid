@@ -78,6 +78,13 @@ function provideGraphService() {
                 return v.addOverlay(overlay);
             }
             return new atom_1.Disposable(() => { });
+        },
+        onDidSelectNode: (callback) => {
+            const v = _getOrCreateView();
+            if (v) {
+                return v.onDidSelectNode(callback);
+            }
+            return new atom_1.Disposable(() => { });
         }
     };
 }

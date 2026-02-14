@@ -78,8 +78,16 @@ export default class ProjectMapView {
     _resizeObserver: ResizeObserver | null = null;
     renderNodes: any[] | null = null;
 
+    emitter = new CompositeDisposable(); // actually we want Emitter
+    // but the class property 'subscriptions' is CompositeDisposable.
+    // We need a new Emitter for events.
+    private eventEmitter: any; // Emitter
+
     constructor(serializedState?: ProjectMapViewOptions) {
         this.subscriptions = new CompositeDisposable();
+        const { Emitter } = require('atom');
+        this.eventEmitter = new Emitter();
+        this.subscriptions.add(this.eventEmitter);
 
         // Data
         this.graphBuilder = new GraphBuilder();
@@ -416,6 +424,7 @@ export default class ProjectMapView {
         this.canvas.addEventListener('mouseleave', () => this._hideTooltip());
         this.canvas.addEventListener('mousedown', (e) => this._onMouseDown(e));
         this.canvas.addEventListener('mouseup', () => this._onMouseUp());
+        this.canvas.addEventListener('click', (e) => this._onClick(e));
         this.canvas.addEventListener('wheel', (e) => this._onWheel(e), { passive: false });
         this.canvas.addEventListener('dblclick', (e) => this._onDoubleClick(e));
 
@@ -610,10 +619,71 @@ export default class ProjectMapView {
     }
 
     _onMouseUp() {
-        this.isDragging = false;
-        if (this.canvas.parentElement) {
+        if (!this.isDragging && this.canvas.parentElement) {
             this.canvas.parentElement.style.cursor = 'grab';
+
+            // Check for click (if we didn't drag much)
+            // Ideally we track mousedown pos and compare.
+            // For now, assume if isDragging was false, it's a click.
+            // But isDragging is set to true on mousedown immediately in current code?
+            // "this.isDragging = true;" in mousedown.
+            // So _onMouseUp always sees true? 
+            // Wait, logic in _onMouseDown was:
+            // if (e.button === 0) { this.isDragging = true; ... }
+            // So isDragging is always true on MouseUp if we held button.
+            // We need to differentiate drag vs click.
         }
+        this.isDragging = false;
+
+        // Let's use a click handler or verify distance
+        if (this.canvas.parentElement) this.canvas.parentElement.style.cursor = 'grab';
+    }
+
+    _onClick(e: MouseEvent) {
+        // Determine hit
+        const bounds = this.canvas.getBoundingClientRect();
+        const cx = bounds.width / 2;
+        const cy = bounds.height / 2;
+        let mouseX = e.clientX - bounds.left;
+        let mouseY = e.clientY - bounds.top;
+        const logicalX = (mouseX - cx) / this.zoomLevel - this.panOffset.x + cx;
+        const logicalY = (mouseY - cy) / this.zoomLevel - this.panOffset.y + cy;
+
+        let hit: any = null;
+        if (this.viewMode === 'folder') {
+            hit = this.treemapRenderer.hitTest(logicalX, logicalY);
+        } else {
+            // File graph hit test
+            if (this.renderNodes) {
+                // Simple distance check
+                // optimization: reverse iterate
+                for (let i = this.renderNodes.length - 1; i >= 0; i--) {
+                    const n = this.renderNodes[i];
+                    const dx = logicalX - n.x;
+                    const dy = logicalY - n.y;
+                    if (dx * dx + dy * dy <= n.r * n.r) {
+                        hit = { path: n.id, ...n }; // FileNode
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (hit) {
+            const path = hit.folder ? hit.folder.path : hit.path;
+            if (path) {
+                this.eventEmitter.emit('did-select-node', {
+                    path: path,
+                    source: 'project-map',
+                    viewMode: this.viewMode
+                });
+            }
+        }
+    }
+
+    // Public API
+    onDidSelectNode(callback: (event: { path: string, source: string, viewMode: string }) => void) {
+        return this.eventEmitter.on('did-select-node', callback);
     }
 
     _onDoubleClick(e: MouseEvent) {

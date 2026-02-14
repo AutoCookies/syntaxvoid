@@ -84,6 +84,13 @@ export function provideGraphService() {
                 return v.addOverlay(overlay);
             }
             return new Disposable(() => { });
+        },
+        onDidSelectNode: (callback: any) => {
+            const v = _getOrCreateView();
+            if (v) {
+                return v.onDidSelectNode(callback);
+            }
+            return new Disposable(() => { });
         }
     };
 }
