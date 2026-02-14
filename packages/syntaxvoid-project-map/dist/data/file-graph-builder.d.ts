@@ -14,6 +14,7 @@ export default class FileGraphBuilder {
     parser: ImportParser;
     cycleDetector: CycleDetector;
     nodes: Map<string, FileNode>;
+    filenameMap: Map<string, Set<string>>;
     edges: Edge[];
     aborted: boolean;
     _debounceTimer: NodeJS.Timeout | null;

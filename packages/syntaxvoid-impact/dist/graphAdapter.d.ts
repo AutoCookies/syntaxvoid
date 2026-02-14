@@ -1,5 +1,5 @@
 import { Disposable } from 'atom';
-import { GraphSnapshot } from './types/impact';
+import { GraphSnapshot } from 'syntaxvoid-project-map';
 /**
  * Interface for providing the project graph.
  * This adapter isolates the Impact package from the Project Map implementation details.

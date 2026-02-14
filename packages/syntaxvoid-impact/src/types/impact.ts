@@ -16,25 +16,6 @@ export interface ImpactResult {
     totalDownstream: number;
 }
 
-export interface GraphNode {
-    id: string;
-    path: string;
-    inDegree: number;
-    outDegree: number;
-    isCircular: boolean;
-}
+import { GraphSnapshot, FileNode, Edge } from 'syntaxvoid-project-map';
+export { GraphSnapshot, FileNode as GraphNode, Edge as GraphEdge }; // Alias for compat?
 
-export interface GraphEdge {
-    from: string;
-    to: string;
-    weight: number;
-}
-
-export interface GraphSnapshot {
-    nodes: GraphNode[];
-    edges: GraphEdge[];
-    circularEdges: Set<string>;
-    totalFiles: number;
-    // Map capability might be missing in snapshot if it's just raw data
-    // so we might need to build maps in adapter
-}

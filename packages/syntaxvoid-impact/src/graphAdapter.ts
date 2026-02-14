@@ -1,5 +1,6 @@
 import { Disposable } from 'atom';
-import { GraphSnapshot } from './types/impact';
+import { GraphSnapshot } from 'syntaxvoid-project-map';
+
 
 /**
  * Interface for providing the project graph.
@@ -42,7 +43,8 @@ export class GraphAdapter implements ProjectGraphProvider {
             nodes: rawGraph.nodes instanceof Map ? Array.from(rawGraph.nodes.values()) : rawGraph.nodes,
             edges: rawGraph.edges,
             circularEdges: rawGraph.circularEdges || new Set(),
-            totalFiles: rawGraph.totalFiles || (rawGraph.nodes instanceof Map ? rawGraph.nodes.size : rawGraph.nodes.length)
+            totalFiles: rawGraph.totalFiles || (rawGraph.nodes instanceof Map ? rawGraph.nodes.size : rawGraph.nodes.length),
+            version: rawGraph.version || this.version
         };
     }
 

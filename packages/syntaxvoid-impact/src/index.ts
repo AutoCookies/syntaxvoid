@@ -2,6 +2,8 @@ import { CompositeDisposable } from 'atom';
 import { ImpactService } from './impactService';
 import { ImpactPanel } from './ui/impactPanel';
 import { GraphAdapter } from './graphAdapter';
+export * from './types/impact';
+
 
 const IMPACT_URI = 'atom://syntaxvoid-impact';
 

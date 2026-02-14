@@ -1,7 +1,8 @@
 import { PatchProposal, RiskSummary } from './types/proposal';
+import { ImpactResult } from 'syntaxvoid-impact';
 import { Disposable } from 'atom';
 interface ImpactService {
-    computeImpact(filePath: string, options: any): any;
+    computeImpact(filePath: string, options: any): ImpactResult | null;
 }
 /**
  * Computes risk for a patch proposal.

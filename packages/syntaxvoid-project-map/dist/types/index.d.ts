@@ -15,6 +15,8 @@ export interface Edge {
 export interface GraphSnapshot {
     nodes: FileNode[];
     edges: Edge[];
+    circularEdges: Set<string>;
+    totalFiles: number;
     version: number;
 }
 export interface HighlightRequest {

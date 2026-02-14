@@ -25,9 +25,10 @@
     "devDependencies": {
         "@types/node": "^25.2.3",
         "@types/uuid": "^10.0.0",
+        "syntaxvoid-impact": "file:../syntaxvoid-impact",
+        "syntaxvoid-project-map": "file:../syntaxvoid-project-map",
         "syntaxvoid-ui-kit": "file:../syntaxvoid-ui-kit",
         "typescript": "^5.9.3",
-        "uuid": "^13.0.0",
-        "syntaxvoid-ui-kit": "file:../syntaxvoid-ui-kit"
+        "uuid": "^13.0.0"
     }
 }

@@ -1,8 +1,10 @@
 import { PatchProposal, RiskSummary } from './types/proposal';
+// @ts-ignore
+import { ImpactResult } from 'syntaxvoid-impact';
 import { Disposable } from 'atom';
 
 interface ImpactService {
-    computeImpact(filePath: string, options: any): any;
+    computeImpact(filePath: string, options: any): ImpactResult | null;
 }
 
 /**

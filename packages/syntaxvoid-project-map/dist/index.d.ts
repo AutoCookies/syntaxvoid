@@ -1,3 +1,4 @@
+export { GraphSnapshot, FileNode, Edge } from './types/index';
 export declare function activate(_state: any): void;
 export declare function deactivate(): void;
 export declare function toggle(): void;

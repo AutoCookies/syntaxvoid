@@ -50,6 +50,7 @@ class FileGraphBuilder {
         this.parser = new import_parser_1.default();
         this.cycleDetector = new cycle_detector_1.default();
         this.nodes = new Map(); // path -> Node
+        this.filenameMap = new Map();
         this.edges = [];
         this.aborted = false;
         this._debounceTimer = null;
@@ -78,7 +79,8 @@ class FileGraphBuilder {
         try {
             // 1. Scan files
             const files = await this._scan(rootPath, ignoredDirs, maxFiles);
-            // 2. Initialize nodes
+            // 2. Initialize nodes and filename map
+            this.filenameMap.clear();
             for (const f of files) {
                 this.nodes.set(f, {
                     id: f,
@@ -93,6 +95,11 @@ class FileGraphBuilder {
                     outDegree: 0,
                     isCircular: false
                 });
+                const basename = path.basename(f);
+                if (!this.filenameMap.has(basename)) {
+                    this.filenameMap.set(basename, new Set());
+                }
+                this.filenameMap.get(basename).add(f);
             }
             // 3. Parse imports
             for (const [filePath, node] of this.nodes) {
@@ -135,10 +142,9 @@ class FileGraphBuilder {
             this.latestGraph = {
                 nodes: Array.from(this.nodes.values()),
                 edges: this.edges,
-                // circularEdges, // GraphSnapshot doesn't have circularEdges set, only Edge[] has circular prop
-                // rootPath, // GraphSnapshot doesn't have it
-                // stats: ... // Not in interface
-                version: Date.now() // Added version to interface? Yes.
+                circularEdges,
+                totalFiles: this.nodes.size,
+                version: Date.now()
             };
             this.emitter.emit('did-update', this.latestGraph);
         }
@@ -198,13 +204,27 @@ class FileGraphBuilder {
         const resolvedSibling = this._tryExtensions(sibling);
         if (resolvedSibling)
             return resolvedSibling;
-        // Attempt C: Fuzzy/Include Path search
-        // If importPath looks like "myheader.h", search known nodes for ending with "/myheader.h"
-        // This is O(N) per import, slow but maybe okay for 2000 files.
-        for (const [nodePath] of this.nodes) {
-            // Check if nodePath ends with importPath (with normalization)
-            if (nodePath.endsWith(path.sep + importPath)) {
-                return nodePath;
+        // Attempt C: Fuzzy/Include Path search using filenameMap
+        // If importPath is "foo.h", we look for "foo.h" in map.
+        // If importPath is "utils/bar.js", we look for "bar.js" and check suffix.
+        const targetName = path.basename(importPath);
+        if (this.filenameMap.has(targetName)) {
+            const candidates = this.filenameMap.get(targetName);
+            // Filter candidates that end with importPath
+            for (const candidate of candidates) {
+                if (candidate.endsWith(path.sep + importPath)) {
+                    return candidate;
+                }
+            }
+            // If explicit filename match (e.g. import "foo.h" and we have "src/include/foo.h")
+            // And importPath has no separators (just filename)
+            if (!importPath.includes(path.sep)) {
+                // Return the first match? or closest?
+                // For now, return first.
+                if (candidates.size > 0) {
+                    const firstCandidate = candidates.values().next().value;
+                    return firstCandidate ?? null;
+                }
             }
         }
         return null;

@@ -23,6 +23,7 @@
         }
     },
     "devDependencies": {
+        "syntaxvoid-project-map": "file:../syntaxvoid-project-map",
         "syntaxvoid-ui-kit": "file:../syntaxvoid-ui-kit"
     }
 }

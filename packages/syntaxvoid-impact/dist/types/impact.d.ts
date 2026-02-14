@@ -13,21 +13,5 @@ export interface ImpactResult {
     totalUpstream: number;
     totalDownstream: number;
 }
-export interface GraphNode {
-    id: string;
-    path: string;
-    inDegree: number;
-    outDegree: number;
-    isCircular: boolean;
-}
-export interface GraphEdge {
-    from: string;
-    to: string;
-    weight: number;
-}
-export interface GraphSnapshot {
-    nodes: GraphNode[];
-    edges: GraphEdge[];
-    circularEdges: Set<string>;
-    totalFiles: number;
-}
+import { GraphSnapshot, FileNode, Edge } from 'syntaxvoid-project-map';
+export { GraphSnapshot, FileNode as GraphNode, Edge as GraphEdge };

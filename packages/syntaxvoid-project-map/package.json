@@ -50,19 +50,7 @@
             "type": "string",
             "default": "node_modules,.git,dist,build,out,.next,.cache,vendor,coverage",
             "description": "Comma-separated list of directory names to skip during scan."
-        }
-    },
-    "deserializers": {
-        "ProjectMapView": "deserializeView"
-    },
-    "devDependencies": {
-        "@types/atom": "^1.40.18",
-        "@types/node": "^24.6.0",
-        "syntaxvoid-ui-kit": "file:../syntaxvoid-ui-kit",
-        "typescript": "^5.0.0"
-    },
-    "consumedServices": {},
-    "configSchema": {
+        },
         "ui": {
             "type": "object",
             "properties": {
@@ -78,5 +66,15 @@
                 }
             }
         }
-    }
+    },
+    "deserializers": {
+        "ProjectMapView": "deserializeView"
+    },
+    "devDependencies": {
+        "@types/atom": "^1.40.18",
+        "@types/node": "^24.6.0",
+        "syntaxvoid-ui-kit": "file:../syntaxvoid-ui-kit",
+        "typescript": "^5.0.0"
+    },
+    "consumedServices": {}
 }

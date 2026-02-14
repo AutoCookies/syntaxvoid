@@ -1,5 +1,7 @@
 import { CompositeDisposable, Disposable } from 'atom';
 import ProjectMapView from './ui/project-map-view';
+export { GraphSnapshot, FileNode, Edge } from './types/index';
+
 
 // Legacy core imports - typed as any for now
 const commands: any = require('../../../core/platform/commands');
