@@ -1,16 +1,21 @@
 import { CompositeDisposable } from 'atom';
-import { SessionState } from '../sessionState';
+import { SessionState } from '../core/sessionState';
 
 export class LiveFeedPanel {
     element: HTMLElement;
     private subscriptions = new CompositeDisposable();
     private state = SessionState.getInstance();
-    private feedContainer!: HTMLElement;
+    private list: HTMLElement;
+    private maxEntries = 50;
 
     constructor() {
         this.element = document.createElement('div');
         this.element.className = 'syntaxvoid-collab-feed';
-        this.subscriptions.add(this.state.onDidAddLog(entry => this._addEntry(entry)));
+
+        this.list = document.createElement('ul');
+        this.element.appendChild(this.list);
+
+        this.subscriptions.add(this.state.onDidAddLog((entry: string) => this._addEntry(entry)));
     }
 
     private _addEntry(text: string) {
