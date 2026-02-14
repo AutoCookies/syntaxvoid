@@ -77,6 +77,20 @@ export function provideGraphService() {
             if (v) {
                 v.highlightNodes(nodeIds, styles);
             }
+        },
+        registerOverlay: (overlay: any) => {
+            const v = _getOrCreateView();
+            if (v) {
+                return v.addOverlay(overlay);
+            }
+            return new Disposable(() => { });
+        },
+        onDidSelectNode: (callback: any) => {
+            const v = _getOrCreateView();
+            if (v) {
+                return v.onDidSelectNode(callback);
+            }
+            return new Disposable(() => { });
         }
     };
 }

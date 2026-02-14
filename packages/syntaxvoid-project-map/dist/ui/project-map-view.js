@@ -58,7 +58,12 @@ class ProjectMapView {
         this.highlightedNodes = null;
         this.highlightStyle = 'impact';
         this._resizeObserver = null;
+        this.renderNodes = null;
+        this.emitter = new atom_1.CompositeDisposable(); // actually we want Emitter
         this.subscriptions = new atom_1.CompositeDisposable();
+        const { Emitter } = require('atom');
+        this.eventEmitter = new Emitter();
+        this.subscriptions.add(this.eventEmitter);
         // Data
         this.graphBuilder = new graph_builder_1.default();
         this.fileGraphBuilder = new file_graph_builder_1.default();
@@ -75,10 +80,12 @@ class ProjectMapView {
         this.filterText = '';
         this.isDragging = false;
         this.lastMouse = { x: 0, y: 0 };
+        this.renderNodes = null; // Cache for layout nodes
         this.overlay = new dependency_overlay_1.default({
             showLinks: settings.get('syntaxvoid-project-map.showDependencyLinks'),
             circularOnly: settings.get('syntaxvoid-project-map.circularOnly')
         });
+        this.externalOverlays = new Set();
         this.rectMap = new Map();
         this.hoveredRect = null;
         this._animFrame = null;
@@ -90,6 +97,26 @@ class ProjectMapView {
         this._updateUIState();
         // Initial build
         this._triggerBuild();
+    }
+    getTitle() {
+        return 'Project Map';
+    }
+    getURI() {
+        return ProjectMapView.URI;
+    }
+    getIconName() {
+        return 'repo';
+    }
+    getElement() {
+        return this.element;
+    }
+    addOverlay(overlay) {
+        this.externalOverlays.add(overlay);
+        this._render();
+        return new atom_1.Disposable(() => {
+            this.externalOverlays.delete(overlay);
+            this._render();
+        });
     }
     _updateUIState() {
         // Mode switch
@@ -119,7 +146,6 @@ class ProjectMapView {
                 i.className = 'icon icon-repo';
         }
     }
-    // ─── DOM Construction ────────────────────────────────────────────
     // ─── DOM Construction ────────────────────────────────────────────
     // Import helper (would normally be at top, but for replacing block)
     // import { panelRoot, header, wrapper, button as svButton, badge } from 'syntaxvoid-ui-kit';
@@ -178,14 +204,24 @@ class ProjectMapView {
         const body = document.createElement('div');
         body.className = 'sv-body project-map-body';
         body.style.display = 'flex';
-        body.style.flexDirection = 'column';
-        body.style.padding = '0'; // Graph needs full width
-        // Canvas Container
+        body.style.flexDirection = 'row'; // Changed to ROW
+        body.style.padding = '0';
+        body.style.height = '100%'; // Ensure full height
+        // Inspector (Left Side)
+        this.inspector.element.style.flex = '0 0 300px';
+        this.inspector.element.style.borderRight = '1px solid var(--sv-border)';
+        this.inspector.element.style.display = 'flex';
+        this.inspector.element.style.flexDirection = 'column';
+        this.inspector.element.style.background = 'var(--sv-surface-2)'; // Slightly distinct bg
+        this.inspector.element.style.zIndex = '2'; // Above canvas if needed
+        body.appendChild(this.inspector.element);
+        // Canvas Container (Right Side)
         const canvasContainer = document.createElement('div');
         canvasContainer.className = 'project-map-canvas-container';
         canvasContainer.style.flex = '1';
         canvasContainer.style.position = 'relative';
         canvasContainer.style.overflow = 'hidden';
+        canvasContainer.style.background = 'var(--sv-bg)';
         this.canvas = document.createElement('canvas');
         this.canvas.style.display = 'block';
         canvasContainer.appendChild(this.canvas);
@@ -219,12 +255,6 @@ class ProjectMapView {
         this.tooltip.innerHTML = `<div class="tooltip-content"></div>`;
         canvasContainer.appendChild(this.tooltip);
         body.appendChild(canvasContainer);
-        // Inspector is appended separately logic?
-        // Original appended inspector element to body.
-        // Inspector Logic:
-        // inspector-panel likely needs refactor too, but we can just append.
-        // inspector.element should be styled via CSS if possible or migrated separately.
-        body.appendChild(this.inspector.element);
         this.element.appendChild(body);
         // 3. Footer
         this.footer = document.createElement('div');
@@ -327,6 +357,7 @@ class ProjectMapView {
         this.canvas.addEventListener('mouseleave', () => this._hideTooltip());
         this.canvas.addEventListener('mousedown', (e) => this._onMouseDown(e));
         this.canvas.addEventListener('mouseup', () => this._onMouseUp());
+        this.canvas.addEventListener('click', (e) => this._onClick(e));
         this.canvas.addEventListener('wheel', (e) => this._onWheel(e), { passive: false });
         this.canvas.addEventListener('dblclick', (e) => this._onDoubleClick(e));
         // Graph updates (Folder)
@@ -343,8 +374,10 @@ class ProjectMapView {
         }));
         // Graph updates (File)
         this.subscriptions.add(this.fileGraphBuilder.onDidUpdate((graph) => {
-            if (this.viewMode === 'file')
+            if (this.viewMode === 'file') {
+                this.renderNodes = null; // Invalidate cache on graph update
                 this._render();
+            }
         }), this.fileGraphBuilder.onDidStart(() => {
             if (this.viewMode === 'file') {
                 this.statusBar.textContent = 'Scanning files...';
@@ -362,6 +395,7 @@ class ProjectMapView {
         }));
         // Resize observer
         this._resizeObserver = new ResizeObserver(() => {
+            this.renderNodes = null; // Invalidate cache
             this._render();
         });
         this._resizeObserver.observe(this.element);
@@ -415,8 +449,12 @@ class ProjectMapView {
             maxFiles: settings.get('syntaxvoid-project-map.maxFiles'),
             ignoredDirs: this._getIgnoredDirs()
         };
+        // Reset cache on new build
+        this.renderNodes = null;
         if (this.viewMode === 'file') {
             this.fileGraphBuilder.build(root, opts);
+            // Layout typically happens in render, but we can pre-calc if we want.
+            // But we wait for the update event.
         }
         else {
             this.graphBuilder.build(root, opts);
@@ -437,6 +475,18 @@ class ProjectMapView {
         else {
             this.graphBuilder.debouncedBuild(root, opts, debounceMs);
         }
+    }
+    // New helper to force layout recalc
+    _recalcLayout(w, h) {
+        if (this.viewMode === 'file') {
+            const graph = this.fileGraphBuilder.getGraph();
+            if (graph && w > 0 && h > 0) {
+                this.renderNodes = this.fileGraphRenderer.layout(graph, w, h);
+            }
+        }
+        // Folder mode handles layout differently (TreemapRenderer does layout implicitly during draw-ish? 
+        // No, TreemapRenderer.layout returns rects. We can cache those too if we wanted, 
+        // but Treemap is fast and deterministic. FileGraph force-directed is the one needing cache.)
     }
     _render() {
         if (this._animFrame)
@@ -471,10 +521,67 @@ class ProjectMapView {
         }
     }
     _onMouseUp() {
-        this.isDragging = false;
-        if (this.canvas.parentElement) {
+        if (!this.isDragging && this.canvas.parentElement) {
             this.canvas.parentElement.style.cursor = 'grab';
+            // Check for click (if we didn't drag much)
+            // Ideally we track mousedown pos and compare.
+            // For now, assume if isDragging was false, it's a click.
+            // But isDragging is set to true on mousedown immediately in current code?
+            // "this.isDragging = true;" in mousedown.
+            // So _onMouseUp always sees true? 
+            // Wait, logic in _onMouseDown was:
+            // if (e.button === 0) { this.isDragging = true; ... }
+            // So isDragging is always true on MouseUp if we held button.
+            // We need to differentiate drag vs click.
         }
+        this.isDragging = false;
+        // Let's use a click handler or verify distance
+        if (this.canvas.parentElement)
+            this.canvas.parentElement.style.cursor = 'grab';
+    }
+    _onClick(e) {
+        // Determine hit
+        const bounds = this.canvas.getBoundingClientRect();
+        const cx = bounds.width / 2;
+        const cy = bounds.height / 2;
+        let mouseX = e.clientX - bounds.left;
+        let mouseY = e.clientY - bounds.top;
+        const logicalX = (mouseX - cx) / this.zoomLevel - this.panOffset.x + cx;
+        const logicalY = (mouseY - cy) / this.zoomLevel - this.panOffset.y + cy;
+        let hit = null;
+        if (this.viewMode === 'folder') {
+            hit = this.treemapRenderer.hitTest(logicalX, logicalY);
+        }
+        else {
+            // File graph hit test
+            if (this.renderNodes) {
+                // Simple distance check
+                // optimization: reverse iterate
+                for (let i = this.renderNodes.length - 1; i >= 0; i--) {
+                    const n = this.renderNodes[i];
+                    const dx = logicalX - n.x;
+                    const dy = logicalY - n.y;
+                    if (dx * dx + dy * dy <= n.r * n.r) {
+                        hit = { path: n.id, ...n }; // FileNode
+                        break;
+                    }
+                }
+            }
+        }
+        if (hit) {
+            const path = hit.folder ? hit.folder.path : hit.path;
+            if (path) {
+                this.eventEmitter.emit('did-select-node', {
+                    path: path,
+                    source: 'project-map',
+                    viewMode: this.viewMode
+                });
+            }
+        }
+    }
+    // Public API
+    onDidSelectNode(callback) {
+        return this.eventEmitter.on('did-select-node', callback);
     }
     _onDoubleClick(e) {
         // Reuse mouse move logic to find hit
@@ -507,6 +614,8 @@ class ProjectMapView {
         const dpr = window.devicePixelRatio || 1;
         const w = container.clientWidth;
         const h = container.clientHeight;
+        if (w === 0 || h === 0)
+            return; // Prevent zero-size layout issues
         this.canvas.width = w * dpr;
         this.canvas.height = h * dpr;
         this.canvas.style.width = `${w}px`;
@@ -525,19 +634,25 @@ class ProjectMapView {
             // File Graph Mode
             const graph = this.fileGraphBuilder.getGraph(); // Assuming builder has getGraph()
             if (graph) {
-                this.fileGraphRenderer.layout(graph, w, h);
-                this.fileGraphRenderer.draw(ctx, graph.nodes, graph.edges, this.hoveredRect, {
-                    showLinks: this.overlay.showLinks,
-                    circularOnly: this.overlay.circularOnly,
-                    filterText: this.filterText // Pass filter text
-                });
-                // Update status
-                let status = `${graph.nodes.length} files · ${graph.edges.length} edges`;
-                // graph.stats and circularEdges missing from GraphSnapshot interface, but might be there at runtime
-                // TypeScript won't like it unless cast.
-                // const g = graph as any;
-                // if (g.stats && g.stats.circularEdges) status += ` · circular`;
-                this.statusBar.textContent = status;
+                // Use cached layout if available and dimensions match (approx)
+                // Actually, if we resize, we MUST re-layout or at least re-center?
+                // For force-directed, resizing usually implies re-simulation or scaling.
+                // Let's re-layout only if cache is null.
+                // But wait, if window resizes, we want to adapt.
+                // If we cache, we MUST invalidate on resize. `_resizeObserver` should handle that.
+                if (!this.renderNodes) {
+                    this._recalcLayout(w, h);
+                }
+                if (this.renderNodes) {
+                    this.fileGraphRenderer.draw(ctx, this.renderNodes, graph.edges, this.hoveredRect, {
+                        showLinks: this.overlay.showLinks,
+                        circularOnly: this.overlay.circularOnly,
+                        filterText: this.filterText
+                    });
+                    // Update status
+                    let status = `${graph.nodes.length} files · ${graph.edges.length} edges`;
+                    this.statusBar.textContent = status;
+                }
             }
         }
         else {
@@ -561,6 +676,12 @@ class ProjectMapView {
                 // DependencyOverlay expects Edge[] which has {source, target, weight/count}.
                 // They match.
                 this.overlay.draw(ctx, graph.edges, graph.circularEdges, this.rectMap, this.hoveredRect);
+                // Draw external overlays (e.g. RiskOverlay)
+                for (const overlay of this.externalOverlays) {
+                    if (typeof overlay.render === 'function') {
+                        overlay.render(ctx, this.rectMap, this.hoveredRect);
+                    }
+                }
                 // Status
                 const circularCount = graph.circularEdges.size;
                 let status = `${graph.totalFiles} files · ${graph.edges.length} deps`;
@@ -688,8 +809,11 @@ class ProjectMapView {
                 // File Node Hit
                 // const importCount = hit.outDegree;
                 const relPath = hit.relPath; // cast needed if not in shared interface?
-                if (header)
-                    header.textContent = hit.name || 'File';
+                if (header) {
+                    const h = hit;
+                    const name = h.name || (h.path ? h.path.split('/').pop() : 'File');
+                    header.textContent = name;
+                }
                 if (pathEl)
                     pathEl.textContent = relPath;
                 if (stat)
