@@ -1,6 +1,6 @@
 'use strict';
 
-const { CompositeDisposable } = require('atom');
+const { CompositeDisposable, Disposable } = require('atom');
 const ProjectMapView = require('./ui/project-map-view');
 const commands = require('../../../core/platform/commands');
 const panels = require('../../../core/platform/panels');
@@ -59,16 +59,15 @@ module.exports = {
         return {
             getGraph: () => {
                 const view = this._getOrCreateView();
-                // Ensure view is initialized to have the builder
-                if (view && view.builder) {
-                    return view.builder.getGraph();
+                if (view && view.fileGraphBuilder) {
+                    return view.fileGraphBuilder.getGraph();
                 }
                 return null;
             },
             onDidUpdateGraph: (callback) => {
                 const view = this._getOrCreateView();
-                if (view && view.builder) {
-                    return view.builder.onDidUpdate(callback);
+                if (view && view.fileGraphBuilder) {
+                    return view.fileGraphBuilder.onDidUpdate(callback);
                 }
                 return new Disposable(() => { }); // No-op if not ready
             },

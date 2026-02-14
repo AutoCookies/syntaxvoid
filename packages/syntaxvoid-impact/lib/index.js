@@ -1,6 +1,6 @@
 'use strict';
 
-const { CompositeDisposable, Disposable } = require('atom');
+const { CompositeDisposable } = require('atom');
 const ImpactService = require('./impact-service');
 const ImpactPanel = require('./ui/impact-panel');
 
@@ -9,7 +9,6 @@ const IMPACT_URI = 'atom://syntaxvoid-impact';
 module.exports = {
     subscriptions: null,
     impactService: null,
-    projectMapService: null,
     impactPanel: null,
 
     activate(state) {
@@ -37,14 +36,16 @@ module.exports = {
         this.subscriptions.add(
             atom.workspace.onDidChangeActiveTextEditor(editor => {
                 if (this.impactPanel && this.impactPanel.element.offsetParent !== null) {
-                    // Panel is visible
-                    const path = editor ? editor.getPath() : null;
-                    if (path) {
-                        this.impactPanel.updateForFile(path);
+                    const filePath = editor ? editor.getPath() : null;
+                    if (filePath) {
+                        this.impactPanel.updateForFile(filePath);
                     }
                 }
             })
         );
+
+        // Build graph proactively
+        this._buildGraphIfNeeded();
     },
 
     deactivate() {
@@ -53,29 +54,24 @@ module.exports = {
         if (this.impactService) this.impactService.destroy();
     },
 
+    // Optional: still accept graph from project-map if available
     consumeGraphService(service) {
-        this.projectMapService = service;
-
-        // Initial graph fetch
+        console.log('[syntaxvoid-impact] consumeGraphService called');
         const graph = service.getGraph();
         if (graph) {
+            console.log('[syntaxvoid-impact] Using external graph');
             this.impactService.setGraph(graph);
+            if (this.impactPanel) this.impactPanel.refreshState();
         }
 
-        // Listen for updates
         this.subscriptions.add(
             service.onDidUpdateGraph((graph) => {
-                this.impactService.setGraph(graph);
+                if (graph) {
+                    this.impactService.setGraph(graph);
+                    if (this.impactPanel) this.impactPanel.refreshState();
+                }
             })
         );
-
-        // Update panel if it exists
-        if (this.impactPanel) {
-            this.impactPanel.update({
-                impactService: this.impactService,
-                projectMapService: this.projectMapService
-            });
-        }
     },
 
     toggle() {
@@ -83,18 +79,33 @@ module.exports = {
     },
 
     async showForActiveFile() {
+        // Ensure graph is built
+        await this._buildGraphIfNeeded();
+
         await atom.workspace.open(IMPACT_URI, { searchAllPanes: true });
-        // After opening, set the file
+
         const editor = atom.workspace.getActiveTextEditor();
         if (editor && this.impactPanel) {
-            this.impactPanel.updateForFile(editor.getPath());
+            const filePath = editor.getPath();
+            console.log('[syntaxvoid-impact] showForActiveFile:', filePath);
+            this.impactPanel.updateForFile(filePath);
+        }
+    },
+
+    async _buildGraphIfNeeded() {
+        if (this.impactService.getGraph() || this.impactService.isBuilding()) return;
+
+        const projectPaths = atom.project.getPaths();
+        if (projectPaths.length > 0) {
+            console.log('[syntaxvoid-impact] Building own graph for:', projectPaths[0]);
+            await this.impactService.buildGraph(projectPaths[0]);
+            if (this.impactPanel) this.impactPanel.refreshState();
         }
     },
 
     _createPanel() {
         this.impactPanel = new ImpactPanel({
-            impactService: this.impactService,
-            projectMapService: this.projectMapService
+            impactService: this.impactService
         });
 
         // Initialize with active file if available

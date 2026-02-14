@@ -188,7 +188,7 @@ class FileGraphBuilder {
         if (this.nodes.has(basePath)) return basePath;
 
         // Extensions
-        const exts = ['.js', '.ts', '.jsx', '.tsx', '.json', '.vue', '.svelte'];
+        const exts = ['.js', '.ts', '.jsx', '.tsx', '.json', '.vue', '.svelte', '.h', '.hh', '.hpp', '.c', '.cc', '.cpp', '.py'];
         for (const ext of exts) {
             if (this.nodes.has(basePath + ext)) return basePath + ext;
         }

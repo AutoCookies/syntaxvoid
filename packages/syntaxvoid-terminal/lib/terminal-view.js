@@ -84,117 +84,118 @@ class TerminalView {
     }
 
     async initializeSession() {
-        const projectPaths = atom.project.getPaths();
-        const cwd = projectPaths.length > 0 ? projectPaths[0] : process.env.HOME;
-
-        // Log to main process stdout
-        ipcRenderer.invoke('syntaxvoid-terminal:log', `Renderer Project Paths: ${JSON.stringify(projectPaths)}`);
-        ipcRenderer.invoke('syntaxvoid-terminal:log', `Renderer Selected CWD: ${cwd}`);
-
-        this.pid = await ipcRenderer.invoke('syntaxvoid-terminal:create', {
-            cols: this.term.cols,
-            rows: this.term.rows,
-            cwd: cwd
-        });
-
-        this.title = `Terminal (${this.pid})`;
-        if (this.emitter) this.emitter.emit('did-change-title', this.title);
-
-        ipcRenderer.on('syntaxvoid-terminal:data', this.handleData);
-        ipcRenderer.on('syntaxvoid-terminal:exit', this.handleExit);
-
-        // Delay writing to terminal to avoid potential shell clear
-        setTimeout(() => {
-            this.term.writeln('\x1b[33m[DEBUG] Terminal session started.\x1b[0m');
-            this.term.writeln(`\x1b[33m[DEBUG] CWD: ${cwd}\x1b[0m`);
-        }, 500);
-    } catch(err) {
-        ipcRenderer.invoke('syntaxvoid-terminal:log', `Error: ${err.message}`);
-        this.term.writeln(`[SyntaxVoid] Error creating session: ${err.message}`);
-    }
-}
-
-handleData(event, pid, data) {
-    if (pid === this.pid) {
-        this.term.write(data);
-    }
-}
-
-handleExit(event, pid, exitCode) {
-    if (pid === this.pid) {
-        this.term.writeln(`\n[SyntaxVoid] Session exited with code ${exitCode}.`);
-        this.pid = null;
-    }
-}
-
-fit() {
-    if (!this.element.offsetWidth || !this.element.offsetHeight) return;
-    this.fitAddon.fit();
-    if (this.pid) {
-        ipcRenderer.send('syntaxvoid-terminal:resize', this.pid, this.term.cols, this.term.rows);
-    }
-}
-
-getTitle() {
-    return this.title;
-}
-
-getDefaultLocation() {
-    return 'bottom';
-}
-
-getURI() {
-    return this.uri;
-}
-
-_handleSlashCommand(commandLine) {
-    const parts = commandLine.split(' ');
-    const cmd = parts[1]; // /sv [cmd]
-
-    this.term.writeln(`\x1b[32m[SyntaxVoid] Executing: ${cmd}\x1b[0m`);
-
-    if (cmd === 'impact') {
-        // /sv impact <file> [depth]
-        const filePathQuery = parts[2]; // Relative path?
-        const depth = parts[3] ? parseInt(parts[3]) : 1;
-
-        if (filePathQuery) {
-            // Resolve path relative to project
+        try {
             const projectPaths = atom.project.getPaths();
-            let fullPath = filePathQuery;
-            if (projectPaths.length > 0 && !path.isAbsolute(fullPath)) {
-                fullPath = path.resolve(projectPaths[0], fullPath);
-            }
+            const cwd = projectPaths.length > 0 ? projectPaths[0] : process.env.HOME;
 
-            atom.workspace.open(fullPath).then(() => {
-                atom.commands.dispatch(atom.views.getView(atom.workspace), 'syntaxvoid-impact:show-for-active-file');
+            // Log to main process stdout
+            ipcRenderer.invoke('syntaxvoid-terminal:log', `Renderer Project Paths: ${JSON.stringify(projectPaths)}`);
+            ipcRenderer.invoke('syntaxvoid-terminal:log', `Renderer Selected CWD: ${cwd}`);
+
+            this.pid = await ipcRenderer.invoke('syntaxvoid-terminal:create', {
+                cols: this.term.cols,
+                rows: this.term.rows,
+                cwd: cwd
             });
 
-            this.term.writeln(`Opening impact view for: ${fullPath} (Depth: ${depth})`);
-        } else {
-            atom.commands.dispatch(atom.views.getView(atom.workspace), 'syntaxvoid-impact:show-for-active-file');
-            this.term.writeln('Opening impact view for active file.');
+            this.title = `Terminal (${this.pid})`;
+            if (this.emitter) this.emitter.emit('did-change-title', this.title);
+
+            ipcRenderer.on('syntaxvoid-terminal:data', this.handleData);
+            ipcRenderer.on('syntaxvoid-terminal:exit', this.handleExit);
+
+            // Delay writing to terminal to avoid potential shell clear
+            setTimeout(() => {
+                this.term.writeln('\x1b[33m[DEBUG] Terminal session started.\x1b[0m');
+                this.term.writeln(`\x1b[33m[DEBUG] CWD: ${cwd}\x1b[0m`);
+            }, 500);
+        } catch (err) {
+            ipcRenderer.invoke('syntaxvoid-terminal:log', `Error: ${err.message}`);
+            this.term.writeln(`[SyntaxVoid] Error creating session: ${err.message}`);
         }
-    } else {
-        this.term.writeln(`Unknown command: ${cmd}`);
-        this.term.writeln('Usage: /sv impact <file> [depth]');
     }
-}
 
-destroy() {
-    if (this.pid) {
-        ipcRenderer.send('syntaxvoid-terminal:kill', this.pid);
+    handleData(event, pid, data) {
+        if (pid === this.pid) {
+            this.term.write(data);
+        }
     }
-    ipcRenderer.removeListener('syntaxvoid-terminal:data', this.handleData);
-    ipcRenderer.removeListener('syntaxvoid-terminal:exit', this.handleExit);
-    this.resizeObserver.disconnect();
-    this.term.dispose();
-    this.element.remove();
-}
 
-getElement() {
-    return this.element;
-}
+    handleExit(event, pid, exitCode) {
+        if (pid === this.pid) {
+            this.term.writeln(`\n[SyntaxVoid] Session exited with code ${exitCode}.`);
+            this.pid = null;
+        }
+    }
+
+    fit() {
+        if (!this.element.offsetWidth || !this.element.offsetHeight) return;
+        this.fitAddon.fit();
+        if (this.pid) {
+            ipcRenderer.send('syntaxvoid-terminal:resize', this.pid, this.term.cols, this.term.rows);
+        }
+    }
+
+    getTitle() {
+        return this.title;
+    }
+
+    getDefaultLocation() {
+        return 'bottom';
+    }
+
+    getURI() {
+        return this.uri;
+    }
+
+    _handleSlashCommand(commandLine) {
+        const parts = commandLine.split(' ');
+        const cmd = parts[1]; // /sv [cmd]
+
+        this.term.writeln(`\x1b[32m[SyntaxVoid] Executing: ${cmd}\x1b[0m`);
+
+        if (cmd === 'impact') {
+            // /sv impact <file> [depth]
+            const filePathQuery = parts[2]; // Relative path?
+            const depth = parts[3] ? parseInt(parts[3]) : 1;
+
+            if (filePathQuery) {
+                // Resolve path relative to project
+                const projectPaths = atom.project.getPaths();
+                let fullPath = filePathQuery;
+                if (projectPaths.length > 0 && !path.isAbsolute(fullPath)) {
+                    fullPath = path.resolve(projectPaths[0], fullPath);
+                }
+
+                atom.workspace.open(fullPath).then(() => {
+                    atom.commands.dispatch(atom.views.getView(atom.workspace), 'syntaxvoid-impact:show-for-active-file');
+                });
+
+                this.term.writeln(`Opening impact view for: ${fullPath} (Depth: ${depth})`);
+            } else {
+                atom.commands.dispatch(atom.views.getView(atom.workspace), 'syntaxvoid-impact:show-for-active-file');
+                this.term.writeln('Opening impact view for active file.');
+            }
+        } else {
+            this.term.writeln(`Unknown command: ${cmd}`);
+            this.term.writeln('Usage: /sv impact <file> [depth]');
+        }
+    }
+
+    destroy() {
+        if (this.pid) {
+            ipcRenderer.send('syntaxvoid-terminal:kill', this.pid);
+        }
+        ipcRenderer.removeListener('syntaxvoid-terminal:data', this.handleData);
+        ipcRenderer.removeListener('syntaxvoid-terminal:exit', this.handleExit);
+        this.resizeObserver.disconnect();
+        this.term.dispose();
+        this.element.remove();
+    }
+
+    getElement() {
+        return this.element;
+    }
 }
 
 module.exports = TerminalView;

@@ -31,7 +31,7 @@ class ImportParser {
 
             if (['.js', '.ts', '.jsx', '.tsx', '.mjs', '.cjs'].includes(ext)) {
                 imports = this._parseJS(content);
-            } else if (['.c', '.cpp', '.h', '.hpp'].includes(ext)) {
+            } else if (['.c', '.cc', '.cpp', '.h', '.hh', '.hpp'].includes(ext)) {
                 imports = this._parseCpp(content);
             } else if (['.py'].includes(ext)) {
                 imports = this._parsePython(content);
@@ -188,7 +188,7 @@ class ImportParser {
         if (fileMap.has(basePath)) return basePath;
 
         // Extensions
-        const exts = ['.js', '.ts', '.jsx', '.tsx', '.json', '.vue', '.svelte', '.h', '.hpp', '.c', '.cpp', '.py'];
+        const exts = ['.js', '.ts', '.jsx', '.tsx', '.json', '.vue', '.svelte', '.h', '.hh', '.hpp', '.c', '.cc', '.cpp', '.py'];
         for (const ext of exts) {
             if (fileMap.has(basePath + ext)) return basePath + ext;
         }
