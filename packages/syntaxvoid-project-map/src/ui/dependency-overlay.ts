@@ -1,30 +1,50 @@
 'use strict';
 
+interface Rect {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+}
+
+interface OverlayOptions {
+    showLinks?: boolean;
+    circularOnly?: boolean;
+}
+
+interface Edge {
+    source: string;
+    target: string;
+    weight?: number;
+    count?: number;
+}
+
 /**
  * Draws curved dependency links between folder rects on a canvas.
  * Highlights circular dependencies with red glow.
  * Polished: Better curves, opacity management, and direction indicators.
  */
-class DependencyOverlay {
+export default class DependencyOverlay {
+    showLinks: boolean;
+    circularOnly: boolean;
+
     /**
-     * @param {Object} opts
-     * @param {boolean} opts.showLinks
-     * @param {boolean} opts.circularOnly
+     * @param opts
      */
-    constructor(opts = {}) {
+    constructor(opts: OverlayOptions = {}) {
         this.showLinks = opts.showLinks !== false;
         this.circularOnly = opts.circularOnly || false;
     }
 
     /**
      * Draw all dependency links on the canvas.
-     * @param {CanvasRenderingContext2D} ctx
-     * @param {Edge[]} edges - [{source, target, count}]
-     * @param {Set<string>} circularEdges - "source|target" keys
-     * @param {Map<string, Rect>} rectMap - folderPath -> rect
-     * @param {Rect|null} hoveredRect - Currently hovered rect for highlighting
+     * @param ctx
+     * @param edges - [{source, target, count}]
+     * @param circularEdges - "source|target" keys
+     * @param rectMap - folderPath -> rect
+     * @param hoveredRect - Currently hovered rect for highlighting
      */
-    draw(ctx, edges, circularEdges, rectMap, hoveredRect = null) {
+    draw(ctx: CanvasRenderingContext2D, edges: Edge[], circularEdges: Set<string>, rectMap: Map<string, Rect>, hoveredRect: Rect | null = null) {
         if (!this.showLinks || !edges || edges.length === 0) return;
 
         ctx.save();
@@ -69,7 +89,7 @@ class DependencyOverlay {
                 ctx.globalAlpha = 0.8;
                 ctx.lineWidth = 2;
             } else {
-                ctx.lineWidth = Math.min(3, Math.max(1, Math.log(edge.count + 1))); // Thickness based on weight
+                ctx.lineWidth = Math.min(3, Math.max(1, Math.log((edge.count || edge.weight || 0) + 1))); // Thickness based on weight
             }
 
             const sx = sourceRect.x + sourceRect.w / 2;
@@ -126,7 +146,7 @@ class DependencyOverlay {
             // Arrow head at target
             // Draw only if relevant or high contrast
             if (ctx.globalAlpha > 0.1) {
-                this._drawArrow(ctx, cx, cy, tx, ty, isCircular ? '#e74c3c' : ctx.strokeStyle);
+                this._drawArrow(ctx, cx, cy, tx, ty, isCircular ? '#e74c3c' : ctx.strokeStyle as string);
             }
 
             ctx.shadowBlur = 0;
@@ -135,7 +155,7 @@ class DependencyOverlay {
         ctx.restore();
     }
 
-    _drawArrow(ctx, fromX, fromY, toX, toY, color) {
+    _drawArrow(ctx: CanvasRenderingContext2D, fromX: number, fromY: number, toX: number, toY: number, color: string) {
         const angle = Math.atan2(toY - fromY, toX - fromX);
         const size = 6;
 
@@ -154,6 +174,3 @@ class DependencyOverlay {
         ctx.fill();
     }
 }
-
-module.exports = DependencyOverlay;
-

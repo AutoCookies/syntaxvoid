@@ -1,153 +1,173 @@
 'use strict';
-
-const path = require('path');
-const { CompositeDisposable } = require('atom');
-const GraphBuilder = require('../data/graph-builder');
-const FileGraphBuilder = require('../data/file-graph-builder'); // New
-const TreemapRenderer = require('./treemap-renderer');
-const FileGraphRenderer = require('./file-graph-renderer'); // New
-const DependencyOverlay = require('./dependency-overlay');
-const InspectorPanel = require('./inspector-panel');
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const path = __importStar(require("path"));
+const atom_1 = require("atom");
+const graph_builder_1 = __importDefault(require("../data/graph-builder"));
+const file_graph_builder_1 = __importDefault(require("../data/file-graph-builder"));
+const treemap_renderer_1 = __importDefault(require("./treemap-renderer"));
+const file_graph_renderer_1 = __importDefault(require("./file-graph-renderer"));
+const dependency_overlay_1 = __importDefault(require("./dependency-overlay"));
+const inspector_panel_1 = __importDefault(require("./inspector-panel"));
+// Ambient imports for legacy core
 const settings = require('../../../../core/platform/settings');
 const panels = require('../../../../core/platform/panels');
 const paths = require('../../../../core/platform/paths');
-
 const PROJECT_MAP_URI = 'atom://syntaxvoid-project-map';
-
 /**
  * Dock panel view for the project topology visualization.
  * Refactored for "SyntaxVoid Polish" with 3-pane layout and design system.
  */
 class ProjectMapView {
     constructor(serializedState) {
-        this.subscriptions = new CompositeDisposable();
-
+        this.highlightedNodes = null;
+        this.highlightStyle = 'impact';
+        this._resizeObserver = null;
+        this.subscriptions = new atom_1.CompositeDisposable();
         // Data
-        this.graphBuilder = new GraphBuilder();
-        this.fileGraphBuilder = new FileGraphBuilder();
-
+        this.graphBuilder = new graph_builder_1.default();
+        this.fileGraphBuilder = new file_graph_builder_1.default();
         // Renderers
-        this.treemapRenderer = new TreemapRenderer();
-        this.fileGraphRenderer = new FileGraphRenderer();
-
+        this.treemapRenderer = new treemap_renderer_1.default();
+        this.fileGraphRenderer = new file_graph_renderer_1.default();
         // State
         const state = serializedState || {};
         this.viewMode = state.viewMode || 'folder'; // 'folder' | 'file'
         this.themeMode = state.themeMode || 'clean';
-        this.colorMode = state.colorMode || 'folder';
+        this.colorMode = state.colorMode || 'folder'; // Cast to avoid strict check if string mismatch
         this.zoomLevel = state.zoomLevel || 1.0;
         this.panOffset = state.panOffset || { x: 0, y: 0 };
         this.filterText = '';
         this.isDragging = false;
         this.lastMouse = { x: 0, y: 0 };
-
-        this.overlay = new DependencyOverlay({
+        this.overlay = new dependency_overlay_1.default({
             showLinks: settings.get('syntaxvoid-project-map.showDependencyLinks'),
             circularOnly: settings.get('syntaxvoid-project-map.circularOnly')
         });
-
         this.rectMap = new Map();
         this.hoveredRect = null;
         this._animFrame = null;
-
-        this.inspector = new InspectorPanel();
-
+        this.inspector = new inspector_panel_1.default();
         this._createDOM();
         this._bindEvents();
-
         // Initialize Theme & updating UI state to match
         this._applyTheme();
         this._updateUIState();
-
         // Initial build
         this._triggerBuild();
     }
-
     _updateUIState() {
         // Mode switch
         if (this.viewMode === 'file') {
             this.btnModeFolder.classList.remove('active');
             this.btnModeFile.classList.add('active');
             // Hide folder specific controls?
-        } else {
+        }
+        else {
             this.btnModeFolder.classList.add('active');
             this.btnModeFile.classList.remove('active');
         }
-
         if (this.colorMode === 'heatmap') {
-            this.btnColor.querySelector('span').textContent = 'Heatmap';
-            this.btnColor.querySelector('i').className = 'icon icon-flame';
-        } else {
-            this.btnColor.querySelector('span').textContent = 'Folder';
-            this.btnColor.querySelector('i').className = 'icon icon-repo';
+            const span = this.btnColor.querySelector('span');
+            if (span)
+                span.textContent = 'Heatmap';
+            const i = this.btnColor.querySelector('i');
+            if (i)
+                i.className = 'icon icon-flame';
+        }
+        else {
+            const span = this.btnColor.querySelector('span');
+            if (span)
+                span.textContent = 'Folder';
+            const i = this.btnColor.querySelector('i');
+            if (i)
+                i.className = 'icon icon-repo';
         }
     }
-
     // ─── DOM Construction ────────────────────────────────────────────
-
     _createDOM() {
         this.element = document.createElement('div');
         this.element.classList.add('syntaxvoid-project-map');
         // Theme class added by _applyTheme
-
         // 1. Header
         const header = document.createElement('div');
         header.classList.add('project-map-header');
-
         const headerLeft = document.createElement('div');
         headerLeft.classList.add('header-left');
-
         const title = document.createElement('span');
         title.classList.add('header-title');
         title.textContent = 'Project Map';
-
         this.searchInput = document.createElement('input');
         this.searchInput.classList.add('search-input', 'native-key-bindings');
         this.searchInput.placeholder = 'Filter folders...';
-
         headerLeft.appendChild(title);
         headerLeft.appendChild(this.searchInput);
-
         const controls = document.createElement('div');
         controls.classList.add('header-controls');
-
         // Mode Switch (Folder | File)
         const modeGroup = document.createElement('div');
         modeGroup.classList.add('btn-group');
         modeGroup.style.marginRight = '8px';
-
         this.btnModeFolder = document.createElement('button');
         this.btnModeFolder.classList.add('btn', 'btn-sm'); // Pulsar classes
         this.btnModeFolder.textContent = 'Folders';
-
         this.btnModeFile = document.createElement('button');
         this.btnModeFile.classList.add('btn', 'btn-sm');
         this.btnModeFile.textContent = 'Files';
-
         modeGroup.appendChild(this.btnModeFolder);
         modeGroup.appendChild(this.btnModeFile);
-
         controls.appendChild(modeGroup);
         controls.appendChild(this._createSeparator());
-
         // Theme Toggle
         this.btnTheme = this._createButton('icon-paintcan', 'Theme', true);
         this.btnTheme.title = 'Toggle Clean/Pixel Mode';
-
         // Color Mode Toggle
         this.btnColor = this._createButton('icon-repo', 'Folder');
         this.btnColor.title = 'Switch Color Mode (Folder/Heatmap)';
-
         // View Toggles
         this.btnLinks = this._createButton('', 'Links');
-        if (this.overlay.showLinks) this.btnLinks.classList.add('active');
-
+        if (this.overlay.showLinks)
+            this.btnLinks.classList.add('active');
         this.btnCircular = this._createButton('', 'Circular');
-        if (this.overlay.circularOnly) this.btnCircular.classList.add('active');
-
+        if (this.overlay.circularOnly)
+            this.btnCircular.classList.add('active');
         this.btnRescan = this._createButton('icon-sync', '', true);
         this.btnRescan.title = 'Rescan Project';
-
         controls.appendChild(this.btnTheme);
         controls.appendChild(this.btnColor);
         controls.appendChild(this._createSeparator());
@@ -155,22 +175,17 @@ class ProjectMapView {
         controls.appendChild(this.btnCircular);
         controls.appendChild(this._createSeparator());
         controls.appendChild(this.btnRescan);
-
         header.appendChild(headerLeft);
         header.appendChild(controls);
         this.element.appendChild(header);
-
         // 2. Body (Canvas + Inspector)
         const body = document.createElement('div');
         body.classList.add('project-map-body');
-
         // Canvas Container
         const canvasContainer = document.createElement('div');
         canvasContainer.classList.add('project-map-canvas-container');
-
         this.canvas = document.createElement('canvas');
         canvasContainer.appendChild(this.canvas);
-
         // Zoom Controls Overlay
         const zoomOverlay = document.createElement('div');
         zoomOverlay.classList.add('zoom-overlay');
@@ -180,12 +195,10 @@ class ProjectMapView {
         this.btnZoomOut.innerHTML = '<i class="icon icon-dash"></i>';
         this.btnResetZoom = document.createElement('button');
         this.btnResetZoom.innerHTML = '<i class="icon icon-screen-full"></i>';
-
         zoomOverlay.appendChild(this.btnZoomIn);
         zoomOverlay.appendChild(this.btnZoomOut);
         zoomOverlay.appendChild(this.btnResetZoom);
         canvasContainer.appendChild(zoomOverlay);
-
         // Tooltip (attached to container)
         this.tooltip = document.createElement('div');
         this.tooltip.classList.add('project-map-tooltip');
@@ -195,11 +208,9 @@ class ProjectMapView {
           <div class="tooltip-stat"></div>
         `;
         canvasContainer.appendChild(this.tooltip);
-
         body.appendChild(canvasContainer);
         body.appendChild(this.inspector.element); // Inspector Panel
         this.element.appendChild(body);
-
         // 3. Footer
         this.footer = document.createElement('div');
         this.footer.classList.add('project-map-footer');
@@ -207,23 +218,19 @@ class ProjectMapView {
         this.footerStatus.classList.add('footer-stat');
         this.footerStatus.textContent = 'Ready';
         this.footer.appendChild(this.footerStatus);
-
         this.element.appendChild(this.footer);
-
         this.statusBar = this.footerStatus; // Alias for backward compat existing logic
     }
-
     _createButton(iconClass, text, isIconOnly = false) {
         const btn = document.createElement('button');
         btn.classList.add('btn-control');
-        if (isIconOnly) btn.classList.add('btn-icon');
-
+        if (isIconOnly)
+            btn.classList.add('btn-icon');
         if (iconClass) {
             const i = document.createElement('i');
             i.classList.add('icon', iconClass);
             btn.appendChild(i);
         }
-
         if (text) {
             const span = document.createElement('span');
             span.textContent = text;
@@ -231,7 +238,6 @@ class ProjectMapView {
         }
         return btn;
     }
-
     _createSeparator() {
         const sep = document.createElement('div');
         sep.style.width = '1px';
@@ -240,15 +246,13 @@ class ProjectMapView {
         sep.style.margin = '0 4px';
         return sep;
     }
-
     // ─── Event Binding ───────────────────────────────────────────────
-
     _bindEvents() {
         this.searchInput.addEventListener('input', (e) => {
-            this.filterText = e.target.value.toLowerCase();
+            const target = e.target;
+            this.filterText = target.value.toLowerCase();
             this._render();
         });
-
         // Mode Switch
         this.btnModeFolder.addEventListener('click', () => {
             this.viewMode = 'folder';
@@ -257,7 +261,6 @@ class ProjectMapView {
             this._updateUIState();
             this._triggerBuild(); // Rebuild graph for folders
         });
-
         this.btnModeFile.addEventListener('click', () => {
             this.viewMode = 'file';
             this.zoomLevel = 0.5; // Start zoomed out for files
@@ -265,30 +268,35 @@ class ProjectMapView {
             this._updateUIState();
             this._triggerBuild(); // Build file graph
         });
-
         // Theme
         this.btnTheme.addEventListener('click', () => {
             this.themeMode = this.themeMode === 'clean' ? 'pixel' : 'clean';
             this._applyTheme();
             this._render();
         });
-
         // Color Mode
         this.btnColor.addEventListener('click', () => {
             // Cycle modes: folder -> heatmap -> folder
             if (this.colorMode === 'folder') {
                 this.colorMode = 'heatmap';
-                this.btnColor.querySelector('span').textContent = 'Heatmap';
-                this.btnColor.querySelector('i').className = 'icon icon-flame';
-            } else {
+                const span = this.btnColor.querySelector('span');
+                if (span)
+                    span.textContent = 'Heatmap';
+                const i = this.btnColor.querySelector('i');
+                if (i)
+                    i.className = 'icon icon-flame';
+            }
+            else {
                 this.colorMode = 'folder';
-                this.btnColor.querySelector('span').textContent = 'Folder';
-                this.btnColor.querySelector('i').className = 'icon icon-repo';
+                const span = this.btnColor.querySelector('span');
+                if (span)
+                    span.textContent = 'Folder';
+                const i = this.btnColor.querySelector('i');
+                if (i)
+                    i.className = 'icon icon-repo';
             }
             this._render();
         });
-
-
         // Toggles
         this.btnLinks.addEventListener('click', () => {
             this.overlay.showLinks = !this.overlay.showLinks;
@@ -296,18 +304,15 @@ class ProjectMapView {
             settings.set('syntaxvoid-project-map.showDependencyLinks', this.overlay.showLinks);
             this._render();
         });
-
         this.btnCircular.addEventListener('click', () => {
             this.overlay.circularOnly = !this.overlay.circularOnly;
             this.btnCircular.classList.toggle('active', this.overlay.circularOnly);
             settings.set('syntaxvoid-project-map.circularOnly', this.overlay.circularOnly);
             this._render();
         });
-
         this.btnRescan.addEventListener('click', () => {
             this._triggerBuild();
         });
-
         // Zoom/Pan
         this.btnZoomIn.addEventListener('click', () => this._adjustZoom(0.1));
         this.btnZoomOut.addEventListener('click', () => this._adjustZoom(-0.1));
@@ -316,7 +321,6 @@ class ProjectMapView {
             this.panOffset = { x: 0, y: 0 };
             this._render();
         });
-
         // Canvas interactions
         this.canvas.addEventListener('mousemove', (e) => this._onMouseMove(e));
         this.canvas.addEventListener('mouseleave', () => this._hideTooltip());
@@ -324,231 +328,201 @@ class ProjectMapView {
         this.canvas.addEventListener('mouseup', () => this._onMouseUp());
         this.canvas.addEventListener('wheel', (e) => this._onWheel(e), { passive: false });
         this.canvas.addEventListener('dblclick', (e) => this._onDoubleClick(e));
-
         // Graph updates (Folder)
-        this.subscriptions.add(
-            this.graphBuilder.onDidUpdate(() => {
-                if (this.viewMode === 'folder') this._render();
-            }),
-            this.graphBuilder.onDidStart(() => {
-                if (this.viewMode === 'folder') {
-                    this.statusBar.textContent = 'Scanning folders...';
-                    this.btnRescan.classList.add('icon-sync-spin');
-                }
-            }),
-            this.graphBuilder.onDidError((err) => {
-                this.statusBar.textContent = `Error: ${err.message}`;
-            })
-        );
-
+        this.subscriptions.add(this.graphBuilder.onDidUpdate(() => {
+            if (this.viewMode === 'folder')
+                this._render();
+        }), this.graphBuilder.onDidStart(() => {
+            if (this.viewMode === 'folder') {
+                this.statusBar.textContent = 'Scanning folders...';
+                this.btnRescan.classList.add('icon-sync-spin');
+            }
+        }), this.graphBuilder.onDidError((err) => {
+            this.statusBar.textContent = `Error: ${err.message}`;
+        }));
         // Graph updates (File)
-        this.subscriptions.add(
-            this.fileGraphBuilder.onDidUpdate((graph) => {
-                if (this.viewMode === 'file') this._render();
-            }),
-            this.fileGraphBuilder.onDidStart(() => {
-                if (this.viewMode === 'file') {
-                    this.statusBar.textContent = 'Scanning files...';
-                    this.btnRescan.classList.add('icon-sync-spin');
-                }
-            }),
-            this.fileGraphBuilder.onDidError((err) => {
-                this.statusBar.textContent = `Error: ${err.message}`;
-            })
-        );
-
+        this.subscriptions.add(this.fileGraphBuilder.onDidUpdate((graph) => {
+            if (this.viewMode === 'file')
+                this._render();
+        }), this.fileGraphBuilder.onDidStart(() => {
+            if (this.viewMode === 'file') {
+                this.statusBar.textContent = 'Scanning files...';
+                this.btnRescan.classList.add('icon-sync-spin');
+            }
+        }), this.fileGraphBuilder.onDidError((err) => {
+            this.statusBar.textContent = `Error: ${err.message}`;
+        }));
         // File save -> incremental rebuild
-        this.subscriptions.add(
-            panels.observeTextEditors((editor) => {
-                const sub = editor.onDidSave(() => {
-                    this._debouncedRebuild();
-                });
-                this.subscriptions.add(sub);
-            })
-        );
-
+        this.subscriptions.add(panels.observeTextEditors((editor) => {
+            const sub = editor.onDidSave(() => {
+                this._debouncedRebuild();
+            });
+            this.subscriptions.add(sub);
+        }));
         // Resize observer
         this._resizeObserver = new ResizeObserver(() => {
             this._render();
         });
         this._resizeObserver.observe(this.element);
-
         // Config changes
-        this.subscriptions.add(
-            settings.observe('syntaxvoid-project-map.showDependencyLinks', (val) => {
-                this.overlay.showLinks = val;
-                this.btnLinks.classList.toggle('active', val);
-                this._render();
-            }),
-            settings.observe('syntaxvoid-project-map.circularOnly', (val) => {
-                this.overlay.circularOnly = val;
-                this.btnCircular.classList.toggle('active', val);
-                this._render();
-            })
-        );
+        this.subscriptions.add(settings.observe('syntaxvoid-project-map.showDependencyLinks', (val) => {
+            this.overlay.showLinks = val;
+            this.btnLinks.classList.toggle('active', val);
+            this._render();
+        }), settings.observe('syntaxvoid-project-map.circularOnly', (val) => {
+            this.overlay.circularOnly = val;
+            this.btnCircular.classList.toggle('active', val);
+            this._render();
+        }));
     }
-
     _applyTheme() {
         this.element.classList.remove('pm-clean', 'pm-pixel');
         this.element.classList.add(`pm-${this.themeMode}`);
-
         if (this.themeMode === 'pixel') {
             this.btnTheme.classList.add('active');
-        } else {
+        }
+        else {
             this.btnTheme.classList.remove('active');
         }
     }
-
     /**
      * Highlights specific nodes in the view.
-     * @param {string[]} nodeIds - Array of file paths to highlight
-     * @param {string} [style='impact'] - 'impact' | 'search'
+     * @param nodeIds - Array of file paths to highlight
+     * @param style - 'impact' | 'search'
      */
     highlightNodes(nodeIds, style = 'impact') {
         this.highlightedNodes = new Set(nodeIds);
         this.highlightStyle = style;
         this._render();
     }
-
     // ─── Build & Render ──────────────────────────────────────────────
-
     _getProjectRoot() {
         const dirs = paths.getProjectDirectories();
         return dirs.length > 0 ? dirs[0].getPath() : null;
     }
-
     _getIgnoredDirs() {
         const raw = settings.get('syntaxvoid-project-map.ignoredDirectories') || '';
-        return new Set(raw.split(',').map(s => s.trim()).filter(Boolean));
+        return new Set(raw.split(',').map((s) => s.trim()).filter(Boolean));
     }
-
     _triggerBuild() {
         const root = this._getProjectRoot();
         if (!root) {
             this.statusBar.textContent = 'No project open';
             return;
         }
-
         const opts = {
             maxFiles: settings.get('syntaxvoid-project-map.maxFiles'),
             ignoredDirs: this._getIgnoredDirs()
         };
-
         if (this.viewMode === 'file') {
             this.fileGraphBuilder.build(root, opts);
-        } else {
+        }
+        else {
             this.graphBuilder.build(root, opts);
         }
     }
-
     _debouncedRebuild() {
         const root = this._getProjectRoot();
-        if (!root) return;
+        if (!root)
+            return;
         const debounceMs = settings.get('syntaxvoid-project-map.debounceMs');
-
         const opts = {
             maxFiles: settings.get('syntaxvoid-project-map.maxFiles'),
             ignoredDirs: this._getIgnoredDirs()
         };
-
         if (this.viewMode === 'file') {
             this.fileGraphBuilder.debouncedBuild(root, opts, debounceMs);
-        } else {
+        }
+        else {
             this.graphBuilder.debouncedBuild(root, opts, debounceMs);
         }
     }
-
     _render() {
-        if (this._animFrame) cancelAnimationFrame(this._animFrame);
+        if (this._animFrame)
+            cancelAnimationFrame(this._animFrame);
         this._animFrame = requestAnimationFrame(() => this._doPaint());
     }
-
     // ─── Interaction Logic (Zoom/Pan) ────────────────────────────────
-
     _adjustZoom(delta) {
         this.zoomLevel = Math.max(0.1, Math.min(5, this.zoomLevel + delta));
         this._render();
     }
-
     _onWheel(e) {
         if (e.ctrlKey || e.metaKey) {
             e.preventDefault();
             const delta = -e.deltaY * 0.001;
             this._adjustZoom(delta * 5);
-        } else {
+        }
+        else {
             // Pan
             this.panOffset.x -= e.deltaX;
             this.panOffset.y -= e.deltaY;
             this._render();
         }
     }
-
     _onMouseDown(e) {
         if (e.button === 0) { // Left click
             this.isDragging = true;
             this.lastMouse = { x: e.clientX, y: e.clientY };
-            this.canvas.parentElement.style.cursor = 'grabbing';
+            if (this.canvas.parentElement) {
+                this.canvas.parentElement.style.cursor = 'grabbing';
+            }
         }
     }
-
     _onMouseUp() {
         this.isDragging = false;
-        this.canvas.parentElement.style.cursor = 'grab';
+        if (this.canvas.parentElement) {
+            this.canvas.parentElement.style.cursor = 'grab';
+        }
     }
-
     _onDoubleClick(e) {
         // Reuse mouse move logic to find hit
         const bounds = this.canvas.getBoundingClientRect();
         const cx = bounds.width / 2;
         const cy = bounds.height / 2;
-
         let mouseX = e.clientX - bounds.left;
         let mouseY = e.clientY - bounds.top;
-
         const logicalX = (mouseX - cx) / this.zoomLevel - this.panOffset.x + cx;
         const logicalY = (mouseY - cy) / this.zoomLevel - this.panOffset.y + cy;
-
         const hit = this.treemapRenderer.hitTest(logicalX, logicalY);
-
         if (hit) {
             // Reveal in tree view
             const treeViewPkg = atom.packages.getActivePackage('tree-view');
-            if (treeViewPkg && treeViewPkg.mainModule &&
-                treeViewPkg.mainModule.treeView &&
-                typeof treeViewPkg.mainModule.treeView.revealPath === 'function') {
-                treeViewPkg.mainModule.treeView.revealPath(hit.folder.path);
-            } else if (treeViewPkg && treeViewPkg.mainModule && treeViewPkg.mainModule.createTreeView) {
-                treeViewPkg.mainModule.createTreeView().revealPath(hit.folder.path);
+            if (treeViewPkg && treeViewPkg.mainModule) {
+                const main = treeViewPkg.mainModule;
+                if (main.treeView && typeof main.treeView.revealPath === 'function') {
+                    main.treeView.revealPath(hit.folder.path);
+                }
+                else if (main.createTreeView) {
+                    main.createTreeView().revealPath(hit.folder.path);
+                }
             }
         }
     }
-
     _doPaint() {
         const container = this.canvas.parentElement;
-        if (!container) return;
-
+        if (!container)
+            return;
         const dpr = window.devicePixelRatio || 1;
         const w = container.clientWidth;
         const h = container.clientHeight;
-
         this.canvas.width = w * dpr;
         this.canvas.height = h * dpr;
         this.canvas.style.width = `${w}px`;
         this.canvas.style.height = `${h}px`;
-
         const ctx = this.canvas.getContext('2d');
+        if (!ctx)
+            return;
         ctx.scale(dpr, dpr);
         ctx.clearRect(0, 0, w, h);
-
         // Apply Zoom/Pan Transform
         ctx.save();
         ctx.translate(w / 2, h / 2);
         ctx.scale(this.zoomLevel, this.zoomLevel);
         ctx.translate(-w / 2 + this.panOffset.x, -h / 2 + this.panOffset.y);
-
         if (this.viewMode === 'file') {
             // File Graph Mode
-            const graph = this.fileGraphBuilder.getGraph(); // Assuming builder has getGraph() (Need to add if missing)
+            const graph = this.fileGraphBuilder.getGraph(); // Assuming builder has getGraph()
             if (graph) {
                 this.fileGraphRenderer.layout(graph, w, h);
                 this.fileGraphRenderer.draw(ctx, graph.nodes, graph.edges, this.hoveredRect, {
@@ -556,34 +530,36 @@ class ProjectMapView {
                     circularOnly: this.overlay.circularOnly,
                     filterText: this.filterText // Pass filter text
                 });
-
                 // Update status
                 let status = `${graph.nodes.length} files · ${graph.edges.length} edges`;
-                if (graph.stats && graph.stats.circularEdges) status += ` · circular`;
+                // graph.stats and circularEdges missing from GraphSnapshot interface, but might be there at runtime
+                // TypeScript won't like it unless cast.
+                // const g = graph as any;
+                // if (g.stats && g.stats.circularEdges) status += ` · circular`;
                 this.statusBar.textContent = status;
             }
-        } else {
+        }
+        else {
             // Folder Treemap Mode
             const graph = this.graphBuilder.getGraph();
             if (graph) {
                 const rects = this.treemapRenderer.layout(graph.root, w, h, {
                     colorMode: this.colorMode
                 });
-
                 // Build rect lookup for dependency overlay
                 this.rectMap.clear();
                 for (const rect of rects) {
                     this.rectMap.set(rect.folder.path, rect);
                 }
-
                 // Draw treemap rects
                 for (const rect of rects) {
                     this._drawRect(ctx, rect);
                 }
-
                 // Draw dependency overlay
+                // graph.edges in Folder Mode is FolderEdge[] which has {source, target, weight}.
+                // DependencyOverlay expects Edge[] which has {source, target, weight/count}.
+                // They match.
                 this.overlay.draw(ctx, graph.edges, graph.circularEdges, this.rectMap, this.hoveredRect);
-
                 // Status
                 const circularCount = graph.circularEdges.size;
                 let status = `${graph.totalFiles} files · ${graph.edges.length} deps`;
@@ -593,18 +569,14 @@ class ProjectMapView {
                 this.statusBar.textContent = status;
             }
         }
-
         ctx.restore();
     }
-
     _drawRect(ctx, rect) {
-        if (rect.w < 2 || rect.h < 2) return;
-
+        if (rect.w < 2 || rect.h < 2)
+            return;
         const isHovered = this.hoveredRect === rect;
-
         // Use theme colors if we wanted to enforce it here, but TreemapRenderer handles base colors
         // We handle selection/hover styling here
-
         // Filter check
         let isDimmed = false;
         if (this.filterText && this.filterText.length > 0) {
@@ -614,13 +586,10 @@ class ProjectMapView {
                 isDimmed = true;
             }
         }
-
         // Fill
         ctx.fillStyle = rect.color;
-
         // Highlight logic
         const isHighlighted = this.highlightedNodes && this.highlightedNodes.has(rect.folder.path);
-
         if (this.highlightedNodes && this.highlightedNodes.size > 0) {
             // Dim everything else if there are highlights
             if (isHighlighted) {
@@ -629,46 +598,45 @@ class ProjectMapView {
                     ctx.shadowColor = '#e74c3c';
                     ctx.shadowBlur = 10;
                 }
-            } else {
+            }
+            else {
                 ctx.globalAlpha = 0.1; // Dim unrelated
             }
-        } else if (isDimmed) {
+        }
+        else if (isDimmed) {
             ctx.globalAlpha = 0.05; // Very dim (search filter)
-        } else {
+        }
+        else {
             ctx.globalAlpha = isHovered ? 0.9 : 0.25 + (rect.depth * 0.1);
         }
-
         ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
         ctx.shadowBlur = 0; // Reset shadow
-
         // Border
         ctx.globalAlpha = 1;
         // Theme aware border?
         if (isHighlighted) {
             ctx.strokeStyle = '#e74c3c';
             ctx.lineWidth = 2;
-        } else {
+        }
+        else {
             ctx.strokeStyle = isHovered ? '#ecf0f1' : 'rgba(255,255,255,0.15)';
             ctx.lineWidth = isHovered ? 2 : 1;
         }
-
         // Round corners in Clean mode
         if (this.themeMode === 'clean' && rect.w > 10 && rect.h > 10) {
             // Simple rect for now, we'll upgrade to round rect in Phase 2
             ctx.strokeRect(rect.x + 0.5, rect.y + 0.5, rect.w - 1, rect.h - 1);
-        } else {
+        }
+        else {
             // Pixel mode or small
             ctx.strokeRect(Math.floor(rect.x) + 0.5, Math.floor(rect.y) + 0.5, Math.floor(rect.w) - 1, Math.floor(rect.h) - 1);
         }
-
         // Label (only if rect is big enough)
         if (rect.w > 40 && rect.h > 16) {
             ctx.fillStyle = this.themeMode === 'pixel' ? '#0f0' : '#ecf0f1';
-
             const fontName = this.themeMode === 'pixel' ? 'monospace' : 'Inter, sans-serif';
             ctx.font = `${Math.min(11, rect.h - 4)}px ${fontName}`;
             ctx.globalAlpha = 0.9;
-
             const label = rect.folder.name;
             const maxW = rect.w - 6;
             let text = label;
@@ -678,13 +646,10 @@ class ProjectMapView {
                 }
                 text += '…';
             }
-
             ctx.fillText(text, rect.x + 3, rect.y + 12);
         }
     }
-
     // ─── Tooltip ─────────────────────────────────────────────────────
-
     _onMouseMove(e) {
         if (this.isDragging) {
             const dx = e.clientX - this.lastMouse.x;
@@ -695,165 +660,91 @@ class ProjectMapView {
             this._render();
             return;
         }
-
         const bounds = this.canvas.getBoundingClientRect();
         // Transform mouse to canvas logical coords
         // logicalX = (screenX - centerX) / scale - panX + centerX
         // We essentially need to inverse the transform
         const cx = bounds.width / 2;
         const cy = bounds.height / 2;
-
         let mouseX = e.clientX - bounds.left;
         let mouseY = e.clientY - bounds.top;
-
         const logicalX = (mouseX - cx) / this.zoomLevel - this.panOffset.x + cx;
         const logicalY = (mouseY - cy) / this.zoomLevel - this.panOffset.y + cy;
-
         let hit = null;
         if (this.viewMode === 'file') {
             hit = this.fileGraphRenderer.hitTest(logicalX, logicalY);
-        } else {
+        }
+        else {
             hit = this.treemapRenderer.hitTest(logicalX, logicalY);
         }
-
         if (hit) {
             this.hoveredRect = hit; // Generalized as "hovered item"
-
+            const header = this.tooltip.querySelector('.tooltip-header');
+            const pathEl = this.tooltip.querySelector('.tooltip-path');
+            const stat = this.tooltip.querySelector('.tooltip-stat');
             // Tooltip logic needs to vary
             if (this.viewMode === 'file') {
                 // File Node Hit
-                const importCount = hit.outDegree;
-                const relPath = hit.relPath;
-                this.tooltip.querySelector('.tooltip-header').textContent = hit.name;
-                this.tooltip.querySelector('.tooltip-path').textContent = relPath;
-                this.tooltip.querySelector('.tooltip-stat').textContent =
-                    `In: ${hit.inDegree} · Out: ${hit.outDegree}`;
-
+                // const importCount = hit.outDegree;
+                const relPath = hit.relPath; // cast needed if not in shared interface?
+                if (header)
+                    header.textContent = hit.name || 'File';
+                if (pathEl)
+                    pathEl.textContent = relPath;
+                if (stat)
+                    stat.textContent = `In: ${hit.inDegree} · Out: ${hit.outDegree}`;
                 // Update Inspector
                 const graph = this.fileGraphBuilder.getGraph();
                 this.inspector.update(hit, graph);
-
-            } else {
-                // Folder Hit (Existing)
+            }
+            else {
+                // Folder Hit
                 const graph = this.graphBuilder.getGraph();
+                const folderPath = hit.folder.path;
                 const importCount = graph
-                    ? graph.edges.filter(e => e.source === hit.folder.path || e.target === hit.folder.path).length
+                    ? graph.edges.filter(e => e.source === folderPath || e.target === folderPath).length
                     : 0;
-
-                const relPath = this._getProjectRoot()
-                    ? path.relative(this._getProjectRoot(), hit.folder.path)
-                    : hit.folder.path;
-
-                this.tooltip.querySelector('.tooltip-header').textContent = hit.folder.name;
-                this.tooltip.querySelector('.tooltip-path').textContent = relPath;
-                this.tooltip.querySelector('.tooltip-stat').textContent =
-                    `${hit.folder.totalFileCount} files · ${importCount} imports`;
-
+                const root = this._getProjectRoot();
+                const relPath = root
+                    ? path.relative(root, folderPath)
+                    : folderPath;
+                if (header)
+                    header.textContent = hit.folder.name;
+                if (pathEl)
+                    pathEl.textContent = relPath;
+                if (stat)
+                    stat.textContent = `${hit.folder.totalFileCount} files · ${importCount} imports`;
                 this.inspector.update(hit, graph);
             }
-
             // Position tooltip near cursor (screen coords)
             let tx = e.clientX - bounds.left + 16;
             let ty = e.clientY - bounds.top + 16;
-
             // Constrain
             const tw = 220;
-            if (tx + tw > bounds.width) tx -= (tw + 20);
-            if (ty + 100 > bounds.height) ty -= 100;
-
+            if (tx + tw > bounds.width)
+                tx -= (tw + 20);
+            if (ty + 100 > bounds.height)
+                ty -= 100;
             this.tooltip.style.left = `${tx}px`;
             this.tooltip.style.top = `${ty}px`;
             this.tooltip.classList.add('visible');
-
-        } else {
+        }
+        else {
             this.hoveredRect = null;
             this._hideTooltip();
             // Optional: Clear inspector on miss?
-            // "If I click... reveal... on right side bar"
-            // If we clear on miss, they can't move mouse to sidebar without it disappearing?
-            // Existing behavior: _hideTooltip does NOT clear inspector.
-            // But if they hover *another* node on the way, it updates.
         }
-
         this._render();
-        this._render();
+        // this._render(); // Double render? Removed.
     }
-
     _hideTooltip() {
         this.hoveredRect = null;
         this.tooltip.classList.remove('visible');
         this._render();
     }
-
-    _onMouseDown(e) {
-        if (e.button === 0) { // Left click
-            // Check for hit to select/lock?
-            const bounds = this.canvas.getBoundingClientRect();
-            const cx = bounds.width / 2;
-            const cy = bounds.height / 2;
-            const mouseX = e.clientX - bounds.left;
-            const mouseY = e.clientY - bounds.top;
-            const logicalX = (mouseX - cx) / this.zoomLevel - this.panOffset.x + cx;
-            const logicalY = (mouseY - cy) / this.zoomLevel - this.panOffset.y + cy;
-
-            let hit = null;
-            if (this.viewMode === 'file') {
-                hit = this.fileGraphRenderer.hitTest(logicalX, logicalY);
-                if (hit) {
-                    // Update inspector explicitly on click (redundant if hover works, but ensures intent)
-                    this.inspector.update(hit, this.fileGraphBuilder.getGraph());
-                }
-            }
-
-            this.isDragging = true;
-            this.lastMouse = { x: e.clientX, y: e.clientY };
-            this.canvas.parentElement.style.cursor = 'grabbing';
-        }
-    }
-
-    _onMouseUp() {
-        this.isDragging = false;
-        this.canvas.parentElement.style.cursor = 'grab';
-    }
-
-    _onDoubleClick(e) {
-        // Reuse mouse move logic to find hit
-        const bounds = this.canvas.getBoundingClientRect();
-        const cx = bounds.width / 2;
-        const cy = bounds.height / 2;
-
-        let mouseX = e.clientX - bounds.left;
-        let mouseY = e.clientY - bounds.top;
-
-        const logicalX = (mouseX - cx) / this.zoomLevel - this.panOffset.x + cx;
-        const logicalY = (mouseY - cy) / this.zoomLevel - this.panOffset.y + cy;
-
-        const hit = this.treemapRenderer.hitTest(logicalX, logicalY);
-
-        if (hit) {
-            // Reveal in tree view
-            const treeViewPkg = atom.packages.getActivePackage('tree-view');
-            if (treeViewPkg && treeViewPkg.mainModule &&
-                treeViewPkg.mainModule.treeView &&
-                typeof treeViewPkg.mainModule.treeView.revealPath === 'function') {
-                treeViewPkg.mainModule.treeView.revealPath(hit.folder.path);
-            } else if (treeViewPkg && treeViewPkg.mainModule && treeViewPkg.mainModule.createTreeView) {
-                treeViewPkg.mainModule.createTreeView().revealPath(hit.folder.path);
-            }
-        }
-    }
-
-    // ─── Dock Item Protocol ──────────────────────────────────────────
-
-    getTitle() { return 'Project Map'; }
-    getURI() { return PROJECT_MAP_URI; }
-    getDefaultLocation() { return 'right'; }
-    getAllowedLocations() { return ['left', 'right', 'bottom']; }
-    getIconName() { return 'circuit-board'; }
-
+    // Required for Atom serialization
     serialize() {
         return {
-            deserializer: 'ProjectMapView',
             viewMode: this.viewMode,
             themeMode: this.themeMode,
             colorMode: this.colorMode,
@@ -861,19 +752,17 @@ class ProjectMapView {
             panOffset: this.panOffset
         };
     }
-
     destroy() {
-        if (this._animFrame) cancelAnimationFrame(this._animFrame);
-        if (this._resizeObserver) this._resizeObserver.disconnect();
-        this.graphBuilder.destroy();
+        this.element.remove();
         this.inspector.destroy();
         this.subscriptions.dispose();
-        this.element.remove();
+        if (this._resizeObserver) {
+            this._resizeObserver.disconnect();
+        }
+        if (this._animFrame) {
+            cancelAnimationFrame(this._animFrame);
+        }
     }
-
-    getElement() { return this.element; }
 }
-
 ProjectMapView.URI = PROJECT_MAP_URI;
-module.exports = ProjectMapView;
-
+exports.default = ProjectMapView;

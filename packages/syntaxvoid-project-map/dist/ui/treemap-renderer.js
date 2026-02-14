@@ -1,5 +1,5 @@
 'use strict';
-
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Squarified treemap layout algorithm.
  * Converts a folder tree into positioned rectangles for canvas rendering.
@@ -14,82 +14,87 @@ class TreemapRenderer {
             '#1abc9c', '#e67e22', '#2980b9', '#27ae60', '#c0392b',
             '#8e44ad', '#d35400', '#16a085', '#f1c40f', '#7f8c8d'
         ];
-
         this.padding = 2; // Default padding
     }
-
     /**
      * Compute layout rectangles from folder tree.
-     * @param {FolderNode} root
-     * @param {number} width - canvas width
-     * @param {number} height - canvas height
-     * @param {Object} opts - { colorMode: 'folder'|'dependency'|'heatmap' }
-     * @returns {Rect[]}
-     *
-     * Rect = { x, y, w, h, folder: FolderNode, depth, color }
+     * @param root
+     * @param width - canvas width
+     * @param height - canvas height
+     * @param opts - { colorMode: 'folder'|'dependency'|'heatmap' }
+     * @returns
      */
     layout(root, width, height, opts = {}) {
         this.rects = [];
-        if (!root || root.totalFileCount === 0) return this.rects;
-
+        if (!root || root.totalFileCount === 0)
+            return this.rects;
         // Apply global padding container
         const pad = 4;
-        this._squarify(root.children.length > 0 ? root.children : [root], {
+        const rootChildren = root.children.filter(c => c.type === 'folder');
+        // Note: Treemap usually only layouts folders? Or files too?
+        // Original code: `root.children.length > 0 ? root.children : [root]`
+        // And `_squarify` takes `children`.
+        // If root has mixed files/folders, how does it handle?
+        // _squarify: `sorted = children.filter(c => c.totalFileCount > 0)`
+        // FileNodes don't have totalFileCount (only size).
+        // Check FileScanner: `FolderNode` has `totalFileCount`. `ScannerFileNode` has `size`.
+        // If `c.totalFileCount` is accessed on a FileNode, it's undefined.
+        // `undefined > 0` is false. So files are filtered out?
+        // If files are filtered out, then only folders appear in treemap.
+        // This seems to be the intended behavior for "Folder Level" treemap.
+        // Wait, `ScannerFileNode` has `size`.
+        // If we want files in treemap, we need to handle them.
+        // But original code: `.filter(c => c.totalFileCount > 0)` strongly suggests it expects folders or nodes with that prop.
+        const childrenToLayout = rootChildren.length > 0 ? rootChildren : [root];
+        // If root has no folder children, we layout root itself?
+        this._squarify(childrenToLayout, {
             x: pad, y: pad, w: width - pad * 2, h: height - pad * 2
         }, root.totalFileCount, 0, opts);
-
         return this.rects;
     }
-
     /**
      * Squarified treemap: lays out children into a rectangle trying
      * to keep aspect ratios close to 1.
      */
     _squarify(children, bounds, totalSize, depth, opts) {
-        if (children.length === 0 || bounds.w < 2 || bounds.h < 2) return;
-
+        if (children.length === 0 || bounds.w < 2 || bounds.h < 2)
+            return;
         // Sort children by size descending for better layout
         const sorted = children
             .filter(c => c.totalFileCount > 0)
             .sort((a, b) => b.totalFileCount - a.totalFileCount);
-
-        if (sorted.length === 0) return;
-
+        if (sorted.length === 0)
+            return;
         this._layoutRow(sorted, bounds, totalSize, depth, opts);
     }
-
     _layoutRow(items, bounds, totalSize, depth, opts) {
-        if (items.length === 0 || bounds.w < 2 || bounds.h < 2) return;
-
+        if (items.length === 0 || bounds.w < 2 || bounds.h < 2)
+            return;
         const isWide = bounds.w >= bounds.h;
         let remaining = [...items];
         let currentBounds = { ...bounds };
-
         while (remaining.length > 0 && currentBounds.w >= 2 && currentBounds.h >= 2) {
             // Find the best row
             const row = [];
             let rowSize = 0;
             const availableSize = remaining.reduce((s, c) => s + c.totalFileCount, 0);
             let bestAspect = Infinity;
-
             for (let i = 0; i < remaining.length; i++) {
                 row.push(remaining[i]);
                 rowSize += remaining[i].totalFileCount;
-
                 const aspect = this._worstAspect(row, rowSize, currentBounds, availableSize, isWide);
                 if (aspect <= bestAspect) {
                     bestAspect = aspect;
-                } else {
+                }
+                else {
                     row.pop();
                     rowSize -= remaining[i].totalFileCount;
                     break;
                 }
             }
-
             // Layout this row
             const rowFraction = rowSize / availableSize;
             let rowBounds;
-
             if (isWide) {
                 const rowW = currentBounds.w * rowFraction;
                 rowBounds = { x: currentBounds.x, y: currentBounds.y, w: rowW, h: currentBounds.h };
@@ -99,7 +104,8 @@ class TreemapRenderer {
                     w: currentBounds.w - rowW,
                     h: currentBounds.h
                 };
-            } else {
+            }
+            else {
                 const rowH = currentBounds.h * rowFraction;
                 rowBounds = { x: currentBounds.x, y: currentBounds.y, w: currentBounds.w, h: rowH };
                 currentBounds = {
@@ -109,13 +115,11 @@ class TreemapRenderer {
                     h: currentBounds.h - rowH
                 };
             }
-
             // Position items within the row
             let offset = 0;
             for (const item of row) {
                 const itemFraction = item.totalFileCount / rowSize;
                 let rect;
-
                 if (isWide) {
                     const itemH = rowBounds.h * itemFraction;
                     rect = {
@@ -128,7 +132,8 @@ class TreemapRenderer {
                         color: this._getColor(item, depth, opts)
                     };
                     offset += itemH;
-                } else {
+                }
+                else {
                     const itemW = rowBounds.w * itemFraction;
                     rect = {
                         x: rowBounds.x + offset,
@@ -141,17 +146,16 @@ class TreemapRenderer {
                     };
                     offset += itemW;
                 }
-
                 this.rects.push(rect);
-
                 // Recurse into children with padding
-                if (item.children.length > 0 && rect.w > 20 && rect.h > 20) {
+                // Filter folder children only
+                const folderChildren = item.children.filter(c => c.type === 'folder' && c.totalFileCount > 0);
+                if (folderChildren.length > 0 && rect.w > 20 && rect.h > 20) {
                     const pad = Math.max(1, 4 - depth); // Tighter padding effectively as we go deeper
                     const headerH = depth === 0 ? 18 : 12; // Header space
-
                     // Don't recurse if too small
                     if (rect.w > pad * 2 && rect.h > headerH + pad) {
-                        this._squarify(item.children, {
+                        this._squarify(folderChildren, {
                             x: rect.x + pad,
                             y: rect.y + headerH,
                             w: rect.w - pad * 2,
@@ -160,30 +164,26 @@ class TreemapRenderer {
                     }
                 }
             }
-
             remaining = remaining.slice(row.length);
         }
     }
-
     _worstAspect(row, rowSize, bounds, totalSize, isWide) {
         const fraction = rowSize / totalSize;
         const stripSize = isWide ? bounds.w * fraction : bounds.h * fraction;
         const stripLength = isWide ? bounds.h : bounds.w;
-
         let worst = 0;
         for (const item of row) {
             const itemFrac = item.totalFileCount / rowSize;
             const itemSize = stripLength * itemFrac;
-            if (itemSize === 0 || stripSize === 0) continue;
+            if (itemSize === 0 || stripSize === 0)
+                continue;
             const aspect = Math.max(itemSize / stripSize, stripSize / itemSize);
             worst = Math.max(worst, aspect);
         }
         return worst;
     }
-
     _getColor(item, depth, opts) {
         const mode = opts.colorMode || 'folder';
-
         switch (mode) {
             case 'heatmap':
                 // Heatmap: darker = more files
@@ -192,18 +192,15 @@ class TreemapRenderer {
                 const heat = Math.min(1, Math.max(0.1, count / 50));
                 // Red Scale
                 return `rgba(231, 76, 60, ${0.2 + heat * 0.8})`;
-
             case 'dependency':
                 // Not implemented fully yet (needs graph data passed to renderer)
                 // Fallback to folder
                 return this.basePalette[depth % this.basePalette.length];
-
             case 'folder':
             default:
                 return this.basePalette[depth % this.basePalette.length];
         }
     }
-
     /**
      * Hit-test: find which rect contains (x, y).
      * Returns deepest (most specific) rect.
@@ -221,6 +218,4 @@ class TreemapRenderer {
         return hit;
     }
 }
-
-module.exports = TreemapRenderer;
-
+exports.default = TreemapRenderer;

@@ -1,5 +1,10 @@
 'use strict';
 
+interface Edge {
+    source: string;
+    target: string;
+}
+
 /**
  * Detect circular dependencies using Tarjan's Strongly Connected Components.
  *
@@ -8,29 +13,29 @@
  *
  * Reusable by Agent system — no DOM dependencies.
  */
-class CycleDetector {
+export default class CycleDetector {
     /**
      * Find all edges that participate in circular dependencies.
-     * @param {Array<{source: string, target: string}>} edges
-     * @returns {Set<string>} keys in format "source|target"
+     * @param edges
+     * @returns keys in format "source|target"
      */
-    detect(edges) {
+    detect(edges: Edge[]): Set<string> {
         // Build adjacency list
-        const adj = new Map();
-        const nodes = new Set();
+        const adj = new Map<string, string[]>();
+        const nodes = new Set<string>();
 
         for (const { source, target } of edges) {
             nodes.add(source);
             nodes.add(target);
             if (!adj.has(source)) adj.set(source, []);
-            adj.get(source).push(target);
+            adj.get(source)!.push(target);
         }
 
         // Tarjan's SCC
         const sccs = this._tarjan(nodes, adj);
 
         // Any SCC with size > 1 contains circular deps
-        const circularNodes = new Set();
+        const circularNodes = new Set<string>();
         for (const scc of sccs) {
             if (scc.length > 1) {
                 for (const node of scc) {
@@ -45,7 +50,7 @@ class CycleDetector {
         }
 
         // Mark edges where both endpoints are in the same SCC
-        const circularEdges = new Set();
+        const circularEdges = new Set<string>();
         for (const { source, target } of edges) {
             if (circularNodes.has(source) && circularNodes.has(target)) {
                 // Verify they are in the SAME SCC
@@ -62,17 +67,17 @@ class CycleDetector {
 
     /**
      * Tarjan's algorithm for strongly connected components.
-     * @returns {Array<string[]>} list of SCCs
+     * @returns list of SCCs
      */
-    _tarjan(nodes, adj) {
+    _tarjan(nodes: Set<string>, adj: Map<string, string[]>): string[][] {
         let index = 0;
-        const stack = [];
-        const onStack = new Set();
-        const indices = new Map();
-        const lowlinks = new Map();
-        const sccs = [];
+        const stack: string[] = [];
+        const onStack = new Set<string>();
+        const indices = new Map<string, number>();
+        const lowlinks = new Map<string, number>();
+        const sccs: string[][] = [];
 
-        const strongconnect = (v) => {
+        const strongconnect = (v: string) => {
             indices.set(v, index);
             lowlinks.set(v, index);
             index++;
@@ -83,17 +88,17 @@ class CycleDetector {
             for (const w of neighbors) {
                 if (!indices.has(w)) {
                     strongconnect(w);
-                    lowlinks.set(v, Math.min(lowlinks.get(v), lowlinks.get(w)));
+                    lowlinks.set(v, Math.min(lowlinks.get(v)!, lowlinks.get(w)!));
                 } else if (onStack.has(w)) {
-                    lowlinks.set(v, Math.min(lowlinks.get(v), indices.get(w)));
+                    lowlinks.set(v, Math.min(lowlinks.get(v)!, indices.get(w)!));
                 }
             }
 
             if (lowlinks.get(v) === indices.get(v)) {
-                const scc = [];
-                let w;
+                const scc: string[] = [];
+                let w: string;
                 do {
-                    w = stack.pop();
+                    w = stack.pop()!;
                     onStack.delete(w);
                     scc.push(w);
                 } while (w !== v);
@@ -110,5 +115,3 @@ class CycleDetector {
         return sccs;
     }
 }
-
-module.exports = CycleDetector;

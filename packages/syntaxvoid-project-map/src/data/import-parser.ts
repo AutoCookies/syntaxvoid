@@ -1,25 +1,59 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
+import * as fs from 'fs';
+import * as path from 'path';
+
+interface FolderNode {
+    type: 'folder';
+    name: string;
+    path: string;
+    children: (FolderNode | FileNode)[];
+    totalFileCount: number;
+    depth: number;
+}
+
+interface FileNode {
+    type: 'file';
+    name: string;
+    path: string;
+    size: number;
+}
+
+interface CacheEntry {
+    mtime: number;
+    imports: string[];
+}
+
+interface Edge {
+    source: string;
+    target: string;
+}
+
+interface FolderEdge {
+    source: string;
+    target: string;
+    weight: number;
+}
 
 /**
  * Regex-based import parser for various languages.
  * Best-effort only (no AST).
  */
-class ImportParser {
+export default class ImportParser {
+    cache: Map<string, CacheEntry>;
+
     constructor() {
         this.cache = new Map(); // path -> { mtime, imports }
     }
 
-    async parse(filePath) {
+    async parse(filePath: string): Promise<string[]> {
         try {
             const stats = await fs.promises.stat(filePath);
             const mtime = stats.mtimeMs;
 
             // Check cache
             if (this.cache.has(filePath)) {
-                const entry = this.cache.get(filePath);
+                const entry = this.cache.get(filePath)!;
                 if (entry.mtime === mtime) {
                     return entry.imports;
                 }
@@ -27,7 +61,7 @@ class ImportParser {
 
             const content = await fs.promises.readFile(filePath, 'utf8');
             const ext = path.extname(filePath).toLowerCase();
-            let imports = [];
+            let imports: string[] = [];
 
             if (['.js', '.ts', '.jsx', '.tsx', '.mjs', '.cjs'].includes(ext)) {
                 imports = this._parseJS(content);
@@ -45,8 +79,8 @@ class ImportParser {
         }
     }
 
-    _parseJS(content) {
-        const imports = new Set();
+    _parseJS(content: string): string[] {
+        const imports = new Set<string>();
 
         // Static import
         // import ... from '...'
@@ -72,8 +106,8 @@ class ImportParser {
         return Array.from(imports);
     }
 
-    _parseCpp(content) {
-        const imports = new Set();
+    _parseCpp(content: string): string[] {
+        const imports = new Set<string>();
         // #include "..." (local)
         const reInclude = /#include\s+"([^"]+)"/g;
         let match;
@@ -83,8 +117,8 @@ class ImportParser {
         return Array.from(imports);
     }
 
-    _parsePython(content) {
-        const imports = new Set();
+    _parsePython(content: string): string[] {
+        const imports = new Set<string>();
 
         // from ... import ...
         const reFrom = /^from\s+([\w\.]+)\s+import/gm;
@@ -101,26 +135,27 @@ class ImportParser {
 
         return Array.from(imports);
     }
+
     /**
      * Legacy method for Folder GraphBuilder.
      * Aggregates parsing results from a folder structure.
      */
-    async buildEdges(rootFolder) {
-        const edges = [];
+    async buildEdges(rootFolder: FolderNode): Promise<FolderEdge[]> {
+        const edges: Edge[] = [];
 
         // 1. Flatten files to a "node map" for resolution
-        const fileMap = new Set();
-        const collectFiles = (node) => {
+        const fileMap = new Set<string>();
+        const collectFiles = (node: FolderNode | FileNode) => {
             if (node.type === 'file') {
                 fileMap.add(node.path);
-            } else if (node.children) {
-                node.children.forEach(collectFiles);
+            } else if ((node as FolderNode).children) {
+                (node as FolderNode).children.forEach(collectFiles);
             }
         };
         collectFiles(rootFolder);
 
         // 2. Helper for resolution (Ported from FileGraphBuilder logic)
-        const resolveImport = (sourceFile, importPath) => {
+        const resolveImport = (sourceFile: string, importPath: string): string | null => {
             // A. Relative
             if (importPath.startsWith('.')) {
                 const dir = path.dirname(sourceFile);
@@ -140,12 +175,12 @@ class ImportParser {
         };
 
         // 3. Traverse and Parse
-        const traverse = async (folder) => {
+        const traverse = async (folder: FolderNode) => {
             if (!folder.children) return;
 
             for (const child of folder.children) {
                 if (child.type === 'folder') {
-                    await traverse(child);
+                    await traverse(child as FolderNode);
                 } else if (child.type === 'file') {
                     const imports = await this.parse(child.path);
                     for (const importPath of imports) {
@@ -164,8 +199,8 @@ class ImportParser {
         await traverse(rootFolder);
 
         // 4. Aggregate to Folder Edges
-        const folderEdges = [];
-        const folderMap = new Map();
+        const folderEdges: FolderEdge[] = [];
+        const folderMap = new Map<string, FolderEdge>();
 
         for (const edge of edges) {
             const srcFolder = path.dirname(edge.source);
@@ -176,14 +211,15 @@ class ImportParser {
                 if (!folderMap.has(key)) {
                     folderMap.set(key, { source: srcFolder, target: dstFolder, weight: 0 });
                 }
-                folderMap.get(key).weight++;
+                const entry = folderMap.get(key)!;
+                entry.weight++;
             }
         }
 
         return Array.from(folderMap.values());
     }
 
-    _tryExtensions(basePath, fileMap) {
+    _tryExtensions(basePath: string, fileMap: Set<string>): string | null {
         // Exact match
         if (fileMap.has(basePath)) return basePath;
 
@@ -202,5 +238,3 @@ class ImportParser {
         return null;
     }
 }
-
-module.exports = ImportParser;
