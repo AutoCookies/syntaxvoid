@@ -1,0 +1,35 @@
+import { CompositeDisposable } from 'atom';
+import { ImpactService } from '../impactService';
+export declare class ImpactPanel {
+    element: HTMLElement;
+    impactService: ImpactService;
+    subscriptions: CompositeDisposable;
+    private selectedFile;
+    private impactData;
+    private depth;
+    private showUpstream;
+    private showDownstream;
+    private headerTitle;
+    private headerPath;
+    private headerInfo;
+    private contentContainer;
+    private depthInput;
+    private depthLabel;
+    private upstreamCheckbox;
+    private downstreamCheckbox;
+    private upstreamLabel;
+    private downstreamLabel;
+    constructor(service: ImpactService);
+    _renderBase(): void;
+    _bindEvents(): void;
+    updateForFile(filePath: string, depth?: number): Promise<void>;
+    _updateHeader(): void;
+    _renderResults(): void;
+    _renderSection(title: string, levels: Record<number, string[]>, type: string): HTMLDivElement;
+    getTitle(): string;
+    getIconName(): string;
+    getDefaultLocation(): string;
+    getURI(): string;
+    getAllowedLocations(): string[];
+    destroy(): void;
+}

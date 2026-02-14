@@ -2,17 +2,24 @@
     "name": "syntaxvoid-impact",
     "version": "0.2.0",
     "description": "Visualize upstream and downstream dependencies for the active file.",
-    "main": "./lib/index",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "engines": {
         "atom": ">=1.0.0 <2.0.0"
     },
-    "dependencies": {
-        "etch": "0.14.1"
+    "dependencies": {},
+    "scripts": {
+        "build": "tsc -p tsconfig.json"
     },
     "consumedServices": {
         "syntaxvoid-project-map.graph": {
             "versions": {
                 "1.0.0": "consumeGraphService"
+            }
+        },
+        "syntaxvoid-console": {
+            "versions": {
+                "1.0.0": "consumeConsole"
             }
         }
     }
