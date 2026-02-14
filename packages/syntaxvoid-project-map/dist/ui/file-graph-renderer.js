@@ -21,44 +21,46 @@ class FileGraphRenderer {
         this.height = height;
         // Preserve existing node positions if possible (incremental layout)
         const oldNodesMap = new Map(this.nodes.map(n => [n.id, n]));
+        const uninitialized = [];
         this.nodes = graph.nodes.map(n => {
             const old = oldNodesMap.get(n.id);
-            if (old) {
+            if (old && old.x !== undefined && !isNaN(old.x)) {
                 return { ...n, x: old.x, y: old.y, vx: old.vx, vy: old.vy, r: old.r };
             }
-            return { ...n }; // will be initialized below
+            // Init with temporary valid values to prevent undefined persistence
+            const newNode = {
+                ...n,
+                x: width / 2 + (Math.random() - 0.5) * 20,
+                y: height / 2 + (Math.random() - 0.5) * 20,
+                vx: 0,
+                vy: 0,
+                r: Math.min(10, 3 + (n.inDegree + n.outDegree) * 0.5)
+            };
+            uninitialized.push(newNode);
+            return newNode;
         });
         this.edges = graph.edges;
         // Stratified Layout Initialization for new nodes
-        const uninitialized = this.nodes.filter(n => n.x === undefined);
-        if (uninitialized.length > 0) {
-            const sorted = [...this.nodes].sort((a, b) => {
+        if (uninitialized.length > 0 && width > 0 && height > 0) {
+            const sorted = uninitialized.sort((a, b) => {
                 const rankA = a.inDegree - a.outDegree;
                 const rankB = b.inDegree - b.outDegree;
                 return rankA - rankB;
             });
             const nodeCount = sorted.length;
             const cols = Math.ceil(Math.sqrt(nodeCount * (width / height)));
-            // Avoid division by zero
             const safeCols = cols || 1;
             const rows = Math.ceil(nodeCount / safeCols);
             const cellW = width / safeCols;
             const cellH = height / (rows || 1);
             sorted.forEach((node, i) => {
-                if (node.x === undefined) {
-                    const c = i % safeCols;
-                    const r = Math.floor(i / safeCols);
-                    node.x = (c * cellW) + (cellW / 2) + (Math.random() * 10 - 5);
-                    node.y = (r * cellH) + (cellH / 2) + (Math.random() * 10 - 5);
-                }
-                node.r = Math.min(10, 3 + (node.inDegree + node.outDegree) * 0.5);
+                const c = i % safeCols;
+                const r = Math.floor(i / safeCols);
+                node.x = (c * cellW) + (cellW / 2) + (Math.random() * 10 - 5);
+                node.y = (r * cellH) + (cellH / 2) + (Math.random() * 10 - 5);
+                // r is already set
             });
         }
-        // If all nodes were new/reset, ensure radii are set
-        this.nodes.forEach(node => {
-            if (!node.r)
-                node.r = Math.min(10, 3 + (node.inDegree + node.outDegree) * 0.5);
-        });
         // Iterative Relaxation
         for (let i = 0; i < 50; i++) {
             this._tick(width, height);
@@ -136,6 +138,11 @@ class FileGraphRenderer {
     }
     draw(ctx, nodes, edges, hoveredNode, opts = {}) {
         const { showLinks = true, circularOnly = false, filterText = '' } = opts;
+        // Debugging Blank Map
+        // console.log(`[FileGraphRenderer] Drawing ${nodes.length} nodes, ${edges.length} edges. Width: ${this.width}, Height: ${this.height}`);
+        if (nodes.length > 0 && nodes[0].x === undefined) {
+            console.warn('[FileGraphRenderer] Node 0 has undefined X!');
+        }
         // 1. Identify "Highlighted" set based on Filter
         // If filterText is present, find matching nodes AND their neighbors
         let matchedNodes = null;
@@ -144,13 +151,16 @@ class FileGraphRenderer {
             const lowerFilter = filterText.toLowerCase();
             matchedNodes = new Set();
             relatedNodes = new Set();
+            if (nodes.length > 0) {
+                // Debug log only once per render? No, too spammy.
+                // We'll trust the user to look at console if asked.
+            }
             for (const n of nodes) {
-                // Check name and relPath. Check if n.name is defined (it's not in FileNode, but logic added it in FileGraphBuilder constructor?
-                // Wait, FileGraphBuilder didn't add name to FileNode. I commented it out to match interface.
-                // So n.name might be undefined.
-                // I should assume n.path is available and derive name if missing, or update FileNode interface.
-                // For now, I'll derive name.
+                // Check name and relPath. Check if n.name is defined
+                // Ensure name is derived if missing.
                 const name = n.name || (n.path ? n.path.split('/').pop() : 'unknown');
+                // Store derived name back on node for hit testing consistency?
+                n.name = name;
                 if (name.toLowerCase().includes(lowerFilter) || (n.relPath && n.relPath.toLowerCase().includes(lowerFilter))) {
                     matchedNodes.add(n);
                 }

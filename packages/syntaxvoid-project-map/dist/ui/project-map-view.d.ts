@@ -1,4 +1,4 @@
-import { CompositeDisposable } from 'atom';
+import { CompositeDisposable, Disposable } from 'atom';
 import GraphBuilder from '../data/graph-builder';
 import FileGraphBuilder from '../data/file-graph-builder';
 import TreemapRenderer, { Rect } from './treemap-renderer';
@@ -41,6 +41,7 @@ export default class ProjectMapView {
         y: number;
     };
     overlay: DependencyOverlay;
+    externalOverlays: Set<any>;
     rectMap: Map<string, Rect>;
     hoveredRect: any;
     _animFrame: number | null;
@@ -65,7 +66,13 @@ export default class ProjectMapView {
     highlightedNodes: Set<string> | null;
     highlightStyle: string;
     _resizeObserver: ResizeObserver | null;
+    renderNodes: any[] | null;
     constructor(serializedState?: ProjectMapViewOptions);
+    getTitle(): string;
+    getURI(): string;
+    getIconName(): string;
+    getElement(): HTMLElement;
+    addOverlay(overlay: any): Disposable;
     _updateUIState(): void;
     _createDOM(): void;
     _createSvButton(text: string, _iconOnly?: boolean): HTMLButtonElement;
@@ -82,6 +89,7 @@ export default class ProjectMapView {
     _getIgnoredDirs(): Set<string>;
     _triggerBuild(): void;
     _debouncedRebuild(): void;
+    _recalcLayout(w: number, h: number): void;
     _render(): void;
     _adjustZoom(delta: number): void;
     _onWheel(e: WheelEvent): void;

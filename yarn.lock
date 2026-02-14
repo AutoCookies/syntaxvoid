@@ -9493,8 +9493,14 @@ sylvester@^0.0.12:
     fuzzaldrin "^2.1.0"
     murmurhash-js "^1.0.0"
 
+"syntaxvoid-patch-governor@file:./packages/syntaxvoid-patch-governor":
+  version "0.1.0"
+
 "syntaxvoid-project-map@file:./packages/syntaxvoid-project-map":
   version "1.0.0"
+
+"syntaxvoid-risk-overlay@file:./packages/syntaxvoid-risk-overlay":
+  version "0.1.0"
 
 "syntaxvoid-terminal@file:./packages/syntaxvoid-terminal":
   version "0.1.0"

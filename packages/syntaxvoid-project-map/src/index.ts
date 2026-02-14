@@ -77,6 +77,13 @@ export function provideGraphService() {
             if (v) {
                 v.highlightNodes(nodeIds, styles);
             }
+        },
+        registerOverlay: (overlay: any) => {
+            const v = _getOrCreateView();
+            if (v) {
+                return v.addOverlay(overlay);
+            }
+            return new Disposable(() => { });
         }
     };
 }

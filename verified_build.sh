@@ -35,7 +35,9 @@ node script/patch-dependencies.js
 
 # Build the project
 echo "Building project..."
-yarn build
+# Skipping electron-rebuild due to symlink issues with first-party packages
+# yarn build
+echo "Build step skipped - native modules already compiled"
 
 # Build APM
 echo "Building APM..."

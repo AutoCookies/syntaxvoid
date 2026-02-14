@@ -48,6 +48,7 @@ export default class ProjectMapView {
     lastMouse: { x: number, y: number };
 
     overlay: DependencyOverlay;
+    externalOverlays: Set<any>;
     rectMap: Map<string, Rect>;
     hoveredRect: any; // Rect | RenderNode
     _animFrame: number | null;
@@ -75,6 +76,7 @@ export default class ProjectMapView {
     highlightedNodes: Set<string> | null = null;
     highlightStyle: string = 'impact';
     _resizeObserver: ResizeObserver | null = null;
+    renderNodes: any[] | null = null;
 
     constructor(serializedState?: ProjectMapViewOptions) {
         this.subscriptions = new CompositeDisposable();
@@ -97,12 +99,14 @@ export default class ProjectMapView {
         this.filterText = '';
         this.isDragging = false;
         this.lastMouse = { x: 0, y: 0 };
+        this.renderNodes = null; // Cache for layout nodes
 
         this.overlay = new DependencyOverlay({
             showLinks: settings.get('syntaxvoid-project-map.showDependencyLinks'),
             circularOnly: settings.get('syntaxvoid-project-map.circularOnly')
         });
 
+        this.externalOverlays = new Set();
         this.rectMap = new Map();
         this.hoveredRect = null;
         this._animFrame = null;
@@ -118,6 +122,31 @@ export default class ProjectMapView {
 
         // Initial build
         this._triggerBuild();
+    }
+
+    getTitle() {
+        return 'Project Map';
+    }
+
+    getURI() {
+        return ProjectMapView.URI;
+    }
+
+    getIconName() {
+        return 'repo';
+    }
+
+    getElement() {
+        return this.element;
+    }
+
+    addOverlay(overlay: any): Disposable {
+        this.externalOverlays.add(overlay);
+        this._render();
+        return new Disposable(() => {
+            this.externalOverlays.delete(overlay);
+            this._render();
+        });
     }
 
     _updateUIState() {
@@ -143,8 +172,6 @@ export default class ProjectMapView {
             if (i) i.className = 'icon icon-repo';
         }
     }
-
-    // ─── DOM Construction ────────────────────────────────────────────
 
     // ─── DOM Construction ────────────────────────────────────────────
 
@@ -221,15 +248,26 @@ export default class ProjectMapView {
         const body = document.createElement('div');
         body.className = 'sv-body project-map-body';
         body.style.display = 'flex';
-        body.style.flexDirection = 'column';
-        body.style.padding = '0'; // Graph needs full width
+        body.style.flexDirection = 'row'; // Changed to ROW
+        body.style.padding = '0';
+        body.style.height = '100%'; // Ensure full height
 
-        // Canvas Container
+        // Inspector (Left Side)
+        this.inspector.element.style.flex = '0 0 300px';
+        this.inspector.element.style.borderRight = '1px solid var(--sv-border)';
+        this.inspector.element.style.display = 'flex';
+        this.inspector.element.style.flexDirection = 'column';
+        this.inspector.element.style.background = 'var(--sv-surface-2)'; // Slightly distinct bg
+        this.inspector.element.style.zIndex = '2'; // Above canvas if needed
+        body.appendChild(this.inspector.element);
+
+        // Canvas Container (Right Side)
         const canvasContainer = document.createElement('div');
         canvasContainer.className = 'project-map-canvas-container';
         canvasContainer.style.flex = '1';
         canvasContainer.style.position = 'relative';
         canvasContainer.style.overflow = 'hidden';
+        canvasContainer.style.background = 'var(--sv-bg)';
 
         this.canvas = document.createElement('canvas');
         this.canvas.style.display = 'block';
@@ -269,14 +307,6 @@ export default class ProjectMapView {
         canvasContainer.appendChild(this.tooltip);
 
         body.appendChild(canvasContainer);
-        // Inspector is appended separately logic?
-        // Original appended inspector element to body.
-
-        // Inspector Logic:
-        // inspector-panel likely needs refactor too, but we can just append.
-        // inspector.element should be styled via CSS if possible or migrated separately.
-        body.appendChild(this.inspector.element);
-
         this.element.appendChild(body);
 
         // 3. Footer
@@ -408,7 +438,10 @@ export default class ProjectMapView {
         // Graph updates (File)
         this.subscriptions.add(
             this.fileGraphBuilder.onDidUpdate((graph) => {
-                if (this.viewMode === 'file') this._render();
+                if (this.viewMode === 'file') {
+                    this.renderNodes = null; // Invalidate cache on graph update
+                    this._render();
+                }
             }),
             this.fileGraphBuilder.onDidStart(() => {
                 if (this.viewMode === 'file') {
@@ -433,6 +466,7 @@ export default class ProjectMapView {
 
         // Resize observer
         this._resizeObserver = new ResizeObserver(() => {
+            this.renderNodes = null; // Invalidate cache
             this._render();
         });
         this._resizeObserver.observe(this.element);
@@ -498,8 +532,13 @@ export default class ProjectMapView {
             ignoredDirs: this._getIgnoredDirs()
         };
 
+        // Reset cache on new build
+        this.renderNodes = null;
+
         if (this.viewMode === 'file') {
             this.fileGraphBuilder.build(root, opts);
+            // Layout typically happens in render, but we can pre-calc if we want.
+            // But we wait for the update event.
         } else {
             this.graphBuilder.build(root, opts);
         }
@@ -520,6 +559,19 @@ export default class ProjectMapView {
         } else {
             this.graphBuilder.debouncedBuild(root, opts, debounceMs);
         }
+    }
+
+    // New helper to force layout recalc
+    _recalcLayout(w: number, h: number) {
+        if (this.viewMode === 'file') {
+            const graph = this.fileGraphBuilder.getGraph();
+            if (graph && w > 0 && h > 0) {
+                this.renderNodes = this.fileGraphRenderer.layout(graph, w, h);
+            }
+        }
+        // Folder mode handles layout differently (TreemapRenderer does layout implicitly during draw-ish? 
+        // No, TreemapRenderer.layout returns rects. We can cache those too if we wanted, 
+        // but Treemap is fast and deterministic. FileGraph force-directed is the one needing cache.)
     }
 
     _render() {
@@ -600,6 +652,8 @@ export default class ProjectMapView {
         const w = container.clientWidth;
         const h = container.clientHeight;
 
+        if (w === 0 || h === 0) return; // Prevent zero-size layout issues
+
         this.canvas.width = w * dpr;
         this.canvas.height = h * dpr;
         this.canvas.style.width = `${w}px`;
@@ -621,20 +675,27 @@ export default class ProjectMapView {
             // File Graph Mode
             const graph = this.fileGraphBuilder.getGraph(); // Assuming builder has getGraph()
             if (graph) {
-                this.fileGraphRenderer.layout(graph, w, h);
-                this.fileGraphRenderer.draw(ctx, (graph.nodes as any), graph.edges, this.hoveredRect, {
-                    showLinks: this.overlay.showLinks,
-                    circularOnly: this.overlay.circularOnly,
-                    filterText: this.filterText // Pass filter text
-                });
+                // Use cached layout if available and dimensions match (approx)
+                // Actually, if we resize, we MUST re-layout or at least re-center?
+                // For force-directed, resizing usually implies re-simulation or scaling.
+                // Let's re-layout only if cache is null.
+                // But wait, if window resizes, we want to adapt.
+                // If we cache, we MUST invalidate on resize. `_resizeObserver` should handle that.
 
-                // Update status
-                let status = `${graph.nodes.length} files · ${graph.edges.length} edges`;
-                // graph.stats and circularEdges missing from GraphSnapshot interface, but might be there at runtime
-                // TypeScript won't like it unless cast.
-                // const g = graph as any;
-                // if (g.stats && g.stats.circularEdges) status += ` · circular`;
-                this.statusBar.textContent = status;
+                if (!this.renderNodes) {
+                    this._recalcLayout(w, h);
+                }
+
+                if (this.renderNodes) {
+                    this.fileGraphRenderer.draw(ctx, this.renderNodes, graph.edges, this.hoveredRect, {
+                        showLinks: this.overlay.showLinks,
+                        circularOnly: this.overlay.circularOnly,
+                        filterText: this.filterText
+                    });
+                    // Update status
+                    let status = `${graph.nodes.length} files · ${graph.edges.length} edges`;
+                    this.statusBar.textContent = status;
+                }
             }
         } else {
             // Folder Treemap Mode
@@ -660,6 +721,13 @@ export default class ProjectMapView {
                 // DependencyOverlay expects Edge[] which has {source, target, weight/count}.
                 // They match.
                 this.overlay.draw(ctx, graph.edges as any[], graph.circularEdges, this.rectMap, this.hoveredRect);
+
+                // Draw external overlays (e.g. RiskOverlay)
+                for (const overlay of this.externalOverlays) {
+                    if (typeof overlay.render === 'function') {
+                        overlay.render(ctx, this.rectMap, this.hoveredRect);
+                    }
+                }
 
                 // Status
                 const circularCount = graph.circularEdges.size;
@@ -805,7 +873,11 @@ export default class ProjectMapView {
                 // File Node Hit
                 // const importCount = hit.outDegree;
                 const relPath = (hit as any).relPath; // cast needed if not in shared interface?
-                if (header) header.textContent = (hit as any).name || 'File';
+                if (header) {
+                    const h = hit as any;
+                    const name = h.name || (h.path ? h.path.split('/').pop() : 'File');
+                    header.textContent = name;
+                }
                 if (pathEl) pathEl.textContent = relPath;
                 if (stat) stat.textContent = `In: ${(hit as any).inDegree} · Out: ${(hit as any).outDegree}`;
 
