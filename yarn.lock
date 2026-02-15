@@ -9493,6 +9493,12 @@ sylvester@^0.0.12:
     fuzzaldrin "^2.1.0"
     murmurhash-js "^1.0.0"
 
+"syntaxvoid-collab-struct@file:./packages/syntaxvoid-collab-struct":
+  version "1.0.0"
+  dependencies:
+    syntaxvoid-ui-kit "file:../../.cache/yarn/v6/npm-syntaxvoid-collab-struct-1.0.0-5a604fe1-a5c3-46de-936b-5e67ebc3bfc6-1771125415563/node_modules/syntaxvoid-ui-kit"
+    ws "^8.16.0"
+
 "syntaxvoid-patch-governor@file:./packages/syntaxvoid-patch-governor":
   version "0.1.0"
 
@@ -9509,7 +9515,7 @@ sylvester@^0.0.12:
     "@xterm/xterm" "^6.0.0"
     node-pty "^1.1.0"
 
-"syntaxvoid-ui-kit@file:./packages/syntaxvoid-ui-kit":
+"syntaxvoid-ui-kit@file:./packages/syntaxvoid-ui-kit", "syntaxvoid-ui-kit@file:packages/syntaxvoid-ui-kit":
   version "0.1.0"
 
 tabbable@^5.1.5:
@@ -10405,6 +10411,11 @@ ws@8.5.0:
   version "8.5.0"
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.5.0.tgz#bfb4be96600757fe5382de12c670dab984a1ed4f"
   integrity sha512-BWX0SWVgLPzYwF8lTzEy1egjhS4S4OEAHfsO8o65WOVsrnSRGaSiUaa9e0ggGlkMTtBlmOpEXiie9RUcBO86qg==
+
+ws@^8.16.0:
+  version "8.19.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.19.0.tgz#ddc2bdfa5b9ad860204f5a72a4863a8895fd8c8b"
+  integrity sha512-blAT2mjOEIi0ZzruJfIhb3nps74PRWTCz1IjglWEEpQl5XS/UNama6u2/rjFkDDouqr4L67ry+1aGIALViWjDg==
 
 xdg-basedir@^4.0.0:
   version "4.0.0"
