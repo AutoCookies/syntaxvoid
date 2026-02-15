@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const fs = require('fs');
 
 const PresenceStore = require('../presence-store');
 const AsepriteAnimator = require('./skins/aseprite-animator');
@@ -23,7 +24,7 @@ class OverlayView {
         });
 
         // assets folder
-        this.assetPath = path.join(__dirname, '..', '..', 'assets', 'eris');
+        this.assetPath = OverlayView.resolveAssetPath();
 
         this.assets = {
             Idle: {
@@ -92,5 +93,14 @@ class OverlayView {
         this.roaming.setStatus(snapshot.status);
     }
 }
+
+OverlayView.resolveAssetPath = function resolveAssetPath() {
+    const candidates = [
+        path.resolve(__dirname, '..', '..', '..', 'assets', 'eris'),
+        path.resolve(__dirname, '..', '..', 'assets', 'eris'),
+    ];
+
+    return candidates.find((candidate) => fs.existsSync(path.join(candidate, '16x32 Idle.json'))) || candidates[0];
+};
 
 module.exports = OverlayView;
