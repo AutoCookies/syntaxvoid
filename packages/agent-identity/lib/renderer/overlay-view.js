@@ -28,20 +28,20 @@ class OverlayView {
 
         this.assets = {
             Idle: {
-                pngUrl: path.join(this.assetPath, '16x32 Idle.png'),
-                jsonUrl: path.join(this.assetPath, '16x32 Idle.json'),
+                pngUrl: path.join(this.assetPath, '16x32_Idle.png'),
+                jsonUrl: path.join(this.assetPath, '16x32_Idle.json'),
             },
             Walk: {
-                pngUrl: path.join(this.assetPath, '16x32 Walk.png'),
-                jsonUrl: path.join(this.assetPath, '16x32 Walk.json'),
+                pngUrl: path.join(this.assetPath, '16x32_Walk.png'),
+                jsonUrl: path.join(this.assetPath, '16x32_Walk.json'),
             },
             Run: {
-                pngUrl: path.join(this.assetPath, '16x32 Run.png'),
-                jsonUrl: path.join(this.assetPath, '16x32 Run.json'),
+                pngUrl: path.join(this.assetPath, '16x32_Run.png'),
+                jsonUrl: path.join(this.assetPath, '16x32_Run.json'),
             },
             Rotate: {
-                pngUrl: path.join(this.assetPath, '16x32 Rotate.png'),
-                jsonUrl: path.join(this.assetPath, '16x32 Rotate.json'),
+                pngUrl: path.join(this.assetPath, '16x32_Rotate.png'),
+                jsonUrl: path.join(this.assetPath, '16x32_Rotate.json'),
             },
         };
 
