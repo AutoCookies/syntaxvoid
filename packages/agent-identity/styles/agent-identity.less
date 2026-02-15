@@ -11,20 +11,15 @@
 
 .agent-movement-wrapper {
     position: absolute;
-    top: 0;
-    left: 0;
+    bottom: 18px;
+    left: 14px;
     width: 0;
     height: 0;
     will-change: transform;
-    /* transform-origin: center center; */
 }
 
 /* The "chrome" that makes it feel real */
 .agent-identity-shell {
-    /* DEBUG: Force visibility */
-    border: 2px solid magenta !important;
-    background: rgba(255, 0, 255, 0.2);
-
     pointer-events: auto;
     display: inline-flex;
     align-items: center;
@@ -43,8 +38,7 @@
     /* Critical: clip sprite frame like a viewport */
     overflow: hidden;
 
-    /* Smooth but not flashy */
-    transition: transform 120ms ease, border-color 160ms ease, background 160ms ease;
+    transition: border-color 160ms ease, background 160ms ease;
 }
 
 .agent-identity-shell:hover {
@@ -66,6 +60,28 @@
     user-select: none;
     width: auto;
     height: auto;
+}
+
+.agent-sprite-flip-wrapper {
+    display: inline-flex;
+    transform: scaleX(1);
+    transform-origin: center center;
+}
+
+.agent-sprite-flip-wrapper.is-facing-left:not(.force-face-right) {
+    transform: scaleX(-1);
+}
+
+.agent-movement-wrapper.debug-motion-zone::before {
+    content: '';
+    position: absolute;
+    left: calc(var(--motion-zone-width, 24px) * -0.5);
+    top: calc(var(--motion-zone-height, 10px) * -0.5);
+    width: var(--motion-zone-width, 24px);
+    height: var(--motion-zone-height, 10px);
+    border: 1px dashed rgba(120, 180, 255, 0.45);
+    border-radius: 12px;
+    pointer-events: none;
 }
 
 /* Error: apply effect to shell so it feels like UI state, not image hack */

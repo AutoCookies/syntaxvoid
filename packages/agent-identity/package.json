@@ -32,6 +32,22 @@
             ],
             "title": "Motion Level",
             "description": "Control the movement behavior of the agent (none: fixed, subtle: minimal breathing, playful: small oscillations)."
+        },
+        "directionMode": {
+            "type": "string",
+            "default": "flip",
+            "enum": [
+                "flip",
+                "assets"
+            ],
+            "title": "Direction Mode",
+            "description": "Use CSS sprite flip for left direction, or dedicated left/right assets when available."
+        },
+        "debugMotion": {
+            "type": "boolean",
+            "default": false,
+            "title": "Debug Motion",
+            "description": "Enable low-noise motion diagnostics and presence zone outline."
         }
     }
 }

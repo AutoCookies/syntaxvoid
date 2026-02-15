@@ -10,21 +10,19 @@ class AsepriteAnimator {
 
         this.element = document.createElement('div');
         this.element.classList.add('agentSprite');
-
-        // Initial invisible state until loaded
         this.element.style.display = 'block';
         this.element.style.imageRendering = 'pixelated';
         this.element.style.backgroundRepeat = 'no-repeat';
 
-        // Timer for animation loop
         this.timerId = null;
-
-        // State
         this.frames = [];
         this.tags = {};
         this.currentTag = null;
-        this.currentFrameIndex = 0; // Global frame index in the 'frames' array
+        this.currentTagName = null;
+        this.currentFrameIndex = 0;
         this.isPlaying = false;
+        this.sheetSize = null;
+        this.loadToken = 0;
 
         this.load();
     }
@@ -41,30 +39,25 @@ class AsepriteAnimator {
     }
 
     async load() {
+        const token = ++this.loadToken;
+
         try {
-            // 1. Load JSON
-            // We can use fetch for local files in Electron renderer, or require/fs if node integration is enabled.
-            // Since this is a renderer process with node integration:
             const jsonPath = this._fileUrlToPath(this.jsonUrl);
             const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+            if (token !== this.loadToken) return;
 
             this._parseData(data);
-
-            // 2. Load Image
-            const cssUrl = this._toCssUrl(this.pngUrl);
-            this.element.style.backgroundImage = `url('${cssUrl}')`;
-
-            // 3. Start Playing default tag or all frames
-            this.playTag('default');
-
-        } catch (err) {
-            console.warn('[AgentIdentity] Failed to load animation:', this.jsonUrl, err);
-            // Fail-safe: Try to render *something* if PNG exists, assuming a simple grid?
-            // Or just show error state. For now, set a fallback size.
+            this.element.style.backgroundImage = `url('${this._toCssUrl(this.pngUrl)}')`;
+            this.playTag(this.currentTagName || 'default');
+        } catch (error) {
+            if (token !== this.loadToken) return;
+            console.warn('[AgentIdentity] Failed to load animation:', this.jsonUrl, error);
+            this.frames = [];
+            this.tags = {};
+            this.sheetSize = null;
             this.element.style.width = '32px';
             this.element.style.height = '64px';
-            const cssUrl = this._toCssUrl(this.pngUrl);
-            this.element.style.backgroundImage = `url('${cssUrl}')`;
+            this.element.style.backgroundImage = `url('${this._toCssUrl(this.pngUrl)}')`;
             this.element.style.backgroundPosition = '0 0';
         }
     }
@@ -75,28 +68,25 @@ class AsepriteAnimator {
         this.stop();
         this.pngUrl = pngUrl;
         this.jsonUrl = jsonUrl;
+        this.currentTag = null;
+        this.currentTagName = null;
+        this.currentFrameIndex = 0;
         this.load();
     }
 
     playTag(tagName) {
-        let tag = this.tags[tagName];
+        if (this.frames.length === 0) return;
 
-        if (!tag) {
-            // Fallback to first available tag, or default 'all frames'
-            const tagNames = Object.keys(this.tags);
-            if (tagNames.length > 0) {
-                tag = this.tags[tagNames[0]];
-            } else {
-                // Synthetic default tag spanning all frames
-                tag = { from: 0, to: Math.max(0, this.frames.length - 1), direction: 'forward' };
-            }
-        }
+        const tag = this._resolveTag(tagName);
+        if (!tag) return;
 
+        const isTagChange = this.currentTagName !== tagName;
         this.currentTag = tag;
+        this.currentTagName = tagName;
 
-        // If switching tags, reset to start of tag
-        if (this.currentFrameIndex < tag.from || this.currentFrameIndex > tag.to) {
+        if (isTagChange) {
             this.currentFrameIndex = tag.from;
+            this.renderFrame();
         }
 
         if (!this.isPlaying) {
@@ -116,10 +106,9 @@ class AsepriteAnimator {
     scheduleNextFrame() {
         if (!this.isPlaying || this.frames.length === 0) return;
 
+        this.renderFrame();
         const frameData = this.frames[this.currentFrameIndex];
         const duration = frameData ? frameData.duration : 100;
-
-        this.renderFrame();
 
         this.timerId = setTimeout(() => {
             this.advanceFrame();
@@ -130,12 +119,8 @@ class AsepriteAnimator {
     advanceFrame() {
         if (!this.currentTag) return;
 
-        const { from, to, direction } = this.currentTag;
-
-        // TODO: Handle 'reverse' or 'pingpong' if needed. 
-        // For now, assume 'forward' loop.
-
-        this.currentFrameIndex++;
+        const { from, to } = this.currentTag;
+        this.currentFrameIndex += 1;
         if (this.currentFrameIndex > to) {
             this.currentFrameIndex = from;
         }
@@ -145,89 +130,73 @@ class AsepriteAnimator {
         const frame = this.frames[this.currentFrameIndex];
         if (!frame) return;
 
-        const { x, y, w, h } = frame;
-
-        // Apply scaling
-        const scaledW = w * this.scale;
-        const scaledH = h * this.scale;
+        const scaledW = frame.w * this.scale;
+        const scaledH = frame.h * this.scale;
 
         this.element.style.width = `${scaledW}px`;
         this.element.style.height = `${scaledH}px`;
-
-        const posX = -(x * this.scale);
-        const posY = -(y * this.scale);
-
-        // DEBUG LOG
-        if (this.currentFrameIndex === 0) {
-            console.log('[AgentIdentity] Rendering Frame 0:', {
-                w, h, scale: this.scale,
-                scaledW, scaledH, posX, posY,
-                bgUrl: this.element.style.backgroundImage
-            });
-            this.element.style.border = '1px solid red'; // DEBUG BORDER
-        }
-
-        this.element.style.backgroundPosition = `${posX}px ${posY}px`;
-
-        // Update background size based on sheet dimensions? 
-        // We need the total sheet size. Assuming simple approach:
-        // We rely on 'background-position' indexing into the full image.
-        // But 'background-size' usually needs to be set if we are scaling the image.
-        // Aseprite JSON 'meta.size' gives us full sheet size.
+        this.element.style.backgroundPosition = `${-(frame.x * this.scale)}px ${-(frame.y * this.scale)}px`;
 
         if (this.sheetSize) {
-            const sheetW = this.sheetSize.w * this.scale;
-            const sheetH = this.sheetSize.h * this.scale;
-            this.element.style.backgroundSize = `${sheetW}px ${sheetH}px`;
+            this.element.style.backgroundSize = `${this.sheetSize.w * this.scale}px ${this.sheetSize.h * this.scale}px`;
         }
     }
 
+    _resolveTag(tagName) {
+        let tag = this.tags[tagName];
+        if (tag) return tag;
+
+        const tagNames = Object.keys(this.tags);
+        if (tagNames.length > 0) {
+            return this.tags[tagNames[0]];
+        }
+
+        if (this.frames.length > 0) {
+            return { from: 0, to: this.frames.length - 1, direction: 'forward' };
+        }
+
+        return null;
+    }
+
     _parseData(data) {
-        // Normalization
         this.frames = [];
         this.tags = {};
 
-        // Frames
         if (Array.isArray(data.frames)) {
-            // Array format
-            console.log('[AgentIdentity] Parsing Array Frames:', data.frames.length);
-            this.frames = data.frames.map(f => ({
-                x: f.frame.x,
-                y: f.frame.y,
-                w: f.frame.w,
-                h: f.frame.h,
-                duration: f.duration
+            this.frames = data.frames.map((frame) => ({
+                x: frame.frame.x,
+                y: frame.frame.y,
+                w: frame.frame.w,
+                h: frame.frame.h,
+                duration: frame.duration
             }));
-        } else if (typeof data.frames === 'object') {
-            // Hash format
+        } else if (data.frames && typeof data.frames === 'object') {
             const keys = Object.keys(data.frames).sort();
-            console.log('[AgentIdentity] Parsing Hash Frames:', keys.length);
-            this.frames = keys.map(k => {
-                const f = data.frames[k];
+            this.frames = keys.map((key) => {
+                const frame = data.frames[key];
                 return {
-                    x: f.frame.x,
-                    y: f.frame.y,
-                    w: f.frame.w,
-                    h: f.frame.h,
-                    duration: f.duration
+                    x: frame.frame.x,
+                    y: frame.frame.y,
+                    w: frame.frame.w,
+                    h: frame.frame.h,
+                    duration: frame.duration
                 };
             });
         }
-        console.log('[AgentIdentity] Total Frames:', this.frames.length);
 
-        // Meta
-        if (data.meta) {
-            this.sheetSize = data.meta.size; // {w, h}
+        this.sheetSize = data.meta && data.meta.size ? data.meta.size : null;
 
-            if (Array.isArray(data.meta.frameTags)) {
-                data.meta.frameTags.forEach(tag => {
-                    this.tags[tag.name] = {
-                        from: tag.from,
-                        to: tag.to,
-                        direction: tag.direction
-                    };
-                });
-            }
+        const frameTags = data.meta && Array.isArray(data.meta.frameTags) ? data.meta.frameTags : [];
+        frameTags.forEach((tag) => {
+            this.tags[tag.name] = {
+                from: tag.from,
+                to: tag.to,
+                direction: tag.direction
+            };
+        });
+
+        if (this.currentFrameIndex >= this.frames.length) {
+            this.currentFrameIndex = 0;
         }
     }
 
@@ -238,15 +207,11 @@ class AsepriteAnimator {
         return fileUrl;
     }
 
-    _toCssUrl(path) {
-        let url = path;
-        if (!url.startsWith('file://')) {
-            // Ensure absolute paths get file protocol
-            if (path.startsWith('/')) {
-                url = `file://${path}`;
-            }
+    _toCssUrl(filePath) {
+        let url = filePath;
+        if (!url.startsWith('file://') && url.startsWith('/')) {
+            url = `file://${url}`;
         }
-        // Encode spaces and special chars
         return encodeURI(url);
     }
 }
