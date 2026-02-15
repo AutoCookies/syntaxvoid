@@ -1,0 +1,107 @@
+.agent-identity-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2147483647;
+}
+
+
+.agent-movement-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    will-change: transform;
+    /* transform-origin: center center; */
+}
+
+/* The "chrome" that makes it feel real */
+.agent-identity-shell {
+    /* DEBUG: Force visibility */
+    border: 2px solid magenta !important;
+    background: rgba(255, 0, 255, 0.2);
+
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px;
+    border-radius: 10px;
+
+    /* Blend with IDE */
+    background: rgba(30, 30, 30, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+
+    /* Subtle depth */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+
+    /* Critical: clip sprite frame like a viewport */
+    overflow: hidden;
+
+    /* Smooth but not flashy */
+    transition: transform 120ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.agent-identity-shell:hover {
+    border-color: rgba(255, 255, 255, 0.18);
+    background: rgba(34, 34, 34, 0.82);
+}
+
+.agent-identity-shell:active {
+    transform: translateY(1px);
+}
+
+/* Sprite itself: DO NOT hardcode width/height here.
+   Let SpriteAnimator set exact scaled size. */
+.agentSprite {
+    display: block;
+    image-rendering: pixelated;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    user-select: none;
+    width: auto;
+    height: auto;
+}
+
+/* Error: apply effect to shell so it feels like UI state, not image hack */
+.agent-identity-shell.is-error {
+    border-color: rgba(255, 80, 80, 0.35);
+    box-shadow: 0 6px 18px rgba(255, 60, 60, 0.10), 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.agent-identity-shell.is-offline {
+    opacity: 0.55;
+    filter: grayscale(100%);
+}
+
+/* optional: shake on shell (short, not annoying) */
+.agent-identity-shell.shake {
+    animation: shake 220ms cubic-bezier(.36, .07, .19, .97) both;
+}
+
+@keyframes shake {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    25% {
+        transform: translate3d(-3px, 0, 0);
+    }
+
+    50% {
+        transform: translate3d(3px, 0, 0);
+    }
+
+    75% {
+        transform: translate3d(-2px, 0, 0);
+    }
+
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+}

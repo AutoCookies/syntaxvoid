@@ -2136,6 +2136,11 @@ agent-base@6, agent-base@^6.0.2:
   dependencies:
     debug "4"
 
+"agent-identity@file:./packages/agent-identity":
+  version "0.1.0"
+  dependencies:
+    syntaxvoid-ui-kit "file:../../.cache/yarn/v6/npm-agent-identity-0.1.0-6262cf86-c468-451a-8a4d-a4c9ea0cc166-1771126014368/node_modules/syntaxvoid-ui-kit"
+
 agentkeepalive@^4.2.1:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/agentkeepalive/-/agentkeepalive-4.6.0.tgz#35f73e94b3f40bf65f105219c623ad19c136ea6a"
@@ -9496,7 +9501,7 @@ sylvester@^0.0.12:
 "syntaxvoid-collab-struct@file:./packages/syntaxvoid-collab-struct":
   version "1.0.0"
   dependencies:
-    syntaxvoid-ui-kit "file:../../.cache/yarn/v6/npm-syntaxvoid-collab-struct-1.0.0-5a604fe1-a5c3-46de-936b-5e67ebc3bfc6-1771125415563/node_modules/syntaxvoid-ui-kit"
+    syntaxvoid-ui-kit "file:../../.cache/yarn/v6/npm-syntaxvoid-collab-struct-1.0.0-49c0cfc2-c4cc-4c24-b552-d585b5904654-1771126014371/node_modules/syntaxvoid-ui-kit"
     ws "^8.16.0"
 
 "syntaxvoid-patch-governor@file:./packages/syntaxvoid-patch-governor":

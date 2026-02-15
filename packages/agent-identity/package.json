@@ -1,0 +1,37 @@
+{
+    "name": "agent-identity",
+    "version": "0.1.0",
+    "description": "Agent Identity System (AIS) for SyntaxVoid",
+    "main": "lib/main.js",
+    "engines": {
+        "atom": ">=1.0.0 <2.0.0"
+    },
+    "dependencies": {
+        "syntaxvoid-ui-kit": "file:../syntaxvoid-ui-kit"
+    },
+    "activationCommands": {
+        "atom-workspace": [
+            "agent-identity:toggle",
+            "agent-identity:open-control-room"
+        ]
+    },
+    "configSchema": {
+        "enabled": {
+            "type": "boolean",
+            "default": false,
+            "title": "Enable Agent Identity",
+            "description": "Show the agent avatar overlay in the workspace."
+        },
+        "motionLevel": {
+            "type": "string",
+            "default": "subtle",
+            "enum": [
+                "none",
+                "subtle",
+                "playful"
+            ],
+            "title": "Motion Level",
+            "description": "Control the movement behavior of the agent (none: fixed, subtle: minimal breathing, playful: small oscillations)."
+        }
+    }
+}
