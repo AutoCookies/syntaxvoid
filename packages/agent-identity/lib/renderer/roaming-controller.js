@@ -3,185 +3,248 @@
 const { Emitter } = require('event-kit');
 
 class RoamingController {
-    constructor(element, animator) {
-        this.element = element;
+    constructor(wrapperEl, animator, assets) {
+        this.wrapperEl = wrapperEl;
         this.animator = animator;
+        this.assets = assets; // { Idle, Walk, Run, Rotate }
+
         this.emitter = new Emitter();
 
-        // Config
-        this.motionLevel = atom.config.get('agent-identity.motionLevel') || 'subtle';
+        this.bounds = { width: window.innerWidth, height: window.innerHeight };
+        this._onResize = () => {
+            this.bounds = { width: window.innerWidth, height: window.innerHeight };
+            this._clampPosition();
+        };
+        window.addEventListener('resize', this._onResize);
 
-        // Physics / State
-        this.position = { x: 0, y: 0 };
+        this.position = { x: 100, y: this.bounds.height - 100 };
         this.velocity = { x: 0, y: 0 };
         this.target = null;
-        this.speed = 2; // pixels per frame
-        this.state = 'idle'; // idle, moving, interacting
-        this.facing = 'right'; // right, left
 
-        // External Status (Editor state)
         this.editorStatus = 'idle';
+        this.baseMoveAnim = 'Walk'; // Walk | Run
+        this.facing = 'right';
 
-        // Loop
-        this.animationFrameId = null;
+        this.phase = 'idle'; // idle | rotating | moving
+        this.rotateInFlight = false;
+
+        this.tickId = null;
         this.lastTime = 0;
 
-        // Bounds (will update on resize)
-        this.bounds = { width: window.innerWidth, height: window.innerHeight };
-        window.addEventListener('resize', () => {
-            this.bounds = { width: window.innerWidth, height: window.innerHeight };
-            this.clampPosition();
-        });
+        this.isDragging = false;
+        this.dragOffset = { x: 0, y: 0 };
+        this.startPos = { x: 0, y: 0 };
+        this.hasMoved = false;
 
-        // Start somewhere visible (bottom-left area)
-        this.position.x = 100;
-        this.position.y = this.bounds.height - 100;
+        this._applyTransform();
+        this._setIdleHard(); // start = idle, no rotate
 
-        console.log('[RoamingController] Init:', {
-            bounds: this.bounds,
-            pos: this.position
-        });
-
-        this.startLoop();
-        this.setupDrag(); // Initialize drag handlers
-        this.pickNewAction();
+        this._setupDrag();
+        this._startLoop();
+        this._pickNewAction();
     }
 
     setStatus(status) {
         this.editorStatus = status;
-        // React immediately to status changes?
+        this.baseMoveAnim = status === 'executing' ? 'Run' : 'Walk';
+
+        // nếu editor đang busy kiểu planning/patching => dừng roaming và về idle
         if (status === 'planning' || status === 'patching') {
-            this.target = null; // Stop moving
-            this.state = 'idle';
+            this.target = null;
+            this.velocity = { x: 0, y: 0 };
+            this._setIdleHard();
         }
     }
 
-    startLoop() {
-        console.log('[RoamingController] Starting loop');
-        const loop = (time) => {
-            const dt = time - this.lastTime;
-            this.lastTime = time;
+    onDidChangeAction(cb) {
+        return this.emitter.on('did-change-action', cb);
+    }
 
-            try {
-                this.update(dt);
-                this.render();
-            } catch (e) {
-                console.error('[RoamingController] Loop Error:', e);
-            }
+    dispose() {
+        if (this.tickId) {
+            cancelAnimationFrame(this.tickId);
+            this.tickId = null;
+        }
+        window.removeEventListener('resize', this._onResize);
+        this.emitter.dispose();
+    }
 
-            this.animationFrameId = requestAnimationFrame(loop);
+    _startLoop() {
+        this.lastTime = performance.now();
+        const loop = (t) => {
+            const dt = Math.min(40, t - this.lastTime || 16);
+            this.lastTime = t;
+
+            this._update(dt);
+            this._applyTransform();
+
+            this.tickId = requestAnimationFrame(loop);
         };
-        this.animationFrameId = requestAnimationFrame(loop);
+        this.tickId = requestAnimationFrame(loop);
     }
 
-    stopLoop() {
-        if (this.animationFrameId) {
-            cancelAnimationFrame(this.animationFrameId);
-        }
-    }
-
-    pickNewAction() {
-        // AI Logic: What to do next?
-        const delay = Math.random() * 2000 + 1000; // 1-3s delay
-
+    _pickNewAction() {
+        const delay = Math.random() * 2000 + 1000; // 1-3s
         setTimeout(() => {
+            if (this.isDragging) return this._pickNewAction();
+
             if (this.editorStatus !== 'idle' && this.editorStatus !== 'executing') {
-                // If busy, just wait
-                this.pickNewAction();
-                return;
+                return this._pickNewAction();
             }
 
-            // 30% chance to idle, 70% to move
             if (Math.random() < 0.3) {
-                this.state = 'idle';
                 this.target = null;
+                this.velocity = { x: 0, y: 0 };
+                this._setIdleHard();
                 this.emitter.emit('did-change-action', 'Idle');
             } else {
-                this.state = 'moving';
-                // Pick random point
                 const padding = 50;
                 this.target = {
                     x: padding + Math.random() * (this.bounds.width - padding * 2),
-                    y: padding + Math.random() * (this.bounds.height - padding * 2)
+                    y: padding + Math.random() * (this.bounds.height - padding * 2),
                 };
-                // Determine animation based on status
-                const anim = this.editorStatus === 'executing' ? 'Run' : 'Walk';
-                this.emitter.emit('did-change-action', anim);
+                this.emitter.emit('did-change-action', this.baseMoveAnim);
             }
 
-            // Re-queue
-            this.pickNewAction();
+            this._pickNewAction();
         }, delay);
     }
 
-    update(dt) {
-        if (!this.target) return;
+    _update(dt) {
+        if (!this.target) {
+            // không roaming => idle, KHÔNG rotate
+            if (this.phase !== 'idle') this._setIdleHard();
+            return;
+        }
+
+        // nếu đang rotate, freeze movement để đảm bảo “không vừa walk vừa rotate”
+        if (this.phase === 'rotating') return;
 
         const dx = this.target.x - this.position.x;
         const dy = this.target.y - this.position.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
 
         if (dist < 5) {
-            // Arrived
             this.position.x = this.target.x;
             this.position.y = this.target.y;
             this.target = null;
-            this.state = 'idle';
+            this.velocity = { x: 0, y: 0 };
+            this._setIdleHard();
             this.emitter.emit('did-change-action', 'Idle');
-            // Wait for next pickNewAction to trigger
             return;
         }
 
-        // Move
-        const speed = this.editorStatus === 'executing' ? 6 : 2; // Run fast if executing
-
+        const speed = this.baseMoveAnim === 'Run' ? 6 : 2;
         const angle = Math.atan2(dy, dx);
         this.velocity.x = Math.cos(angle) * speed;
         this.velocity.y = Math.sin(angle) * speed;
 
+        const desiredFacing = this.velocity.x < -0.1 ? 'left' : this.velocity.x > 0.1 ? 'right' : this.facing;
+
+        // nếu đổi hướng => rotate trước, xong mới move + walk/run
+        if (desiredFacing !== this.facing) {
+            this._rotateTo(desiredFacing);
+            return;
+        }
+
+        // đã đúng hướng => move + walk/run
+        this.phase = 'moving';
         this.position.x += this.velocity.x;
         this.position.y += this.velocity.y;
+        this._clampPosition();
 
-        // Facing
-        if (this.velocity.x > 0.1) this.facing = 'right';
-        if (this.velocity.x < -0.1) this.facing = 'left';
+        // đảm bảo đang move thì set walk/run (nếu lỡ bị idle)
+        this._ensureMoveAnim();
     }
 
-    clampPosition() {
+    _ensureMoveAnim() {
+        const want = this.baseMoveAnim;
+        if (!this.assets[want]) return;
+
+        // đang rotating thì không đụng
+        if (this.phase === 'rotating') return;
+
+        // nếu chưa đúng anim thì switch
+        if (this._currentAnim !== want) {
+            this._currentAnim = want;
+            this.animator.setAsset(this.assets[want]);
+            this.animator.playLoopAll();
+        }
+    }
+
+    _setIdleHard() {
+        this.phase = 'idle';
+        this.rotateInFlight = false;
+
+        if (!this.assets.Idle) return;
+
+        if (this._currentAnim !== 'Idle') {
+            this._currentAnim = 'Idle';
+            this.animator.setAsset(this.assets.Idle);
+            this.animator.playLoopAll();
+        }
+    }
+
+    _rotateTo(nextFacing) {
+        if (!this.assets.Rotate) {
+            // fallback: không có rotate asset thì chỉ flip và đi luôn
+            this.facing = nextFacing;
+            this.animator.setFacing(this.facing);
+            this._ensureMoveAnim();
+            return;
+        }
+
+        this.phase = 'rotating';
+        this.rotateInFlight = true;
+
+        this.facing = nextFacing;
+        this.animator.setFacing(this.facing);
+
+        this._currentAnim = 'Rotate';
+        this.animator.setAsset(this.assets.Rotate);
+
+        // rotate “1 lần” xong mới chuyển qua walk/run
+        this.animator.playOnceAll(() => {
+            // có thể trong lúc rotate user stop roaming => lúc đó về idle
+            this.rotateInFlight = false;
+
+            if (!this.target) {
+                this._setIdleHard();
+                return;
+            }
+
+            this.phase = 'moving';
+            this._ensureMoveAnim();
+        });
+    }
+
+    _applyTransform() {
+        // wrapper controls position only
+        this.wrapperEl.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0)`;
+    }
+
+    _clampPosition() {
         const padding = 20;
         this.position.x = Math.max(padding, Math.min(this.bounds.width - padding, this.position.x));
         this.position.y = Math.max(padding, Math.min(this.bounds.height - padding, this.position.y));
     }
 
-    render() {
-        // Apply transform
-        // Use translate3d for GPU
-        // Flip using scaleX
-        const scaleX = this.facing === 'left' ? -1 : 1;
-        this.element.style.transform = `translate3d(${this.position.x}px, ${this.position.y}px, 0) scaleX(${scaleX})`;
+    _setupDrag() {
+        this.wrapperEl.style.pointerEvents = 'auto';
 
-        // Debug
-        // console.log(`[Roaming] x:${this.position.x.toFixed(0)} vx:${this.velocity.x.toFixed(2)} fac:${this.facing} drag:${this.isDragging}`);
-    }
-
-    setupDrag() {
-        this.isDragging = false;
-        this.dragOffset = { x: 0, y: 0 };
-
-        this.element.addEventListener('mousedown', (e) => {
-            if (e.button !== 0) return; // Left click only
+        this.wrapperEl.addEventListener('mousedown', (e) => {
+            if (e.button !== 0) return;
             this.isDragging = true;
-            this.state = 'interacting';
-            this.target = null; // Stop autonomous movement
-            this.velocity = { x: 0, y: 0 };
+            this.hasMoved = false;
 
-            // Calculate offset logic
-            // The element is positioned at this.position.x/y
-            // Mouse is at e.clientX/Y
+            this.target = null;
+            this.velocity = { x: 0, y: 0 };
+            this._setIdleHard();
+
             this.dragOffset.x = e.clientX - this.position.x;
             this.dragOffset.y = e.clientY - this.position.y;
+            this.startPos = { x: e.clientX, y: e.clientY };
 
-            // Prevent default to avoid text selection etc
             e.preventDefault();
             e.stopPropagation();
         });
@@ -189,34 +252,30 @@ class RoamingController {
         window.addEventListener('mousemove', (e) => {
             if (!this.isDragging) return;
 
+            if (!this.hasMoved) {
+                const dx = e.clientX - this.startPos.x;
+                const dy = e.clientY - this.startPos.y;
+                if (Math.sqrt(dx * dx + dy * dy) < 5) return;
+                this.hasMoved = true;
+            }
+
             this.position.x = e.clientX - this.dragOffset.x;
             this.position.y = e.clientY - this.dragOffset.y;
-
-            // Clamp during drag
-            this.clampPosition();
-
-            // Force render update immediately for smoothness? 
-            // The loop handles it, but maybe update lastTime to prevent jumps?
+            this._clampPosition();
         });
 
-        window.addEventListener('mouseup', (e) => {
+        window.addEventListener('mouseup', () => {
             if (!this.isDragging) return;
             this.isDragging = false;
-            this.state = 'idle';
-            this.pickNewAction(); // Resume life
+            this._pickNewAction();
         });
-    }
 
-    onDidChangeAction(callback) {
-        return this.emitter.on('did-change-action', callback);
-    }
-
-    dispose() {
-        this.stopLoop();
-        this.emitter.dispose();
-        // Remove window listeners? 
-        // Need to bind them to refer, but for now this leaks a bit on reload if not careful.
-        // We really should bind functions.
+        this.wrapperEl.addEventListener('dblclick', (e) => {
+            // optional: open control room
+            atom.commands.dispatch(atom.views.getView(atom.workspace), 'agent-identity:open-control-room');
+            e.preventDefault();
+            e.stopPropagation();
+        });
     }
 }
 

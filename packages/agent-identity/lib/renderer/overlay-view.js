@@ -1,143 +1,95 @@
 'use strict';
 
 const path = require('path');
-const fs = require('fs');
+
 const PresenceStore = require('../presence-store');
-const MotionController = require('./motion-controller');
 const AsepriteAnimator = require('./skins/aseprite-animator');
+const RoamingController = require('./roaming-controller');
 
 class OverlayView {
     constructor() {
+        // wrapper for positioning + input
         this.element = document.createElement('div');
         this.element.classList.add('agent-identity-overlay');
 
-        this.movementWrapper = document.createElement('div');
-        this.movementWrapper.classList.add('agent-movement-wrapper');
-        this.element.appendChild(this.movementWrapper);
+        Object.assign(this.element.style, {
+            position: 'fixed',
+            left: '0px',
+            top: '0px',
+            zIndex: '1000',
+            width: '0px',
+            height: '0px',
+            pointerEvents: 'none', // Wrapper pass-through, inner elements handle clicks
+        });
 
-        this.shell = document.createElement('div');
-        this.shell.classList.add('agent-identity-shell');
-        this.movementWrapper.appendChild(this.shell);
-
-        this.spriteFlipWrapper = document.createElement('div');
-        this.spriteFlipWrapper.classList.add('agent-sprite-flip-wrapper');
-        this.shell.appendChild(this.spriteFlipWrapper);
-
-        this.spriteMount = document.createElement('div');
-        this.spriteMount.classList.add('agent-sprite-mount');
-        this.spriteFlipWrapper.appendChild(this.spriteMount);
-
+        // assets folder
         this.assetPath = path.join(__dirname, '..', '..', 'assets', 'eris');
-        this.currentAsset = null;
-        this.currentAction = null;
-        this.currentStatus = 'idle';
+
+        this.assets = {
+            Idle: {
+                pngUrl: path.join(this.assetPath, '16x32 Idle.png'),
+                jsonUrl: path.join(this.assetPath, '16x32 Idle.json'),
+            },
+            Walk: {
+                pngUrl: path.join(this.assetPath, '16x32 Walk.png'),
+                jsonUrl: path.join(this.assetPath, '16x32 Walk.json'),
+            },
+            Run: {
+                pngUrl: path.join(this.assetPath, '16x32 Run.png'),
+                jsonUrl: path.join(this.assetPath, '16x32 Run.json'),
+            },
+            Rotate: {
+                pngUrl: path.join(this.assetPath, '16x32 Rotate.png'),
+                jsonUrl: path.join(this.assetPath, '16x32 Rotate.json'),
+            },
+        };
 
         this.animator = new AsepriteAnimator({
-            pngUrl: path.join(this.assetPath, '16x32 Idle.png'),
-            jsonUrl: path.join(this.assetPath, '16x32 Idle.json'),
-            scale: 2
+            ...this.assets.Idle,
+            scale: 2,
         });
-        this.animator.mount(this.spriteMount);
+        this.animator.mount(this.element);
+        this.animator.setFacing('right');
 
-        this.motionController = new MotionController({
-            movementElement: this.movementWrapper,
-            flipElement: this.spriteFlipWrapper,
-            shellElement: this.shell
-        });
+        this.roaming = new RoamingController(this.element, this.animator, this.assets);
 
-        this.element.addEventListener('click', () => {
-            atom.commands.dispatch(atom.views.getView(atom.workspace), 'agent-identity:open-control-room');
-        });
-
-        this.subscription = PresenceStore.onDidChange((snapshot) => {
-            this.update(snapshot);
-        });
+        this.subscription = PresenceStore.onDidChange((snapshot) => this.update(snapshot));
     }
 
     attach() {
         document.body.appendChild(this.element);
-        this.animator.playTag('default');
-        this.update(PresenceStore.getSnapshot());
     }
 
     detach() {
-        if (this.subscription) {
-            this.subscription.dispose();
-            this.subscription = null;
-        }
-        this.motionController.dispose();
-        this.animator.stop();
-        this.animator.unmount();
+        this.subscription?.dispose?.();
+        this.subscription = null;
+
+        this.roaming?.dispose?.();
+        this.roaming = null;
+
+        this.animator?.unmount?.();
+        this.animator = null;
+
         this.element.remove();
     }
 
     update(snapshot) {
-        if (!snapshot) return;
+        // Presence chỉ ảnh hưởng tốc độ move (Walk vs Run) và có thể disable roaming.
+        // Quan trọng: “không roaming => idle, không rotate” đã được roaming-controller đảm bảo.
 
-        this.currentStatus = snapshot.status || 'idle';
-        this.motionController.onPresence(snapshot);
-
-        this.shell.classList.toggle('is-offline', this.currentStatus === 'offline');
-        this.shell.classList.toggle('is-error', this.currentStatus === 'error');
-
-        const action = this.resolveAction(snapshot, this.motionController.getSpeed());
-        this.applyAction(action);
-    }
-
-    resolveAction(snapshot, speed) {
-        const status = snapshot.status || 'idle';
-
-        switch (status) {
-            case 'planning':
-                return 'Rotate';
-            case 'patching':
-                return 'Interact';
-            case 'reviewing':
-                return speed > 0.03 ? 'Walk' : 'Idle';
-            case 'executing':
-                return speed > 0.03 ? 'Run' : 'Idle';
-            default:
-                return 'Idle';
-        }
-    }
-
-    applyAction(action) {
-        if (!action) return;
-
-        const directionMode = atom.config.get('agent-identity.directionMode') || 'flip';
-        const facing = this.motionController.getFacing();
-        const directionalSupported = directionMode === 'assets' && (action === 'Walk' || action === 'Run');
-
-        let baseName = `16x32 ${action}`;
-        if (directionalSupported && facing === 'left') {
-            const leftVariant = `16x32 ${action} Left`;
-            if (this.assetExists(leftVariant)) {
-                baseName = leftVariant;
-            }
+        if (snapshot.status === 'offline') {
+            this.element.classList.add('offline');
+        } else {
+            this.element.classList.remove('offline');
         }
 
-        this.spriteFlipWrapper.classList.toggle('force-face-right', directionMode === 'assets');
-
-        const pngUrl = path.join(this.assetPath, `${baseName}.png`);
-        const jsonUrl = path.join(this.assetPath, `${baseName}.json`);
-        const nextAsset = `${pngUrl}|${jsonUrl}`;
-
-        if (this.currentAsset !== nextAsset) {
-            this.currentAsset = nextAsset;
-            this.animator.setAsset({ pngUrl, jsonUrl });
+        if (snapshot.status === 'error') {
+            this.element.classList.add('shake');
+        } else {
+            this.element.classList.remove('shake');
         }
 
-        this.animator.playTag('default');
-        this.currentAction = action;
-    }
-
-    assetExists(baseName) {
-        try {
-            return fs.existsSync(path.join(this.assetPath, `${baseName}.png`)) &&
-                fs.existsSync(path.join(this.assetPath, `${baseName}.json`));
-        } catch (error) {
-            return false;
-        }
+        this.roaming.setStatus(snapshot.status);
     }
 }
 

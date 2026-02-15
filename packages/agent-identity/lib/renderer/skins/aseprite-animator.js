@@ -13,18 +13,28 @@ class AsepriteAnimator {
         this.element.style.display = 'block';
         this.element.style.imageRendering = 'pixelated';
         this.element.style.backgroundRepeat = 'no-repeat';
+        this.element.style.willChange = 'background-position, transform';
 
         this.timerId = null;
-        this.frames = [];
-        this.tags = {};
-        this.currentTag = null;
-        this.currentTagName = null;
-        this.currentFrameIndex = 0;
-        this.isPlaying = false;
-        this.sheetSize = null;
-        this.loadToken = 0;
 
-        this.load();
+        this.frames = [];
+        this.sheetSize = null;
+
+        this.playback = {
+            from: 0,
+            to: 0,
+            loop: true,
+            direction: 'forward', // forward | pingpong
+            cursor: 0,
+            step: 1,
+            running: false,
+            onComplete: null,
+        };
+
+        this.loadToken = 0;
+        this.loadedKey = null;
+
+        this._load();
     }
 
     mount(container) {
@@ -33,101 +43,152 @@ class AsepriteAnimator {
 
     unmount() {
         this.stop();
-        if (this.element.parentNode) {
-            this.element.parentNode.removeChild(this.element);
-        }
-    }
-
-    async load() {
-        const token = ++this.loadToken;
-
-        try {
-            const jsonPath = this._fileUrlToPath(this.jsonUrl);
-            const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
-            if (token !== this.loadToken) return;
-
-            this._parseData(data);
-            this.element.style.backgroundImage = `url('${this._toCssUrl(this.pngUrl)}')`;
-            this.playTag(this.currentTagName || 'default');
-        } catch (error) {
-            if (token !== this.loadToken) return;
-            console.warn('[AgentIdentity] Failed to load animation:', this.jsonUrl, error);
-            this.frames = [];
-            this.tags = {};
-            this.sheetSize = null;
-            this.element.style.width = '32px';
-            this.element.style.height = '64px';
-            this.element.style.backgroundImage = `url('${this._toCssUrl(this.pngUrl)}')`;
-            this.element.style.backgroundPosition = '0 0';
-        }
-    }
-
-    setAsset({ pngUrl, jsonUrl }) {
-        if (this.pngUrl === pngUrl && this.jsonUrl === jsonUrl) return;
-
-        this.stop();
-        this.pngUrl = pngUrl;
-        this.jsonUrl = jsonUrl;
-        this.currentTag = null;
-        this.currentTagName = null;
-        this.currentFrameIndex = 0;
-        this.load();
-    }
-
-    playTag(tagName) {
-        if (this.frames.length === 0) return;
-
-        const tag = this._resolveTag(tagName);
-        if (!tag) return;
-
-        const isTagChange = this.currentTagName !== tagName;
-        this.currentTag = tag;
-        this.currentTagName = tagName;
-
-        if (isTagChange) {
-            this.currentFrameIndex = tag.from;
-            this.renderFrame();
-        }
-
-        if (!this.isPlaying) {
-            this.isPlaying = true;
-            this.scheduleNextFrame();
-        }
+        if (this.element.parentNode) this.element.parentNode.removeChild(this.element);
     }
 
     stop() {
-        this.isPlaying = false;
+        this.playback.running = false;
         if (this.timerId) {
             clearTimeout(this.timerId);
             this.timerId = null;
         }
     }
 
-    scheduleNextFrame() {
-        if (!this.isPlaying || this.frames.length === 0) return;
+    setFacing(facing /* 'left' | 'right' */) {
+        const scaleX = facing === 'left' ? -1 : 1;
+        // NOTE: roaming-controller sẽ set translate3d trên wrapper element,
+        // animator chỉ flip local sprite.
+        this.element.style.transform = `scaleX(${scaleX})`;
+    }
 
-        this.renderFrame();
-        const frameData = this.frames[this.currentFrameIndex];
-        const duration = frameData ? frameData.duration : 100;
+    async setAsset({ pngUrl, jsonUrl }) {
+        const nextKey = `${pngUrl}::${jsonUrl}`;
+        if (this.loadedKey === nextKey) return;
+
+        this.stop();
+        this.pngUrl = pngUrl;
+        this.jsonUrl = jsonUrl;
+        this.loadedKey = null;
+
+        await this._load();
+    }
+
+    playLoopAll() {
+        if (!this.frames.length) return;
+        this._playRange({
+            from: 0,
+            to: this.frames.length - 1,
+            loop: true,
+            direction: 'forward',
+            onComplete: null,
+        });
+    }
+
+    playOnceAll(onComplete) {
+        if (!this.frames.length) return;
+        this._playRange({
+            from: 0,
+            to: this.frames.length - 1,
+            loop: false,
+            direction: 'forward',
+            onComplete,
+        });
+    }
+
+    playRange({ from, to, loop = true, direction = 'forward', onComplete = null }) {
+        if (!this.frames.length) return;
+        const safeFrom = Math.max(0, Math.min(this.frames.length - 1, from | 0));
+        const safeTo = Math.max(0, Math.min(this.frames.length - 1, to | 0));
+        this._playRange({
+            from: Math.min(safeFrom, safeTo),
+            to: Math.max(safeFrom, safeTo),
+            loop,
+            direction,
+            onComplete,
+        });
+    }
+
+    _playRange({ from, to, loop, direction, onComplete }) {
+        this.stop();
+
+        this.playback.from = from;
+        this.playback.to = to;
+        this.playback.loop = loop;
+        this.playback.direction = direction;
+        this.playback.onComplete = onComplete;
+
+        this.playback.cursor = from;
+        this.playback.step = 1;
+        this.playback.running = true;
+
+        this._renderFrame(this.playback.cursor);
+        this._scheduleNext();
+    }
+
+    _scheduleNext() {
+        if (!this.playback.running || !this.frames.length) return;
+
+        const frame = this.frames[this.playback.cursor];
+        const duration = frame?.duration ?? 100;
 
         this.timerId = setTimeout(() => {
-            this.advanceFrame();
-            this.scheduleNextFrame();
+            this._advance();
+            if (!this.playback.running) return;
+            this._renderFrame(this.playback.cursor);
+            this._scheduleNext();
         }, duration);
     }
 
-    advanceFrame() {
-        if (!this.currentTag) return;
+    _advance() {
+        const pb = this.playback;
+        const from = pb.from;
+        const to = pb.to;
 
-        const { from, to } = this.currentTag;
-        this.currentFrameIndex += 1;
-        if (this.currentFrameIndex > to) {
-            this.currentFrameIndex = from;
+        if (from === to) {
+            if (!pb.loop) this._complete();
+            return;
         }
+
+        if (pb.direction === 'pingpong') {
+            const next = pb.cursor + pb.step;
+
+            if (next > to) {
+                pb.step = -1;
+                pb.cursor = to - 1;
+                if (pb.cursor < from) pb.cursor = from;
+                return;
+            }
+
+            if (next < from) {
+                if (!pb.loop) return this._complete();
+                pb.step = 1;
+                pb.cursor = from + 1;
+                if (pb.cursor > to) pb.cursor = to;
+                return;
+            }
+
+            pb.cursor = next;
+            return;
+        }
+
+        // forward
+        const next = pb.cursor + 1;
+        if (next > to) {
+            if (!pb.loop) return this._complete();
+            pb.cursor = from;
+            return;
+        }
+        pb.cursor = next;
     }
 
-    renderFrame() {
-        const frame = this.frames[this.currentFrameIndex];
+    _complete() {
+        const cb = this.playback.onComplete;
+        this.stop();
+        if (typeof cb === 'function') cb();
+    }
+
+    _renderFrame(frameIndex) {
+        const frame = this.frames[frameIndex];
         if (!frame) return;
 
         const scaledW = frame.w * this.scale;
@@ -142,76 +203,67 @@ class AsepriteAnimator {
         }
     }
 
-    _resolveTag(tagName) {
-        let tag = this.tags[tagName];
-        if (tag) return tag;
+    async _load() {
+        const token = ++this.loadToken;
 
-        const tagNames = Object.keys(this.tags);
-        if (tagNames.length > 0) {
-            return this.tags[tagNames[0]];
+        try {
+            const jsonPath = this._fileUrlToPath(this.jsonUrl);
+            const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+            if (token !== this.loadToken) return;
+
+            this._parseData(data);
+
+            this.element.style.backgroundImage = `url('${this._toCssUrl(this.pngUrl)}')`;
+
+            this.loadedKey = `${this.pngUrl}::${this.jsonUrl}`;
+
+            // default: loop all
+            this.playLoopAll();
+        } catch (error) {
+            if (token !== this.loadToken) return;
+
+            console.warn('[AgentIdentity] Failed to load aseprite assets:', this.jsonUrl, error);
+
+            this.frames = [];
+            this.sheetSize = null;
+
+            this.element.style.width = `${16 * this.scale}px`;
+            this.element.style.height = `${32 * this.scale}px`;
+            this.element.style.backgroundImage = `url('${this._toCssUrl(this.pngUrl)}')`;
+            this.element.style.backgroundPosition = '0 0';
         }
-
-        if (this.frames.length > 0) {
-            return { from: 0, to: this.frames.length - 1, direction: 'forward' };
-        }
-
-        return null;
     }
 
     _parseData(data) {
         this.frames = [];
-        this.tags = {};
 
         if (Array.isArray(data.frames)) {
-            this.frames = data.frames.map((frame) => ({
-                x: frame.frame.x,
-                y: frame.frame.y,
-                w: frame.frame.w,
-                h: frame.frame.h,
-                duration: frame.duration
+            this.frames = data.frames.map((f) => ({
+                x: f.frame.x,
+                y: f.frame.y,
+                w: f.frame.w,
+                h: f.frame.h,
+                duration: f.duration,
             }));
         } else if (data.frames && typeof data.frames === 'object') {
             const keys = Object.keys(data.frames).sort();
-            this.frames = keys.map((key) => {
-                const frame = data.frames[key];
-                return {
-                    x: frame.frame.x,
-                    y: frame.frame.y,
-                    w: frame.frame.w,
-                    h: frame.frame.h,
-                    duration: frame.duration
-                };
+            this.frames = keys.map((k) => {
+                const f = data.frames[k];
+                return { x: f.frame.x, y: f.frame.y, w: f.frame.w, h: f.frame.h, duration: f.duration };
             });
         }
 
-        this.sheetSize = data.meta && data.meta.size ? data.meta.size : null;
-
-        const frameTags = data.meta && Array.isArray(data.meta.frameTags) ? data.meta.frameTags : [];
-        frameTags.forEach((tag) => {
-            this.tags[tag.name] = {
-                from: tag.from,
-                to: tag.to,
-                direction: tag.direction
-            };
-        });
-
-        if (this.currentFrameIndex >= this.frames.length) {
-            this.currentFrameIndex = 0;
-        }
+        this.sheetSize = data?.meta?.size ?? null;
     }
 
     _fileUrlToPath(fileUrl) {
-        if (fileUrl.startsWith('file://')) {
-            return decodeURI(fileUrl.slice(7));
-        }
+        if (fileUrl.startsWith('file://')) return decodeURI(fileUrl.slice(7));
         return fileUrl;
     }
 
     _toCssUrl(filePath) {
         let url = filePath;
-        if (!url.startsWith('file://') && url.startsWith('/')) {
-            url = `file://${url}`;
-        }
+        if (!url.startsWith('file://') && url.startsWith('/')) url = `file://${url}`;
         return encodeURI(url);
     }
 }
