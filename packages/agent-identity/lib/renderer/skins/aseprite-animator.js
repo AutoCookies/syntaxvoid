@@ -207,7 +207,7 @@ class AsepriteAnimator {
         const token = ++this.loadToken;
 
         try {
-            const jsonPath = this._fileUrlToPath(this.jsonUrl);
+            const jsonPath = this._resolveJsonPath(this._fileUrlToPath(this.jsonUrl));
             const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
             if (token !== this.loadToken) return;
 
@@ -254,6 +254,18 @@ class AsepriteAnimator {
         }
 
         this.sheetSize = data?.meta?.size ?? null;
+    }
+
+
+    _resolveJsonPath(jsonPath) {
+        if (fs.existsSync(jsonPath)) return jsonPath;
+
+        // Backward compatibility for packaged layouts where files may be placed
+        // at assets/eris/*.json instead of assets/eris/16x32/*.json.
+        const fixedPath = jsonPath.replace(/\/16x32\/(16x32 .+\.json)$/u, '/$1');
+        if (fixedPath !== jsonPath && fs.existsSync(fixedPath)) return fixedPath;
+
+        return jsonPath;
     }
 
     _fileUrlToPath(fileUrl) {
