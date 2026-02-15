@@ -35,12 +35,11 @@ node script/patch-dependencies.js
 
 # Build the project
 echo "Building project..."
-# Skipping electron-rebuild due to symlink issues with first-party packages
-# yarn build
-echo "Build step skipped - native modules already compiled"
+echo "Building project..."
+yarn build
 
 # Build APM
 echo "Building APM..."
-yarn build:apm
+# yarn build:apm
 
 echo "Build complete. To run in dev mode, execute: yarn start"

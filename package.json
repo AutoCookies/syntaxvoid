@@ -181,6 +181,7 @@
     "syntaxvoid-project-map": "file:./packages/syntaxvoid-project-map",
     "syntaxvoid-risk-overlay": "file:./packages/syntaxvoid-risk-overlay",
     "tree-view": "file:./packages/tree-view",
+    "syntaxvoid-ui-kit": "file:./packages/syntaxvoid-ui-kit",
     "typescript": "^5.8.3",
     "underscore-plus": "^1.7.0",
     "update-package-dependencies": "file:./packages/update-package-dependencies",

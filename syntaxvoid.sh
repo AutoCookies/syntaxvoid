@@ -243,6 +243,11 @@ elif [ $OS == 'Linux' ]; then
       elif [ -f "$TMPDIR/syntaxvoid-build/${ATOM_APP_NAME}/${ATOM_EXECUTABLE_NAME}" ]; then
         # This is where SyntaxVoid can be found during some CI build tasks.
         SYNTAXVOID_PATH="$TMPDIR/syntaxvoid-build/${ATOM_APP_NAME}"
+      elif [ -f "$(dirname "$0")/package.json" ]; then
+        # Running from source
+        echo "Running from source..."
+        yarn start "$@"
+        exit $?
       else
         echoerr "Cannot locate ${ATOM_APP_NAME}. Set the SYNTAXVOID_PATH environment variable to the directory containing the \`${ATOM_BASE_NAME}\` executable."
         exit 1
