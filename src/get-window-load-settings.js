@@ -4,7 +4,11 @@ let windowLoadSettings = null;
 
 module.exports = () => {
   if (!windowLoadSettings) {
-    windowLoadSettings = JSON.parse(remote.getCurrentWindow().loadSettingsJSON);
+    // Embedded in Cheesecrab: preload sets window.loadSettingsJSON
+    const raw = typeof window.loadSettingsJSON !== 'undefined'
+      ? window.loadSettingsJSON
+      : remote.getCurrentWindow().loadSettingsJSON;
+    windowLoadSettings = JSON.parse(raw);
   }
   return windowLoadSettings;
 };
