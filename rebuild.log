@@ -1,0 +1,418 @@
+npm verbose cli /home/autocookie/.nvm/versions/node/v22.22.0/bin/node /home/autocookie/.nvm/versions/node/v22.22.0/bin/npm
+npm info using npm@10.9.4
+npm info using node@v22.22.0
+npm verbose title npm rebuild better-sqlite3
+npm verbose argv "rebuild" "better-sqlite3" "--target" "40.8.0" "--runtime" "electron" "--dist-url" "https://electronjs.org/headers" "--loglevel" "verbose"
+npm verbose logfile logs-max:10 dir:/home/autocookie/.npm/_logs/2026-03-10T05_07_16_456Z-
+npm verbose logfile /home/autocookie/.npm/_logs/2026-03-10T05_07_16_456Z-debug-0.log
+npm info run better-sqlite3@11.1.2 install node_modules/better-sqlite3 prebuild-install || node-gyp rebuild --release
+npm info run better-sqlite3@11.1.2 install { code: 1, signal: null }
+npm verbose stack Error: command failed
+npm verbose stack     at promiseSpawn (/home/autocookie/.nvm/versions/node/v22.22.0/lib/node_modules/npm/node_modules/@npmcli/promise-spawn/lib/index.js:22:22)
+npm verbose stack     at spawnWithShell (/home/autocookie/.nvm/versions/node/v22.22.0/lib/node_modules/npm/node_modules/@npmcli/promise-spawn/lib/index.js:124:10)
+npm verbose stack     at promiseSpawn (/home/autocookie/.nvm/versions/node/v22.22.0/lib/node_modules/npm/node_modules/@npmcli/promise-spawn/lib/index.js:12:12)
+npm verbose stack     at runScriptPkg (/home/autocookie/.nvm/versions/node/v22.22.0/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/run-script-pkg.js:79:13)
+npm verbose stack     at runScript (/home/autocookie/.nvm/versions/node/v22.22.0/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/run-script.js:9:12)
+npm verbose stack     at /home/autocookie/.nvm/versions/node/v22.22.0/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/rebuild.js:329:17
+npm verbose stack     at run (/home/autocookie/.nvm/versions/node/v22.22.0/lib/node_modules/npm/node_modules/promise-call-limit/dist/commonjs/index.js:67:22)
+npm verbose stack     at /home/autocookie/.nvm/versions/node/v22.22.0/lib/node_modules/npm/node_modules/promise-call-limit/dist/commonjs/index.js:84:9
+npm verbose stack     at new Promise (<anonymous>)
+npm verbose stack     at callLimit (/home/autocookie/.nvm/versions/node/v22.22.0/lib/node_modules/npm/node_modules/promise-call-limit/dist/commonjs/index.js:35:69)
+npm verbose pkgid better-sqlite3@11.1.2
+npm error code 1
+npm error path /home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3
+npm error command failed
+npm error command sh -c prebuild-install || node-gyp rebuild --release
+npm error make: Entering directory '/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3/build'
+npm error   touch ba23eeee118cd63e16015df367567cb043fed872.intermediate
+npm error   LD_LIBRARY_PATH=/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3/build/Release/lib.host:/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3/build/Release/lib.target:$LD_LIBRARY_PATH; export LD_LIBRARY_PATH; cd ../deps; mkdir -p /home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3/build/Release/obj/gen/sqlite3; node copy.js "/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3/build/Release/obj/gen/sqlite3" ""
+npm error   touch Release/obj.target/deps/locate_sqlite3.stamp
+npm error   cc -o Release/obj.target/sqlite3/gen/sqlite3/sqlite3.o Release/obj/gen/sqlite3/sqlite3.c '-DNODE_GYP_MODULE_NAME=sqlite3' '-DUSING_UV_SHARED=1' '-DUSING_V8_SHARED=1' '-DV8_DEPRECATION_WARNINGS=1' '-D_GLIBCXX_USE_CXX11_ABI=1' '-D_FILE_OFFSET_BITS=64' '-DELECTRON_ENSURE_CONFIG_GYPI' '-D_LARGEFILE_SOURCE' '-DUSING_ELECTRON_CONFIG_GYPI' '-DV8_COMPRESS_POINTERS' '-DV8_COMPRESS_POINTERS_IN_MULTIPLE_CAGES' '-DV8_31BIT_SMIS_ON_64BIT_ARCH' '-DV8_ENABLE_SANDBOX' '-DV8_EXTERNAL_CODE_SPACE' '-D__STDC_FORMAT_MACROS' '-DOPENSSL_NO_PINSHARED' '-DOPENSSL_THREADS' '-DOPENSSL_NO_ASM' '-DHAVE_INT16_T=1' '-DHAVE_INT32_T=1' '-DHAVE_INT8_T=1' '-DHAVE_STDINT_H=1' '-DHAVE_UINT16_T=1' '-DHAVE_UINT32_T=1' '-DHAVE_UINT8_T=1' '-DHAVE_USLEEP=1' '-DSQLITE_DEFAULT_CACHE_SIZE=-16000' '-DSQLITE_DEFAULT_FOREIGN_KEYS=1' '-DSQLITE_DEFAULT_MEMSTATUS=0' '-DSQLITE_DEFAULT_WAL_SYNCHRONOUS=1' '-DSQLITE_DQS=0' '-DSQLITE_ENABLE_COLUMN_METADATA' '-DSQLITE_ENABLE_DESERIALIZE' '-DSQLITE_ENABLE_FTS3' '-DSQLITE_ENABLE_FTS3_PARENTHESIS' '-DSQLITE_ENABLE_FTS4' '-DSQLITE_ENABLE_FTS5' '-DSQLITE_ENABLE_GEOPOLY' '-DSQLITE_ENABLE_JSON1' '-DSQLITE_ENABLE_MATH_FUNCTIONS' '-DSQLITE_ENABLE_RTREE' '-DSQLITE_ENABLE_STAT4' '-DSQLITE_ENABLE_UPDATE_DELETE_LIMIT' '-DSQLITE_LIKE_DOESNT_MATCH_BLOBS' '-DSQLITE_OMIT_DEPRECATED' '-DSQLITE_OMIT_PROGRESS_CALLBACK' '-DSQLITE_OMIT_SHARED_CACHE' '-DSQLITE_OMIT_TCL_VARIABLE' '-DSQLITE_SOUNDEX' '-DSQLITE_THREADSAFE=2' '-DSQLITE_TRACE_SIZE_LIMIT=32' '-DSQLITE_USE_URI=0' '-DNDEBUG' -I/home/autocookie/.cache/node-gyp/40.8.0/include/node -I/home/autocookie/.cache/node-gyp/40.8.0/src -I/home/autocookie/.cache/node-gyp/40.8.0/deps/openssl/config -I/home/autocookie/.cache/node-gyp/40.8.0/deps/openssl/openssl/include -I/home/autocookie/.cache/node-gyp/40.8.0/deps/uv/include -I/home/autocookie/.cache/node-gyp/40.8.0/deps/zlib -I/home/autocookie/.cache/node-gyp/40.8.0/deps/v8/include -I./Release/obj/gen/sqlite3  -fPIC -pthread -Wall -Wextra -Wno-unused-parameter -std=c99 -w -m64 -O3 -O3 -fno-omit-frame-pointer  -MMD -MF ./Release/.deps/Release/obj.target/sqlite3/gen/sqlite3/sqlite3.o.d.raw   -c
+npm error make: Leaving directory '/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3/build'
+npm error /home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/node-abi/index.js:39
+npm error   throw new Error('Could not detect abi for version ' + target + ' and runtime ' + runtime + '.  Updating "node-abi" might help solve this issue if it is a new release of ' + runtime)
+npm error   ^
+npm error
+npm error Error: Could not detect abi for version 40.8.0 and runtime electron.  Updating "node-abi" might help solve this issue if it is a new release of electron
+npm error     at getAbi (/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/node-abi/index.js:39:9)
+npm error     at module.exports (/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/prebuild-install/rc.js:54:57)
+npm error     at Object.<anonymous> (/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/prebuild-install/bin.js:8:27)
+npm error     at Module._compile (node:internal/modules/cjs/loader:1706:14)
+npm error     at Object..js (node:internal/modules/cjs/loader:1839:10)
+npm error     at Module.load (node:internal/modules/cjs/loader:1441:32)
+npm error     at Function._load (node:internal/modules/cjs/loader:1263:12)
+npm error     at TracingChannel.traceSync (node:diagnostics_channel:328:14)
+npm error     at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+npm error     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+npm error
+npm error Node.js v22.22.0
+npm error gyp info it worked if it ends with ok
+npm error gyp verb cli [
+npm error gyp verb cli '/home/autocookie/.nvm/versions/node/v22.22.0/bin/node',
+npm error gyp verb cli '/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/.bin/node-gyp',
+npm error gyp verb cli 'rebuild',
+npm error gyp verb cli '--release'
+npm error gyp verb cli ]
+npm error gyp info using node-gyp@10.2.0-electron.1
+npm error gyp info using node@22.22.0 | linux | x64
+npm error gyp verb clean removing "build" directory
+npm error gyp verb download using dist-url https://electronjs.org/headers
+npm error gyp verb find Python Python is not set from command line or npm configuration
+npm error gyp verb find Python Python is not set from environment variable PYTHON
+npm error gyp verb find Python checking if "python3" can be used
+npm error gyp verb find Python - executing "python3" to get executable path
+npm error gyp sill find Python execFile: exec = "python3"
+npm error gyp sill find Python execFile: args = ["-c","import sys; sys.stdout.buffer.write(sys.executable.encode('utf-8'));"]
+npm error gyp sill find Python execFile: opts = {"env":{"GJS_DEBUG_TOPICS":"JS ERROR;JS LOG","LESSOPEN":"| /usr/bin/lesspipe %s","VSCODE_JDWP_ADAPTER_ENDPOINTS":"/home/autocookie/.antigravity/extensions/vscjava.vscode-java-debug-0.58.5-universal/.noConfigDebugAdapterEndpoints/endpoint-7d9cf9806ef96b0b.txt","npm_package_dev":"","USER":"autocookie","npm_config_user_agent":"npm/10.9.4 node/v22.22.0 linux x64 workspaces/false","XDG_SESSION_TYPE":"wayland","GIT_ASKPASS":"/usr/share/antigravity/resources/app/extensions/git/dist/askpass.sh","npm_node_execpath":"/home/autocookie/.nvm/versions/node/v22.22.0/bin/node","npm_package_resolved":"https://registry.npmjs.org/better-sqlite3/-/better-sqlite3-11.1.2.tgz","CLUTTER_DISABLE_MIPMAPPED_TEXT":"1","SHLVL":"1","npm_config_noproxy":"","ANTIGRAVITY_CLI_ALIAS":"agy","HOME":"/home/autocookie","CHROME_DESKTOP":"antigravity.desktop","OLDPWD":"/home/autocookie/pomaieco/cheesecrab","npm_package_optional":"","TERM_PROGRAM_VERSION":"1.107.0","DESKTOP_SESSION":"ubuntu","NVM_BIN":"/home/autocookie/.nvm/versions/node/v22.22.0/bin","npm_package_json":"/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3/package.json","NVM_INC":"/home/autocookie/.nvm/versions/node/v22.22.0/include/node","GIO_LAUNCHED_DESKTOP_FILE":"/usr/share/applications/antigravity.desktop","GNOME_SHELL_SESSION_MODE":"ubuntu","GTK_MODULES":"gail:atk-bridge","PAGER":"cat","VSCODE_GIT_ASKPASS_MAIN":"/usr/share/antigravity/resources/app/extensions/git/dist/askpass-main.js","npm_config_target":"40.8.0","VSCODE_GIT_ASKPASS_NODE":"/usr/share/antigravity/antigravity","MANAGERPID":"1403","npm_config_userconfig":"/home/autocookie/.npmrc","npm_config_local_prefix":"/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid","npm_package_integrity":"sha512-gujtFwavWU4MSPT+h9B+4pkvZdyOUkH54zgLdIrMmmmd4ZqiBIrRNBzNzYVFO417xo882uP5HBu4GjOfaSrIQw==","SYSTEMD_EXEC_PID":"2819","IM_CONFIG_CHECK_ENV":"1","VSCODE_PYTHON_AUTOACTIVATE_GUARD":"1","GSM_SKIP_SSH_AGENT_WORKAROUND":"true","DBUS_SESSION_BUS_ADDRESS":"unix:path=/run/user/1000/bus","COLORTERM":"truecolor","ANTIGRAVITY_AGENT":"1","GIO_LAUNCHED_DESKTOP_FILE_PID":"87572","COLOR":"0","NVM_DIR":"/home/autocookie/.nvm","DEBUGINFOD_URLS":"https://debuginfod.ubuntu.com ","IM_CONFIG_PHASE":"1","WAYLAND_DISPLAY":"wayland-0","LOGNAME":"autocookie","JOURNAL_STREAM":"9:17361","_":"/home/autocookie/.nvm/versions/node/v22.22.0/bin/npm","npm_config_prefix":"/home/autocookie/.nvm/versions/node/v22.22.0","npm_config_npm_version":"10.9.4","MEMORY_PRESSURE_WATCH":"/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/session.slice/org.gnome.Shell@wayland.service/memory.pressure","XDG_SESSION_CLASS":"user","npm_config_runtime":"electron","USERNAME":"autocookie","TERM":"dumb","npm_config_cache":"/home/autocookie/.npm","GNOME_DESKTOP_SESSION_ID":"this-is-deprecated","FC_FONTATIONS":"1","npm_config_node_gyp":"/home/autocookie/.nvm/versions/node/v22.22.0/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js","PATH":"/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3/node_modules/.bin:/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/node_modules/.bin:/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/.bin:/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/node_modules/.bin:/home/autocookie/pomaieco/cheesecrab/app/src/spaces/node_modules/.bin:/home/autocookie/pomaieco/cheesecrab/app/src/node_modules/.bin:/home/autocookie/pomaieco/cheesecrab/app/node_modules/.bin:/home/autocookie/pomaieco/cheesecrab/node_modules/.bin:/home/autocookie/pomaieco/node_modules/.bin:/home/autocookie/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/home/autocookie/.nvm/versions/node/v22.22.0/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/usr/local/i686-elf/bin:/home/autocookie/go1.25.3.linux-amd64/go/bin:/usr/local/i686-elf/bin:/home/autocookie/go1.25.3.linux-amd64/go/bin:/home/autocookie/.nvm/versions/node/v22.22.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/autocookie/.antigravity/extensions/vscjava.vscode-java-debug-0.58.5-universal/bundled/scripts/noConfigScripts","SESSION_MANAGER":"local/autocookie-HP-ProBook-450-G5:@/tmp/.ICE-unix/2786,unix/autocookie-HP-ProBook-450-G5:/tmp/.ICE-unix/2786","INVOCATION_ID":"13167fdf1b15477f90520f02a718bdb0","NODE":"/home/autocookie/.nvm/versions/node/v22.22.0/bin/node","npm_package_name":"better-sqlite3","XDG_MENU_PREFIX":"gnome-","GNOME_SETUP_DISPLAY":":1","XDG_RUNTIME_DIR":"/run/user/1000","GDK_BACKEND":"wayland","DISPLAY":":0","LANG":"en_US.UTF-8","XDG_CURRENT_DESKTOP":"ubuntu:GNOME","XMODIFIERS":"@im=ibus","XDG_SESSION_DESKTOP":"ubuntu","XAUTHORITY":"/run/user/1000/.mutter-Xwaylandauth.7YBWL3","LS_COLORS":"rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:","SBX_CHROME_API_RQ":"1","VSCODE_GIT_IPC_HANDLE":"/run/user/1000/vscode-git-d8ac615d9f.sock","TERM_PROGRAM":"vscode","npm_config_loglevel":"verbose","npm_lifecycle_script":"prebuild-install || node-gyp rebuild --release","SSH_AUTH_SOCK":"/run/user/1000/keyring/ssh","SHELL":"/bin/bash","VSCODE_JAVA_EXEC":"/usr/lib/jvm/java-21-openjdk-amd64/bin/java","npm_package_version":"11.1.2","npm_lifecycle_event":"install","QT_ACCESSIBILITY":"1","GDMSESSION":"ubuntu","LESSCLOSE":"/usr/bin/lesspipe %s %s","npm_package_dev_optional":"","GJS_DEBUG_OUTPUT":"stderr","VSCODE_GIT_ASKPASS_EXTRA_ARGS":"","QT_IM_MODULE":"ibus","npm_config_globalconfig":"/home/autocookie/.nvm/versions/node/v22.22.0/etc/npmrc","npm_config_init_module":"/home/autocookie/.npm-init.js","npm_package_peer":"","PWD":"/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3","npm_execpath":"/home/autocookie/.nvm/versions/node/v22.22.0/lib/node_modules/npm/bin/npm-cli.js","XDG_CONFIG_DIRS":"/etc/xdg/xdg-ubuntu:/etc/xdg","NVM_CD_FLAGS":"","XDG_DATA_DIRS":"/usr/share/ubuntu:/usr/share/gnome:/home/autocookie/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop","npm_config_global_prefix":"/home/autocookie/.nvm/versions/node/v22.22.0","npm_command":"rebuild","MEMORY_PRESSURE_WRITE":"c29tZSAyMDAwMDAgMjAwMDAwMAA=","npm_config_dist_url":"https://electronjs.org/headers","INIT_CWD":"/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid","EDITOR":"vi"},"shell":false}
+npm error gyp sill find Python execFile result: err = null
+npm error gyp sill find Python execFile result: stdout = "/usr/bin/python3"
+npm error gyp sill find Python execFile result: stderr = ""
+npm error gyp verb find Python - executable path is "/usr/bin/python3"
+npm error gyp verb find Python - executing "/usr/bin/python3" to get version
+npm error gyp sill find Python execFile: exec = "/usr/bin/python3"
+npm error gyp sill find Python execFile: args = ["-c","import sys; print(\"%s.%s.%s\" % sys.version_info[:3]);"]
+npm error gyp sill find Python execFile: opts = {"env":{"GJS_DEBUG_TOPICS":"JS ERROR;JS LOG","LESSOPEN":"| /usr/bin/lesspipe %s","VSCODE_JDWP_ADAPTER_ENDPOINTS":"/home/autocookie/.antigravity/extensions/vscjava.vscode-java-debug-0.58.5-universal/.noConfigDebugAdapterEndpoints/endpoint-7d9cf9806ef96b0b.txt","npm_package_dev":"","USER":"autocookie","npm_config_user_agent":"npm/10.9.4 node/v22.22.0 linux x64 workspaces/false","XDG_SESSION_TYPE":"wayland","GIT_ASKPASS":"/usr/share/antigravity/resources/app/extensions/git/dist/askpass.sh","npm_node_execpath":"/home/autocookie/.nvm/versions/node/v22.22.0/bin/node","npm_package_resolved":"https://registry.npmjs.org/better-sqlite3/-/better-sqlite3-11.1.2.tgz","CLUTTER_DISABLE_MIPMAPPED_TEXT":"1","SHLVL":"1","npm_config_noproxy":"","ANTIGRAVITY_CLI_ALIAS":"agy","HOME":"/home/autocookie","CHROME_DESKTOP":"antigravity.desktop","OLDPWD":"/home/autocookie/pomaieco/cheesecrab","npm_package_optional":"","TERM_PROGRAM_VERSION":"1.107.0","DESKTOP_SESSION":"ubuntu","NVM_BIN":"/home/autocookie/.nvm/versions/node/v22.22.0/bin","npm_package_json":"/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3/package.json","NVM_INC":"/home/autocookie/.nvm/versions/node/v22.22.0/include/node","GIO_LAUNCHED_DESKTOP_FILE":"/usr/share/applications/antigravity.desktop","GNOME_SHELL_SESSION_MODE":"ubuntu","GTK_MODULES":"gail:atk-bridge","PAGER":"cat","VSCODE_GIT_ASKPASS_MAIN":"/usr/share/antigravity/resources/app/extensions/git/dist/askpass-main.js","npm_config_target":"40.8.0","VSCODE_GIT_ASKPASS_NODE":"/usr/share/antigravity/antigravity","MANAGERPID":"1403","npm_config_userconfig":"/home/autocookie/.npmrc","npm_config_local_prefix":"/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid","npm_package_integrity":"sha512-gujtFwavWU4MSPT+h9B+4pkvZdyOUkH54zgLdIrMmmmd4ZqiBIrRNBzNzYVFO417xo882uP5HBu4GjOfaSrIQw==","SYSTEMD_EXEC_PID":"2819","IM_CONFIG_CHECK_ENV":"1","VSCODE_PYTHON_AUTOACTIVATE_GUARD":"1","GSM_SKIP_SSH_AGENT_WORKAROUND":"true","DBUS_SESSION_BUS_ADDRESS":"unix:path=/run/user/1000/bus","COLORTERM":"truecolor","ANTIGRAVITY_AGENT":"1","GIO_LAUNCHED_DESKTOP_FILE_PID":"87572","COLOR":"0","NVM_DIR":"/home/autocookie/.nvm","DEBUGINFOD_URLS":"https://debuginfod.ubuntu.com ","IM_CONFIG_PHASE":"1","WAYLAND_DISPLAY":"wayland-0","LOGNAME":"autocookie","JOURNAL_STREAM":"9:17361","_":"/home/autocookie/.nvm/versions/node/v22.22.0/bin/npm","npm_config_prefix":"/home/autocookie/.nvm/versions/node/v22.22.0","npm_config_npm_version":"10.9.4","MEMORY_PRESSURE_WATCH":"/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/session.slice/org.gnome.Shell@wayland.service/memory.pressure","XDG_SESSION_CLASS":"user","npm_config_runtime":"electron","USERNAME":"autocookie","TERM":"dumb","npm_config_cache":"/home/autocookie/.npm","GNOME_DESKTOP_SESSION_ID":"this-is-deprecated","FC_FONTATIONS":"1","npm_config_node_gyp":"/home/autocookie/.nvm/versions/node/v22.22.0/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js","PATH":"/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3/node_modules/.bin:/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/node_modules/.bin:/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/.bin:/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/node_modules/.bin:/home/autocookie/pomaieco/cheesecrab/app/src/spaces/node_modules/.bin:/home/autocookie/pomaieco/cheesecrab/app/src/node_modules/.bin:/home/autocookie/pomaieco/cheesecrab/app/node_modules/.bin:/home/autocookie/pomaieco/cheesecrab/node_modules/.bin:/home/autocookie/pomaieco/node_modules/.bin:/home/autocookie/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/home/autocookie/.nvm/versions/node/v22.22.0/lib/node_modules/npm/node_modules/@npmcli/run-script/lib/node-gyp-bin:/usr/local/i686-elf/bin:/home/autocookie/go1.25.3.linux-amd64/go/bin:/usr/local/i686-elf/bin:/home/autocookie/go1.25.3.linux-amd64/go/bin:/home/autocookie/.nvm/versions/node/v22.22.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/autocookie/.antigravity/extensions/vscjava.vscode-java-debug-0.58.5-universal/bundled/scripts/noConfigScripts","SESSION_MANAGER":"local/autocookie-HP-ProBook-450-G5:@/tmp/.ICE-unix/2786,unix/autocookie-HP-ProBook-450-G5:/tmp/.ICE-unix/2786","INVOCATION_ID":"13167fdf1b15477f90520f02a718bdb0","NODE":"/home/autocookie/.nvm/versions/node/v22.22.0/bin/node","npm_package_name":"better-sqlite3","XDG_MENU_PREFIX":"gnome-","GNOME_SETUP_DISPLAY":":1","XDG_RUNTIME_DIR":"/run/user/1000","GDK_BACKEND":"wayland","DISPLAY":":0","LANG":"en_US.UTF-8","XDG_CURRENT_DESKTOP":"ubuntu:GNOME","XMODIFIERS":"@im=ibus","XDG_SESSION_DESKTOP":"ubuntu","XAUTHORITY":"/run/user/1000/.mutter-Xwaylandauth.7YBWL3","LS_COLORS":"rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=00:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.avif=01;35:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:*~=00;90:*#=00;90:*.bak=00;90:*.crdownload=00;90:*.dpkg-dist=00;90:*.dpkg-new=00;90:*.dpkg-old=00;90:*.dpkg-tmp=00;90:*.old=00;90:*.orig=00;90:*.part=00;90:*.rej=00;90:*.rpmnew=00;90:*.rpmorig=00;90:*.rpmsave=00;90:*.swp=00;90:*.tmp=00;90:*.ucf-dist=00;90:*.ucf-new=00;90:*.ucf-old=00;90:","SBX_CHROME_API_RQ":"1","VSCODE_GIT_IPC_HANDLE":"/run/user/1000/vscode-git-d8ac615d9f.sock","TERM_PROGRAM":"vscode","npm_config_loglevel":"verbose","npm_lifecycle_script":"prebuild-install || node-gyp rebuild --release","SSH_AUTH_SOCK":"/run/user/1000/keyring/ssh","SHELL":"/bin/bash","VSCODE_JAVA_EXEC":"/usr/lib/jvm/java-21-openjdk-amd64/bin/java","npm_package_version":"11.1.2","npm_lifecycle_event":"install","QT_ACCESSIBILITY":"1","GDMSESSION":"ubuntu","LESSCLOSE":"/usr/bin/lesspipe %s %s","npm_package_dev_optional":"","GJS_DEBUG_OUTPUT":"stderr","VSCODE_GIT_ASKPASS_EXTRA_ARGS":"","QT_IM_MODULE":"ibus","npm_config_globalconfig":"/home/autocookie/.nvm/versions/node/v22.22.0/etc/npmrc","npm_config_init_module":"/home/autocookie/.npm-init.js","npm_package_peer":"","PWD":"/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3","npm_execpath":"/home/autocookie/.nvm/versions/node/v22.22.0/lib/node_modules/npm/bin/npm-cli.js","XDG_CONFIG_DIRS":"/etc/xdg/xdg-ubuntu:/etc/xdg","NVM_CD_FLAGS":"","XDG_DATA_DIRS":"/usr/share/ubuntu:/usr/share/gnome:/home/autocookie/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop","npm_config_global_prefix":"/home/autocookie/.nvm/versions/node/v22.22.0","npm_command":"rebuild","MEMORY_PRESSURE_WRITE":"c29tZSAyMDAwMDAgMjAwMDAwMAA=","npm_config_dist_url":"https://electronjs.org/headers","INIT_CWD":"/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid","EDITOR":"vi"},"shell":false}
+npm error gyp sill find Python execFile result: err = null
+npm error gyp sill find Python execFile result: stdout = "3.12.3\n"
+npm error gyp sill find Python execFile result: stderr = ""
+npm error gyp verb find Python - version is "3.12.3"
+npm error gyp info find Python using Python version 3.12.3 found at "/usr/bin/python3"
+npm error gyp verb get node dir compiling against --target node version: 40.8.0
+npm error gyp verb download using dist-url https://electronjs.org/headers
+npm error gyp verb install input version string "40.8.0"
+npm error gyp verb install installing version: 40.8.0
+npm error gyp verb install --ensure was passed, so won't reinstall if already installed
+npm error gyp verb install version is already installed, need to check "installVersion"
+npm error gyp verb got "installVersion" 11
+npm error gyp verb needs "installVersion" 11
+npm error gyp verb install version is good
+npm error gyp verb get node dir target node version installed: 40.8.0
+npm error gyp verb build dir attempting to create "build" dir: /home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3/build
+npm error gyp verb build dir "build" dir needed to be created? Yes
+npm error gyp verb build/config.gypi creating config file
+npm error gyp sill build/config.gypi {
+npm error gyp sill build/config.gypi target_defaults: {
+npm error gyp sill build/config.gypi cflags: [],
+npm error gyp sill build/config.gypi configurations: { Debug: [Object], Release: [Object] },
+npm error gyp sill build/config.gypi default_configuration: 'Release',
+npm error gyp sill build/config.gypi defines: [],
+npm error gyp sill build/config.gypi include_dirs: [],
+npm error gyp sill build/config.gypi libraries: []
+npm error gyp sill build/config.gypi },
+npm error gyp sill build/config.gypi variables: {
+npm error gyp sill build/config.gypi arm_fpu: 'neon',
+npm error gyp sill build/config.gypi asan: 0,
+npm error gyp sill build/config.gypi build_v8_with_gn: 'false',
+npm error gyp sill build/config.gypi built_with_electron: 1,
+npm error gyp sill build/config.gypi control_flow_guard: 'false',
+npm error gyp sill build/config.gypi coverage: 'false',
+npm error gyp sill build/config.gypi dcheck_always_on: 0,
+npm error gyp sill build/config.gypi debug_nghttp2: 'false',
+npm error gyp sill build/config.gypi debug_node: 'false',
+npm error gyp sill build/config.gypi enable_lto: 'false',
+npm error gyp sill build/config.gypi enable_pgo_generate: 'false',
+npm error gyp sill build/config.gypi enable_pgo_use: 'false',
+npm error gyp sill build/config.gypi error_on_warn: 'false',
+npm error gyp sill build/config.gypi force_dynamic_crt: 0,
+npm error gyp sill build/config.gypi host_arch: 'x64',
+npm error gyp sill build/config.gypi icu_data_in: '..\\..\\deps\\icu-tmp\\icudt78l.dat',
+npm error gyp sill build/config.gypi icu_endianness: 'l',
+npm error gyp sill build/config.gypi icu_gyp_path: 'tools/icu/icu-generic.gyp',
+npm error gyp sill build/config.gypi icu_path: 'deps/icu-small',
+npm error gyp sill build/config.gypi icu_small: 'false',
+npm error gyp sill build/config.gypi icu_ver_major: '78',
+npm error gyp sill build/config.gypi libdir: 'lib',
+npm error gyp sill build/config.gypi llvm_version: '0.0',
+npm error gyp sill build/config.gypi napi_build_version: '10',
+npm error gyp sill build/config.gypi node_builtin_shareable_builtins: [ 'deps/undici/undici.js', 'deps/amaro/dist/index.js' ],
+npm error gyp sill build/config.gypi node_byteorder: 'little',
+npm error gyp sill build/config.gypi node_cctest_sources: [
+npm error gyp sill build/config.gypi 'src/node_snapshot_stub.cc',
+npm error gyp sill build/config.gypi 'test/cctest/inspector/test_network_requests_buffer.cc',
+npm error gyp sill build/config.gypi 'test/cctest/inspector/test_node_protocol.cc',
+npm error gyp sill build/config.gypi 'test/cctest/node_test_fixture.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_aliased_buffer.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_base64.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_base_object_ptr.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_cppgc.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_crypto_clienthello.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_dataqueue.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_environment.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_inspector_socket.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_inspector_socket_server.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_json_utils.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_linked_binding.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_lru_cache.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_node_api.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_node_crypto.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_node_crypto_env.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_node_postmortem_metadata.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_node_task_runner.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_path.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_per_process.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_platform.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_quic_cid.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_quic_error.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_quic_tokens.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_report.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_sockaddr.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_string_bytes.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_traced_value.cc',
+npm error gyp sill build/config.gypi 'test/cctest/test_util.cc',
+npm error gyp sill build/config.gypi 'test/cctest/node_test_fixture.h'
+npm error gyp sill build/config.gypi ],
+npm error gyp sill build/config.gypi node_debug_lib: 'false',
+npm error gyp sill build/config.gypi node_enable_d8: 'false',
+npm error gyp sill build/config.gypi node_enable_v8_vtunejit: 'false',
+npm error gyp sill build/config.gypi node_enable_v8windbg: 'false',
+npm error gyp sill build/config.gypi node_fipsinstall: 'false',
+npm error gyp sill build/config.gypi node_install_corepack: 'true',
+npm error gyp sill build/config.gypi node_install_npm: 'true',
+npm error gyp sill build/config.gypi node_library_files: [
+npm error gyp sill build/config.gypi 'lib/_http_agent.js',
+npm error gyp sill build/config.gypi 'lib/_http_client.js',
+npm error gyp sill build/config.gypi 'lib/_http_common.js',
+npm error gyp sill build/config.gypi 'lib/_http_incoming.js',
+npm error gyp sill build/config.gypi 'lib/_http_outgoing.js',
+npm error gyp sill build/config.gypi 'lib/_http_server.js',
+npm error gyp sill build/config.gypi 'lib/_stream_duplex.js',
+npm error gyp sill build/config.gypi 'lib/_stream_passthrough.js',
+npm error gyp sill build/config.gypi 'lib/_stream_readable.js',
+npm error gyp sill build/config.gypi 'lib/_stream_transform.js',
+npm error gyp sill build/config.gypi 'lib/_stream_wrap.js',
+npm error gyp sill build/config.gypi 'lib/_stream_writable.js',
+npm error gyp sill build/config.gypi 'lib/_tls_common.js',
+npm error gyp sill build/config.gypi 'lib/_tls_wrap.js',
+npm error gyp sill build/config.gypi 'lib/assert.js',
+npm error gyp sill build/config.gypi 'lib/assert/strict.js',
+npm error gyp sill build/config.gypi 'lib/async_hooks.js',
+npm error gyp sill build/config.gypi 'lib/buffer.js',
+npm error gyp sill build/config.gypi 'lib/child_process.js',
+npm error gyp sill build/config.gypi 'lib/cluster.js',
+npm error gyp sill build/config.gypi 'lib/console.js',
+npm error gyp sill build/config.gypi 'lib/constants.js',
+npm error gyp sill build/config.gypi 'lib/crypto.js',
+npm error gyp sill build/config.gypi 'lib/dgram.js',
+npm error gyp sill build/config.gypi 'lib/diagnostics_channel.js',
+npm error gyp sill build/config.gypi 'lib/dns.js',
+npm error gyp sill build/config.gypi 'lib/dns/promises.js',
+npm error gyp sill build/config.gypi 'lib/domain.js',
+npm error gyp sill build/config.gypi 'lib/events.js',
+npm error gyp sill build/config.gypi 'lib/fs.js',
+npm error gyp sill build/config.gypi 'lib/fs/promises.js',
+npm error gyp sill build/config.gypi 'lib/http.js',
+npm error gyp sill build/config.gypi 'lib/http2.js',
+npm error gyp sill build/config.gypi 'lib/https.js',
+npm error gyp sill build/config.gypi 'lib/inspector.js',
+npm error gyp sill build/config.gypi 'lib/inspector/promises.js',
+npm error gyp sill build/config.gypi 'lib/internal/abort_controller.js',
+npm error gyp sill build/config.gypi 'lib/internal/assert.js',
+npm error gyp sill build/config.gypi 'lib/internal/assert/assertion_error.js',
+npm error gyp sill build/config.gypi 'lib/internal/assert/calltracker.js',
+npm error gyp sill build/config.gypi 'lib/internal/assert/myers_diff.js',
+npm error gyp sill build/config.gypi 'lib/internal/assert/utils.js',
+npm error gyp sill build/config.gypi 'lib/internal/async_context_frame.js',
+npm error gyp sill build/config.gypi 'lib/internal/async_hooks.js',
+npm error gyp sill build/config.gypi 'lib/internal/async_local_storage/async_context_frame.js',
+npm error gyp sill build/config.gypi 'lib/internal/async_local_storage/async_hooks.js',
+npm error gyp sill build/config.gypi 'lib/internal/blob.js',
+npm error gyp sill build/config.gypi 'lib/internal/blocklist.js',
+npm error gyp sill build/config.gypi 'lib/internal/bootstrap/node.js',
+npm error gyp sill build/config.gypi 'lib/internal/bootstrap/realm.js',
+npm error gyp sill build/config.gypi 'lib/internal/bootstrap/shadow_realm.js',
+npm error gyp sill build/config.gypi 'lib/internal/bootstrap/switches/does_not_own_process_state.js',
+npm error gyp sill build/config.gypi 'lib/internal/bootstrap/switches/does_own_process_state.js',
+npm error gyp sill build/config.gypi 'lib/internal/bootstrap/switches/is_main_thread.js',
+npm error gyp sill build/config.gypi 'lib/internal/bootstrap/switches/is_not_main_thread.js',
+npm error gyp sill build/config.gypi 'lib/internal/bootstrap/web/exposed-wildcard.js',
+npm error gyp sill build/config.gypi 'lib/internal/bootstrap/web/exposed-window-or-worker.js',
+npm error gyp sill build/config.gypi 'lib/internal/buffer.js',
+npm error gyp sill build/config.gypi 'lib/internal/child_process.js',
+npm error gyp sill build/config.gypi 'lib/internal/child_process/serialization.js',
+npm error gyp sill build/config.gypi 'lib/internal/cli_table.js',
+npm error gyp sill build/config.gypi 'lib/internal/cluster/child.js',
+npm error gyp sill build/config.gypi 'lib/internal/cluster/primary.js',
+npm error gyp sill build/config.gypi 'lib/internal/cluster/round_robin_handle.js',
+npm error gyp sill build/config.gypi 'lib/internal/cluster/shared_handle.js',
+npm error gyp sill build/config.gypi 'lib/internal/cluster/utils.js',
+npm error gyp sill build/config.gypi 'lib/internal/cluster/worker.js',
+npm error gyp sill build/config.gypi 'lib/internal/console/constructor.js',
+npm error gyp sill build/config.gypi 'lib/internal/console/global.js',
+npm error gyp sill build/config.gypi 'lib/internal/constants.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/aes.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/argon2.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/certificate.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/cfrg.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/chacha20_poly1305.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/cipher.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/diffiehellman.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/ec.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/hash.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/hashnames.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/hkdf.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/kem.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/keygen.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/keys.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/mac.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/ml_dsa.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/ml_kem.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/pbkdf2.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/random.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/rsa.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/scrypt.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/sig.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/util.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/webcrypto.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/webidl.js',
+npm error gyp sill build/config.gypi 'lib/internal/crypto/x509.js',
+npm error gyp sill build/config.gypi 'lib/internal/data_url.js',
+npm error gyp sill build/config.gypi 'lib/internal/debugger/inspect.js',
+npm error gyp sill build/config.gypi 'lib/internal/debugger/inspect_client.js',
+npm error gyp sill build/config.gypi 'lib/internal/debugger/inspect_repl.js',
+npm error gyp sill build/config.gypi ... 252 more items
+npm error gyp sill build/config.gypi ],
+npm error gyp sill build/config.gypi node_module_version: 143,
+npm error gyp sill build/config.gypi node_no_browser_globals: 'false',
+npm error gyp sill build/config.gypi node_prefix: '\\usr\\local',
+npm error gyp sill build/config.gypi node_quic: 'false',
+npm error gyp sill build/config.gypi node_release_urlbase: '',
+npm error gyp sill build/config.gypi node_shared: 'false',
+npm error gyp sill build/config.gypi node_shared_ada: 'false',
+npm error gyp sill build/config.gypi node_shared_brotli: 'false',
+npm error gyp sill build/config.gypi node_shared_cares: 'false',
+npm error gyp sill build/config.gypi node_shared_gtest: 'false',
+npm error gyp sill build/config.gypi node_shared_hdr_histogram: 'false',
+npm error gyp sill build/config.gypi node_shared_http_parser: 'false',
+npm error gyp sill build/config.gypi node_shared_libuv: 'false',
+npm error gyp sill build/config.gypi node_shared_merve: 'false',
+npm error gyp sill build/config.gypi node_shared_nbytes: 'false',
+npm error gyp sill build/config.gypi node_shared_nghttp2: 'false',
+npm error gyp sill build/config.gypi node_shared_nghttp3: 'false',
+npm error gyp sill build/config.gypi node_shared_ngtcp2: 'false',
+npm error gyp sill build/config.gypi node_shared_openssl: 'false',
+npm error gyp sill build/config.gypi node_shared_simdjson: 'false',
+npm error gyp sill build/config.gypi node_shared_simdutf: 'false',
+npm error gyp sill build/config.gypi node_shared_sqlite: 'false',
+npm error gyp sill build/config.gypi node_shared_uvwasi: 'false',
+npm error gyp sill build/config.gypi node_shared_zlib: 'false',
+npm error gyp sill build/config.gypi node_shared_zstd: 'false',
+npm error gyp sill build/config.gypi node_tag: '',
+npm error gyp sill build/config.gypi node_target_type: 'executable',
+npm error gyp sill build/config.gypi node_use_amaro: 'true',
+npm error gyp sill build/config.gypi node_use_bundled_v8: 'true',
+npm error gyp sill build/config.gypi node_use_node_code_cache: 'false',
+npm error gyp sill build/config.gypi node_use_node_snapshot: 'false',
+npm error gyp sill build/config.gypi node_use_openssl: 'true',
+npm error gyp sill build/config.gypi node_use_sqlite: 'true',
+npm error gyp sill build/config.gypi node_use_v8_platform: 'true',
+npm error gyp sill build/config.gypi node_with_ltcg: 'true',
+npm error gyp sill build/config.gypi node_without_node_options: 'false',
+npm error gyp sill build/config.gypi node_write_snapshot_as_array_literals: 'true',
+npm error gyp sill build/config.gypi openssl_is_fips: 'false',
+npm error gyp sill build/config.gypi openssl_no_asm: 1,
+npm error gyp sill build/config.gypi openssl_quic: 'false',
+npm error gyp sill build/config.gypi ossfuzz: 'false',
+npm error gyp sill build/config.gypi shlib_suffix: 'so.137',
+npm error gyp sill build/config.gypi single_executable_application: 'true',
+npm error gyp sill build/config.gypi suppress_all_error_on_warn: 'false',
+npm error gyp sill build/config.gypi target_arch: 'x64',
+npm error gyp sill build/config.gypi ubsan: 0,
+npm error gyp sill build/config.gypi use_ccache_win: 0,
+npm error gyp sill build/config.gypi use_prefix_to_find_headers: 'false',
+npm error gyp sill build/config.gypi using_electron_config_gypi: 1,
+npm error gyp sill build/config.gypi v8_enable_31bit_smis_on_64bit_arch: 1,
+npm error gyp sill build/config.gypi v8_enable_extensible_ro_snapshot: 0,
+npm error gyp sill build/config.gypi v8_enable_external_code_space: 1,
+npm error gyp sill build/config.gypi v8_enable_gdbjit: 0,
+npm error gyp sill build/config.gypi v8_enable_hugepage: 0,
+npm error gyp sill build/config.gypi v8_enable_i18n_support: 1,
+npm error gyp sill build/config.gypi v8_enable_inspector: 1,
+npm error gyp sill build/config.gypi v8_enable_javascript_promise_hooks: 1,
+npm error gyp sill build/config.gypi v8_enable_lite_mode: 0,
+npm error gyp sill build/config.gypi v8_enable_maglev: 1,
+npm error gyp sill build/config.gypi v8_enable_object_print: 1,
+npm error gyp sill build/config.gypi v8_enable_pointer_compression: 1,
+npm error gyp sill build/config.gypi v8_enable_pointer_compression_shared_cage: 0,
+npm error gyp sill build/config.gypi v8_enable_sandbox: 1,
+npm error gyp sill build/config.gypi v8_enable_webassembly: 1,
+npm error gyp sill build/config.gypi v8_optimized_debug: 1,
+npm error gyp sill build/config.gypi v8_promise_internal_field_count: 1,
+npm error gyp sill build/config.gypi v8_random_seed: 0,
+npm error gyp sill build/config.gypi v8_trace_maps: 0,
+npm error gyp sill build/config.gypi v8_use_siphash: 1,
+npm error gyp sill build/config.gypi want_separate_host_toolset: 1,
+npm error gyp sill build/config.gypi nodedir: '/home/autocookie/.cache/node-gyp/40.8.0',
+npm error gyp sill build/config.gypi python: '/usr/bin/python3',
+npm error gyp sill build/config.gypi standalone_static_library: 1,
+npm error gyp sill build/config.gypi user_agent: 'npm/10.9.4 node/v22.22.0 linux x64 workspaces/false',
+npm error gyp sill build/config.gypi target: '40.8.0',
+npm error gyp sill build/config.gypi userconfig: '/home/autocookie/.npmrc',
+npm error gyp sill build/config.gypi local_prefix: '/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid',
+npm error gyp sill build/config.gypi prefix: '/home/autocookie/.nvm/versions/node/v22.22.0',
+npm error gyp sill build/config.gypi npm_version: '10.9.4',
+npm error gyp sill build/config.gypi runtime: 'electron',
+npm error gyp sill build/config.gypi cache: '/home/autocookie/.npm',
+npm error gyp sill build/config.gypi node_gyp: '/home/autocookie/.nvm/versions/node/v22.22.0/lib/node_modules/npm/node_modules/node-gyp/bin/node-gyp.js',
+npm error gyp sill build/config.gypi globalconfig: '/home/autocookie/.nvm/versions/node/v22.22.0/etc/npmrc',
+npm error gyp sill build/config.gypi init_module: '/home/autocookie/.npm-init.js',
+npm error gyp sill build/config.gypi global_prefix: '/home/autocookie/.nvm/versions/node/v22.22.0'
+npm error gyp sill build/config.gypi }
+npm error gyp sill build/config.gypi }
+npm error gyp verb build/config.gypi writing out config file: /home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3/build/config.gypi
+npm error gyp verb config.gypi checking for gypi file: /home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3/config.gypi
+npm error gyp verb common.gypi checking for gypi file: /home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3/common.gypi
+npm error gyp verb gyp gyp format was not specified; forcing "make"
+npm error gyp info spawn /usr/bin/python3
+npm error gyp info spawn args [
+npm error gyp info spawn args '/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/@electron/node-gyp/gyp/gyp_main.py',
+npm error gyp info spawn args 'binding.gyp',
+npm error gyp info spawn args '-f',
+npm error gyp info spawn args 'make',
+npm error gyp info spawn args '-I',
+npm error gyp info spawn args '/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3/build/config.gypi',
+npm error gyp info spawn args '-I',
+npm error gyp info spawn args '/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/@electron/node-gyp/addon.gypi',
+npm error gyp info spawn args '-I',
+npm error gyp info spawn args '/home/autocookie/.cache/node-gyp/40.8.0/include/node/common.gypi',
+npm error gyp info spawn args '-Dlibrary=shared_library',
+npm error gyp info spawn args '-Dvisibility=default',
+npm error gyp info spawn args '-Dnode_root_dir=/home/autocookie/.cache/node-gyp/40.8.0',
+npm error gyp info spawn args '-Dnode_gyp_dir=/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/@electron/node-gyp',
+npm error gyp info spawn args '-Dnode_lib_file=/home/autocookie/.cache/node-gyp/40.8.0/<(target_arch)/node.lib',
+npm error gyp info spawn args '-Dmodule_root_dir=/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3',
+npm error gyp info spawn args '-Dnode_engine=v8',
+npm error gyp info spawn args '--depth=.',
+npm error gyp info spawn args '--no-parallel',
+npm error gyp info spawn args '--generator-output',
+npm error gyp info spawn args 'build',
+npm error gyp info spawn args '-Goutput_dir=.'
+npm error gyp info spawn args ]
+npm error gyp verb build type Release
+npm error gyp verb architecture x64
+npm error gyp verb node dev dir /home/autocookie/.cache/node-gyp/40.8.0
+npm error gyp verb python /usr/bin/python3
+npm error gyp verb `which` succeeded for `make` /usr/bin/make
+npm error gyp verb bin symlinks created symlink to "/usr/bin/python3" in "/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3/build/node_gyp_bins" and added to PATH
+npm error gyp info spawn make
+npm error gyp info spawn args [ 'V=1', 'BUILDTYPE=Release', '-C', 'build' ]
+npm error Release/obj/gen/sqlite3/sqlite3.c:257688:1: fatal error: opening dependency file ./Release/.deps/Release/obj.target/sqlite3/gen/sqlite3/sqlite3.o.d.raw: No such file or directory
+npm error 257688 | SQLITE_API const char *sqlite3_sourceid(void){ return SQLITE_SOURCE_ID; }
+npm error        | ^~~~~~~~~~
+npm error compilation terminated.
+npm error make: *** [deps/sqlite3.target.mk:214: Release/obj.target/sqlite3/gen/sqlite3/sqlite3.o] Error 1
+npm error gyp ERR! build error 
+npm error gyp ERR! stack Error: `make` failed with exit code: 2
+npm error gyp ERR! stack at ChildProcess.<anonymous> (/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/@electron/node-gyp/lib/build.js:215:23)
+npm error gyp ERR! System Linux 6.17.0-14-generic
+npm error gyp ERR! command "/home/autocookie/.nvm/versions/node/v22.22.0/bin/node" "/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/.bin/node-gyp" "rebuild" "--release"
+npm error gyp ERR! cwd /home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/better-sqlite3
+npm error gyp ERR! node -v v22.22.0
+npm error gyp ERR! node-gyp -v v10.2.0-electron.1
+npm error gyp ERR! not ok
+npm verbose cwd /home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid
+npm verbose os Linux 6.17.0-14-generic
+npm verbose node v22.22.0
+npm verbose npm  v10.9.4
+npm verbose exit 1
+npm verbose code 1
+npm error A complete log of this run can be found in: /home/autocookie/.npm/_logs/2026-03-10T05_07_16_456Z-debug-0.log
