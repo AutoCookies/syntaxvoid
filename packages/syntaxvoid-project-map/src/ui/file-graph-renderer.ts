@@ -268,11 +268,9 @@ export default class FileGraphRenderer {
 
                 // Filter Visibility
                 if (isFiltered && !isEdgeVisible(s, t)) {
-                    // If heavily filtered, maybe don't draw at all? 
-                    // Or draw extremely faint
-                    ctx.globalAlpha = 0.02;
+                    ctx.globalAlpha = 0.05;
                 } else {
-                    ctx.globalAlpha = 0.2;
+                    ctx.globalAlpha = 0.4;
                 }
 
                 const isHoverPath = hoveredNode && (s === hoveredNode || t === hoveredNode);
@@ -284,12 +282,12 @@ export default class FileGraphRenderer {
 
                 if (edge.circular) {
                     ctx.strokeStyle = '#e74c3c';
-                    ctx.globalAlpha = isDimmed ? 0.05 : 0.8;
+                    ctx.globalAlpha = isDimmed ? 0.1 : 0.9;
                 } else {
-                    ctx.strokeStyle = '#555';
-                    ctx.globalAlpha = isDimmed ? (isFiltered ? 0.02 : 0.05) : 0.2;
-                    if (isHoverPath) ctx.globalAlpha = 0.8;
-                    if (isFiltered && isEdgeVisible(s, t) && !isDimmed) ctx.globalAlpha = 0.5; // Highlight filtered edges
+                    ctx.strokeStyle = '#888'; // Lighter gray for better visibility
+                    ctx.globalAlpha = isDimmed ? (isFiltered ? 0.05 : 0.1) : 0.4;
+                    if (isHoverPath) ctx.globalAlpha = 1.0;
+                    if (isFiltered && isEdgeVisible(s, t) && !isDimmed) ctx.globalAlpha = 0.7; // Highlight filtered edges
                 }
 
                 ctx.stroke();

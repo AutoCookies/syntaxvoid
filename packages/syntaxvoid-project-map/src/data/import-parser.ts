@@ -103,6 +103,13 @@ export default class ImportParser {
             imports.add(match[1]);
         }
 
+        // Side-effect import
+        // import '...'
+        const reSideEffect = /^import\s+['"]([^'"]+)['"]/gm;
+        while ((match = reSideEffect.exec(content)) !== null) {
+            imports.add(match[1]);
+        }
+
         return Array.from(imports);
     }
 
@@ -114,6 +121,12 @@ export default class ImportParser {
         while ((match = reInclude.exec(content)) !== null) {
             imports.add(match[1]);
         }
+
+        // #include <...> (system/include path)
+        const reIncludeBracket = /#include\s+<([^>]+)>/g;
+        while ((match = reIncludeBracket.exec(content)) !== null) {
+            imports.add(match[1]);
+        }
         return Array.from(imports);
     }
 
@@ -121,14 +134,14 @@ export default class ImportParser {
         const imports = new Set<string>();
 
         // from ... import ...
-        const reFrom = /^from\s+([\w\.]+)\s+import/gm;
+        const reFrom = /^\s*from\s+([\w\.]+)\s+import/gm;
         let match;
         while ((match = reFrom.exec(content)) !== null) {
             imports.add(match[1].replace(/\./g, '/')); // Convert dots to paths
         }
 
         // import ...
-        const reImport = /^import\s+([\w\.]+)/gm;
+        const reImport = /^\s*import\s+([\w\.]+)/gm;
         while ((match = reImport.exec(content)) !== null) {
             imports.add(match[1].replace(/\./g, '/'));
         }

@@ -23,10 +23,10 @@ module.exports = class TitleBar {
   dblclickHandler() {
     // User preference deciding which action to take on a title bar double-click
     switch (
-      this.applicationDelegate.getUserDefault(
-        'AppleActionOnDoubleClick',
-        'string'
-      )
+    this.applicationDelegate.getUserDefault(
+      'AppleActionOnDoubleClick',
+      'string'
+    )
     ) {
       case 'Minimize':
         this.applicationDelegate.minimizeWindow();
@@ -46,8 +46,9 @@ module.exports = class TitleBar {
   }
 
   updateWindowSheetOffset() {
-    this.applicationDelegate
-      .getCurrentWindow()
-      .setSheetOffset(this.element.offsetHeight);
+    const currentWindow = this.applicationDelegate.getCurrentWindow();
+    if (typeof currentWindow.setSheetOffset === 'function') {
+      currentWindow.setSheetOffset(this.element.offsetHeight);
+    }
   }
 };

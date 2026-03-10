@@ -825,6 +825,9 @@ class AtomEnvironment {
   //   * `height` The window's height {Number}.
   getWindowDimensions() {
     const browserWindow = this.getCurrentWindow();
+    if (!browserWindow) {
+      return this.windowDimensions || { x: 0, y: 0, width: 800, height: 600, maximized: false };
+    }
     const [x, y] = browserWindow.getPosition();
     const [width, height] = browserWindow.getSize();
     const maximized = browserWindow.isMaximized();
@@ -1008,7 +1011,7 @@ class AtomEnvironment {
       this.deserializeTimings.atom = Date.now() - startTime;
 
       if (
-        process.platform === 'darwin' &&
+        (process.platform === 'darwin' || process.platform === 'linux') &&
         this.config.get('core.titleBar') === 'custom'
       ) {
         this.workspace.addHeaderPanel({
@@ -1021,7 +1024,7 @@ class AtomEnvironment {
         this.document.body.classList.add('custom-title-bar');
       }
       if (
-        process.platform === 'darwin' &&
+        (process.platform === 'darwin' || process.platform === 'linux') &&
         this.config.get('core.titleBar') === 'custom-inset'
       ) {
         this.workspace.addHeaderPanel({
@@ -1034,7 +1037,7 @@ class AtomEnvironment {
         this.document.body.classList.add('custom-inset-title-bar');
       }
       if (
-        process.platform === 'darwin' &&
+        (process.platform === 'darwin' || process.platform === 'linux') &&
         this.config.get('core.titleBar') === 'hidden'
       ) {
         this.document.body.classList.add('hidden-title-bar');
