@@ -1,0 +1,303 @@
+yarn run v1.22.22
+$ electron-rebuild
+- Searching dependency tree
+
+make: Entering directory '/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/@pulsar-edit/fuzzy-native/build'
+  CXX(target) Release/obj.target/fuzzy-native/src/binding.o
+In file included from /home/autocookie/.electron-gyp/40.8.0/include/node/v8-handle-base.h:8,
+                 from /home/autocookie/.electron-gyp/40.8.0/include/node/v8-local-handle.h:13,
+                 from /home/autocookie/.electron-gyp/40.8.0/include/node/v8-array-buffer.h:12,
+                 from /home/autocookie/.electron-gyp/40.8.0/include/node/v8.h:24,
+                 from /home/autocookie/.electron-gyp/40.8.0/include/node/node.h:80,
+                 from ../../../nan/nan.h:62,
+                 from ../src/binding.cpp:1:
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-internal.h:431:1: warning: multi-line comment [-Wcomment]
+  431 | //         / \
+      | ^
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-internal.h:433:1: warning: multi-line comment [-Wcomment]
+  433 | //       / \
+      | ^
+In file included from /home/autocookie/.electron-gyp/40.8.0/include/node/v8-array-buffer.h:14:
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-object.h: In static member function ‘static void* v8::Object::GetAlignedPointerFromInternalField(const v8::PersistentBase<v8::Object>&, int)’:
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-object.h:564:79: warning: ‘void* v8::Object::GetAlignedPointerFromInternalField(int)’ is deprecated: Use GetAlignedPointerFromInternalField with EmbedderDataTypeTag parameter instead. [-Wdeprecated-declarations]
+  564 |     return object.template value<Object>()->GetAlignedPointerFromInternalField(
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+  565 |         index);
+      |         ~~~~~~                                                                 
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-object.h:537:19: note: declared here
+  537 |   V8_INLINE void* GetAlignedPointerFromInternalField(int index) {
+      |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-object.h: In static member function ‘static void* v8::Object::GetAlignedPointerFromInternalField(const v8::BasicTracedReference<v8::Object>&, int)’:
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-object.h:581:79: warning: ‘void* v8::Object::GetAlignedPointerFromInternalField(int)’ is deprecated: Use GetAlignedPointerFromInternalField with EmbedderDataTypeTag parameter instead. [-Wdeprecated-declarations]
+  581 |     return object.template value<Object>()->GetAlignedPointerFromInternalField(
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+  582 |         index);
+      |         ~~~~~~                                                                 
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-object.h:537:19: note: declared here
+  537 |   V8_INLINE void* GetAlignedPointerFromInternalField(int index) {
+      |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../nan/nan.h: At global scope:
+../../../nan/nan.h:208:40: error: expected template-name before ‘<’ token
+  208 |     public v8::CopyablePersistentTraits<T> {};
+      |                                        ^
+../../../nan/nan.h:208:40: error: expected ‘{’ before ‘<’ token
+In file included from ../../../nan/nan.h:290:
+../../../nan/nan_maybe_43_inl.h: In function ‘Nan::Maybe<bool> Nan::SetPrototype(v8::Local<v8::Object>, v8::Local<v8::Value>)’:
+../../../nan/nan_maybe_43_inl.h:210:15: error: ‘class v8::Object’ has no member named ‘SetPrototype’; did you mean ‘SetPrototypeV2’?
+  210 |   return obj->SetPrototype(isolate->GetCurrentContext(), prototype);
+      |               ^~~~~~~~~~~~
+      |               SetPrototypeV2
+../../../nan/nan.h: At global scope:
+../../../nan/nan.h:424:59: error: ‘REPLACE_INVALID_UTF8’ is not a member of ‘v8::String’
+  424 |   static const unsigned kReplaceInvalidUtf8 = v8::String::REPLACE_INVALID_UTF8;
+      |                                                           ^~~~~~~~~~~~~~~~~~~~
+../../../nan/nan.h: In function ‘bool Nan::IdleNotification(int)’:
+../../../nan/nan.h:688:39: error: ‘class v8::Isolate’ has no member named ‘IdleNotificationDeadline’
+  688 |     return v8::Isolate::GetCurrent()->IdleNotificationDeadline(
+      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~
+../../../nan/nan.h: In function ‘void* Nan::GetInternalFieldPointer(v8::Local<v8::Object>, int)’:
+../../../nan/nan.h:801:54: warning: ‘void* v8::Object::GetAlignedPointerFromInternalField(int)’ is deprecated: Use GetAlignedPointerFromInternalField with EmbedderDataTypeTag parameter instead. [-Wdeprecated-declarations]
+  801 |     return object->GetAlignedPointerFromInternalField(index);
+      |            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-object.h:537:19: note: declared here
+  537 |   V8_INLINE void* GetAlignedPointerFromInternalField(int index) {
+      |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../nan/nan.h: In function ‘void Nan::SetInternalFieldPointer(v8::Local<v8::Object>, int, void*)’:
+../../../nan/nan.h:808:45: warning: ‘void v8::Object::SetAlignedPointerInInternalField(int, void*)’ is deprecated: Use SetAlignedPointerInInternalField with EmbedderDataTypeTag parameter instead. [-Wdeprecated-declarations]
+  808 |     object->SetAlignedPointerInInternalField(index, value);
+      |     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-object.h:596:8: note: declared here
+  596 |   void SetAlignedPointerInInternalField(int index, void* value) {
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../../../nan/nan.h: In constructor ‘Nan::Utf8String::Utf8String(v8::Local<v8::Value>)’:
+../../../nan/nan.h:1152:25: error: ‘NO_NULL_TERMINATION’ is not a member of ‘v8::String’
+ 1152 |             v8::String::NO_NULL_TERMINATION | imp::kReplaceInvalidUtf8;
+      |                         ^~~~~~~~~~~~~~~~~~~
+../../../nan/nan.h:1154:27: error: ‘class v8::String’ has no member named ‘WriteUtf8’; did you mean ‘WriteUtf8V2’?
+ 1154 |         length_ = string->WriteUtf8(v8::Isolate::GetCurrent(), str_,
+      |                           ^~~~~~~~~
+      |                           WriteUtf8V2
+../../../nan/nan.h: In function ‘v8::Local<v8::Value> Nan::Encode(const void*, size_t, Encoding)’:
+../../../nan/nan.h:2348:24: warning: ‘v8::Local<v8::Value> node::Encode(v8::Isolate*, const uint16_t*, size_t)’ is deprecated: Use TryEncode(...) instead [-Wdeprecated-declarations]
+ 2348 |     return node::Encode(
+      |            ~~~~~~~~~~~~^
+ 2349 |         isolate
+      |         ~~~~~~~         
+ 2350 |       , reinterpret_cast<const uint16_t *>(buf)
+      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 2351 |       , len / 2);
+      |       ~~~~~~~~~~        
+/home/autocookie/.electron-gyp/40.8.0/include/node/node.h:1273:50: note: declared here
+ 1273 |                 NODE_EXTERN v8::Local<v8::Value> Encode(v8::Isolate* isolate,
+      |                                                  ^~~~~~
+/home/autocookie/.electron-gyp/40.8.0/include/node/node.h:122:42: note: in definition of macro ‘NODE_DEPRECATED’
+  122 |     __attribute__((deprecated(message))) declarator
+      |                                          ^~~~~~~~~~
+../../../nan/nan.h:2353:24: warning: ‘v8::Local<v8::Value> node::Encode(v8::Isolate*, const char*, size_t, encoding)’ is deprecated: Use TryEncode(...) instead [-Wdeprecated-declarations]
+ 2353 |     return node::Encode(
+      |            ~~~~~~~~~~~~^
+ 2354 |         isolate
+      |         ~~~~~~~         
+ 2355 |       , reinterpret_cast<const char *>(buf)
+      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 2356 |       , len
+      |       ~~~~~             
+ 2357 |       , node_enc);
+      |       ~~~~~~~~~~~       
+/home/autocookie/.electron-gyp/40.8.0/include/node/node.h:1265:38: note: declared here
+ 1265 |     NODE_EXTERN v8::Local<v8::Value> Encode(v8::Isolate* isolate,
+      |                                      ^~~~~~
+/home/autocookie/.electron-gyp/40.8.0/include/node/node.h:122:42: note: in definition of macro ‘NODE_DEPRECATED’
+  122 |     __attribute__((deprecated(message))) declarator
+      |                                          ^~~~~~~~~~
+../../../nan/nan.h: At global scope:
+../../../nan/nan.h:2520:5: error: ‘v8::AccessControl’ has not been declared
+ 2520 |   , v8::AccessControl settings
+      |     ^~
+../../../nan/nan.h: In function ‘void Nan::SetAccessor(v8::Local<v8::ObjectTemplate>, v8::Local<v8::String>, GetterCallback, SetterCallback, v8::Local<v8::Value>, int, v8::PropertyAttribute, imp::Sig)’:
+../../../nan/nan.h:2548:8: error: ‘class v8::ObjectTemplate’ has no member named ‘SetAccessor’
+ 2548 |   tpl->SetAccessor(
+      |        ^~~~~~~~~~~
+../../../nan/nan.h: At global scope:
+../../../nan/nan.h:2569:5: error: ‘v8::AccessControl’ has not been declared
+ 2569 |   , v8::AccessControl settings = v8::DEFAULT
+      |     ^~
+../../../nan/nan.h:2569:38: error: ‘DEFAULT’ is not a member of ‘v8’
+ 2569 |   , v8::AccessControl settings = v8::DEFAULT
+      |                                      ^~~~~~~
+../../../nan/nan.h: In function ‘void Nan::SetAccessor(v8::Local<v8::ObjectTemplate>, v8::Local<v8::String>, GetterCallback, SetterCallback, v8::Local<v8::Value>, int, v8::PropertyAttribute)’:
+../../../nan/nan.h:2596:8: error: ‘class v8::ObjectTemplate’ has no member named ‘SetAccessor’
+ 2596 |   tpl->SetAccessor(
+      |        ^~~~~~~~~~~
+../../../nan/nan.h: At global scope:
+../../../nan/nan.h:2614:5: error: ‘v8::AccessControl’ has not been declared
+ 2614 |   , v8::AccessControl settings = v8::DEFAULT
+      |     ^~
+../../../nan/nan.h:2614:38: error: ‘DEFAULT’ is not a member of ‘v8’
+ 2614 |   , v8::AccessControl settings = v8::DEFAULT
+      |                                      ^~~~~~~
+../../../nan/nan.h: In function ‘bool Nan::SetAccessor(v8::Local<v8::Object>, v8::Local<v8::String>, GetterCallback, SetterCallback, v8::Local<v8::Value>, int, v8::PropertyAttribute)’:
+../../../nan/nan.h:2642:15: error: ‘class v8::Object’ has no member named ‘SetAccessor’
+ 2642 |   return obj->SetAccessor(
+      |               ^~~~~~~~~~~
+../../../nan/nan.h: In function ‘void Nan::SetNamedPropertyHandler(v8::Local<v8::ObjectTemplate>, PropertyGetterCallback, PropertySetterCallback, PropertyQueryCallback, PropertyDeleterCallback, PropertyEnumeratorCallback, v8::Local<v8::Value>)’:
+../../../nan/nan.h:2719:7: error: invalid conversion from ‘Nan::imp::NativePropertyGetter’ {aka ‘void (*)(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>&)’} to ‘v8::NamedPropertyGetterCallback’ {aka ‘v8::Intercepted (*)(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>&)’} [-fpermissive]
+ 2719 |       getter_, setter_, query_, deleter_, enumerator_, obj));
+      |       ^~~~~~~
+      |       |
+      |       Nan::imp::NativePropertyGetter {aka void (*)(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Value>&)}
+In file included from /home/autocookie/.electron-gyp/40.8.0/include/node/v8-function.h:15,
+                 from /home/autocookie/.electron-gyp/40.8.0/include/node/v8.h:33:
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-template.h:725:35: note:   initializing argument 1 of ‘v8::NamedPropertyHandlerConfiguration::NamedPropertyHandlerConfiguration(v8::NamedPropertyGetterCallback, v8::NamedPropertySetterCallback, v8::NamedPropertyQueryCallback, v8::NamedPropertyDeleterCallback, v8::NamedPropertyEnumeratorCallback, v8::Local<v8::Value>, v8::PropertyHandlerFlags)’
+  725 |       NamedPropertyGetterCallback getter,
+      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
+../../../nan/nan.h:2719:16: error: invalid conversion from ‘Nan::imp::NativePropertySetter’ {aka ‘void (*)(v8::Local<v8::Name>, v8::Local<v8::Value>, const v8::PropertyCallbackInfo<v8::Value>&)’} to ‘v8::NamedPropertySetterCallback’ {aka ‘v8::Intercepted (*)(v8::Local<v8::Name>, v8::Local<v8::Value>, const v8::PropertyCallbackInfo<void>&)’} [-fpermissive]
+ 2719 |       getter_, setter_, query_, deleter_, enumerator_, obj));
+      |                ^~~~~~~
+      |                |
+      |                Nan::imp::NativePropertySetter {aka void (*)(v8::Local<v8::Name>, v8::Local<v8::Value>, const v8::PropertyCallbackInfo<v8::Value>&)}
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-template.h:726:35: note:   initializing argument 2 of ‘v8::NamedPropertyHandlerConfiguration::NamedPropertyHandlerConfiguration(v8::NamedPropertyGetterCallback, v8::NamedPropertySetterCallback, v8::NamedPropertyQueryCallback, v8::NamedPropertyDeleterCallback, v8::NamedPropertyEnumeratorCallback, v8::Local<v8::Value>, v8::PropertyHandlerFlags)’
+  726 |       NamedPropertySetterCallback setter = nullptr,
+      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+../../../nan/nan.h:2719:25: error: invalid conversion from ‘Nan::imp::NativePropertyQuery’ {aka ‘void (*)(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Integer>&)’} to ‘v8::NamedPropertyQueryCallback’ {aka ‘v8::Intercepted (*)(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Integer>&)’} [-fpermissive]
+ 2719 |       getter_, setter_, query_, deleter_, enumerator_, obj));
+      |                         ^~~~~~
+      |                         |
+      |                         Nan::imp::NativePropertyQuery {aka void (*)(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Integer>&)}
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-template.h:727:34: note:   initializing argument 3 of ‘v8::NamedPropertyHandlerConfiguration::NamedPropertyHandlerConfiguration(v8::NamedPropertyGetterCallback, v8::NamedPropertySetterCallback, v8::NamedPropertyQueryCallback, v8::NamedPropertyDeleterCallback, v8::NamedPropertyEnumeratorCallback, v8::Local<v8::Value>, v8::PropertyHandlerFlags)’
+  727 |       NamedPropertyQueryCallback query = nullptr,
+      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
+../../../nan/nan.h:2719:33: error: invalid conversion from ‘void (*)(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Boolean>&)’ to ‘v8::NamedPropertyDeleterCallback’ {aka ‘v8::Intercepted (*)(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Boolean>&)’} [-fpermissive]
+ 2719 |       getter_, setter_, query_, deleter_, enumerator_, obj));
+      |                                 ^~~~~~~~
+      |                                 |
+      |                                 void (*)(v8::Local<v8::Name>, const v8::PropertyCallbackInfo<v8::Boolean>&)
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-template.h:728:36: note:   initializing argument 4 of ‘v8::NamedPropertyHandlerConfiguration::NamedPropertyHandlerConfiguration(v8::NamedPropertyGetterCallback, v8::NamedPropertySetterCallback, v8::NamedPropertyQueryCallback, v8::NamedPropertyDeleterCallback, v8::NamedPropertyEnumeratorCallback, v8::Local<v8::Value>, v8::PropertyHandlerFlags)’
+  728 |       NamedPropertyDeleterCallback deleter = nullptr,
+      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+../../../nan/nan.h: In function ‘void Nan::SetIndexedPropertyHandler(v8::Local<v8::ObjectTemplate>, IndexGetterCallback, IndexSetterCallback, IndexQueryCallback, IndexDeleterCallback, IndexEnumeratorCallback, v8::Local<v8::Value>)’:
+../../../nan/nan.h:2789:7: error: invalid conversion from ‘Nan::imp::NativeIndexGetter’ {aka ‘void (*)(unsigned int, const v8::PropertyCallbackInfo<v8::Value>&)’} to ‘v8::IndexedPropertyGetterCallbackV2’ {aka ‘v8::Intercepted (*)(unsigned int, const v8::PropertyCallbackInfo<v8::Value>&)’} [-fpermissive]
+ 2789 |       getter_, setter_, query_, deleter_, enumerator_, obj));
+      |       ^~~~~~~
+      |       |
+      |       Nan::imp::NativeIndexGetter {aka void (*)(unsigned int, const v8::PropertyCallbackInfo<v8::Value>&)}
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-template.h:804:39: note:   initializing argument 1 of ‘v8::IndexedPropertyHandlerConfiguration::IndexedPropertyHandlerConfiguration(v8::IndexedPropertyGetterCallbackV2, v8::IndexedPropertySetterCallbackV2, v8::IndexedPropertyQueryCallbackV2, v8::IndexedPropertyDeleterCallbackV2, v8::IndexedPropertyEnumeratorCallback, v8::Local<v8::Value>, v8::PropertyHandlerFlags)’
+  804 |       IndexedPropertyGetterCallbackV2 getter = nullptr,
+      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+../../../nan/nan.h:2789:16: error: invalid conversion from ‘Nan::imp::NativeIndexSetter’ {aka ‘void (*)(unsigned int, v8::Local<v8::Value>, const v8::PropertyCallbackInfo<v8::Value>&)’} to ‘v8::IndexedPropertySetterCallbackV2’ {aka ‘v8::Intercepted (*)(unsigned int, v8::Local<v8::Value>, const v8::PropertyCallbackInfo<void>&)’} [-fpermissive]
+ 2789 |       getter_, setter_, query_, deleter_, enumerator_, obj));
+      |                ^~~~~~~
+      |                |
+      |                Nan::imp::NativeIndexSetter {aka void (*)(unsigned int, v8::Local<v8::Value>, const v8::PropertyCallbackInfo<v8::Value>&)}
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-template.h:805:39: note:   initializing argument 2 of ‘v8::IndexedPropertyHandlerConfiguration::IndexedPropertyHandlerConfiguration(v8::IndexedPropertyGetterCallbackV2, v8::IndexedPropertySetterCallbackV2, v8::IndexedPropertyQueryCallbackV2, v8::IndexedPropertyDeleterCallbackV2, v8::IndexedPropertyEnumeratorCallback, v8::Local<v8::Value>, v8::PropertyHandlerFlags)’
+  805 |       IndexedPropertySetterCallbackV2 setter = nullptr,
+      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+../../../nan/nan.h:2789:25: error: invalid conversion from ‘Nan::imp::NativeIndexQuery’ {aka ‘void (*)(unsigned int, const v8::PropertyCallbackInfo<v8::Integer>&)’} to ‘v8::IndexedPropertyQueryCallbackV2’ {aka ‘v8::Intercepted (*)(unsigned int, const v8::PropertyCallbackInfo<v8::Integer>&)’} [-fpermissive]
+ 2789 |       getter_, setter_, query_, deleter_, enumerator_, obj));
+      |                         ^~~~~~
+      |                         |
+      |                         Nan::imp::NativeIndexQuery {aka void (*)(unsigned int, const v8::PropertyCallbackInfo<v8::Integer>&)}
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-template.h:806:38: note:   initializing argument 3 of ‘v8::IndexedPropertyHandlerConfiguration::IndexedPropertyHandlerConfiguration(v8::IndexedPropertyGetterCallbackV2, v8::IndexedPropertySetterCallbackV2, v8::IndexedPropertyQueryCallbackV2, v8::IndexedPropertyDeleterCallbackV2, v8::IndexedPropertyEnumeratorCallback, v8::Local<v8::Value>, v8::PropertyHandlerFlags)’
+  806 |       IndexedPropertyQueryCallbackV2 query = nullptr,
+      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~
+../../../nan/nan.h:2789:33: error: invalid conversion from ‘Nan::imp::NativeIndexDeleter’ {aka ‘void (*)(unsigned int, const v8::PropertyCallbackInfo<v8::Boolean>&)’} to ‘v8::IndexedPropertyDeleterCallbackV2’ {aka ‘v8::Intercepted (*)(unsigned int, const v8::PropertyCallbackInfo<v8::Boolean>&)’} [-fpermissive]
+ 2789 |       getter_, setter_, query_, deleter_, enumerator_, obj));
+      |                                 ^~~~~~~~
+      |                                 |
+      |                                 Nan::imp::NativeIndexDeleter {aka void (*)(unsigned int, const v8::PropertyCallbackInfo<v8::Boolean>&)}
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-template.h:807:40: note:   initializing argument 4 of ‘v8::IndexedPropertyHandlerConfiguration::IndexedPropertyHandlerConfiguration(v8::IndexedPropertyGetterCallbackV2, v8::IndexedPropertySetterCallbackV2, v8::IndexedPropertyQueryCallbackV2, v8::IndexedPropertyDeleterCallbackV2, v8::IndexedPropertyEnumeratorCallback, v8::Local<v8::Value>, v8::PropertyHandlerFlags)’
+  807 |       IndexedPropertyDeleterCallbackV2 deleter = nullptr,
+      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
+In file included from ../../../nan/nan.h:2954:
+../../../nan/nan_scriptorigin.h: In constructor ‘Nan::ScriptOrigin::ScriptOrigin(v8::Local<v8::Value>)’:
+../../../nan/nan_scriptorigin.h:19:55: error: no matching function for call to ‘v8::ScriptOrigin::ScriptOrigin(v8::Isolate*, v8::Local<v8::Value>&)’
+   19 |       v8::ScriptOrigin(v8::Isolate::GetCurrent(), name) {}
+      |                                                       ^
+In file included from /home/autocookie/.electron-gyp/40.8.0/include/node/v8-script.h:20,
+                 from /home/autocookie/.electron-gyp/40.8.0/include/node/v8-debug.h:10,
+                 from /home/autocookie/.electron-gyp/40.8.0/include/node/v8-isolate.h:20,
+                 from /home/autocookie/.electron-gyp/40.8.0/include/node/v8-snapshot.h:9,
+                 from /home/autocookie/.electron-gyp/40.8.0/include/node/v8-context.h:15,
+                 from /home/autocookie/.electron-gyp/40.8.0/include/node/v8.h:26:
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:65:13: note: candidate: ‘v8::ScriptOrigin::ScriptOrigin(v8::Local<v8::Value>, int, int, bool, int, v8::Local<v8::Value>, bool, bool, bool, v8::Local<v8::Data>)’
+   65 |   V8_INLINE ScriptOrigin(Local<Value> resource_name,
+      |             ^~~~~~~~~~~~
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:65:39: note:   no known conversion for argument 1 from ‘v8::Isolate*’ to ‘v8::Local<v8::Value>’
+   65 |   V8_INLINE ScriptOrigin(Local<Value> resource_name,
+      |                          ~~~~~~~~~~~~~^~~~~~~~~~~~~
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:63:17: note: candidate: ‘constexpr v8::ScriptOrigin::ScriptOrigin(const v8::ScriptOrigin&)’
+   63 | class V8_EXPORT ScriptOrigin {
+      |                 ^~~~~~~~~~~~
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:63:17: note:   candidate expects 1 argument, 2 provided
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:63:17: note: candidate: ‘constexpr v8::ScriptOrigin::ScriptOrigin(v8::ScriptOrigin&&)’
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:63:17: note:   candidate expects 1 argument, 2 provided
+../../../nan/nan_scriptorigin.h: In constructor ‘Nan::ScriptOrigin::ScriptOrigin(v8::Local<v8::Value>, v8::Local<v8::Integer>)’:
+../../../nan/nan_scriptorigin.h:25:52: error: no matching function for call to ‘v8::ScriptOrigin::ScriptOrigin(v8::Isolate*, v8::Local<v8::Value>&, int)’
+   25 |                    , To<int32_t>(line).FromMaybe(0)) {}
+      |                                                    ^
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:65:13: note: candidate: ‘v8::ScriptOrigin::ScriptOrigin(v8::Local<v8::Value>, int, int, bool, int, v8::Local<v8::Value>, bool, bool, bool, v8::Local<v8::Data>)’
+   65 |   V8_INLINE ScriptOrigin(Local<Value> resource_name,
+      |             ^~~~~~~~~~~~
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:65:39: note:   no known conversion for argument 1 from ‘v8::Isolate*’ to ‘v8::Local<v8::Value>’
+   65 |   V8_INLINE ScriptOrigin(Local<Value> resource_name,
+      |                          ~~~~~~~~~~~~~^~~~~~~~~~~~~
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:63:17: note: candidate: ‘constexpr v8::ScriptOrigin::ScriptOrigin(const v8::ScriptOrigin&)’
+   63 | class V8_EXPORT ScriptOrigin {
+      |                 ^~~~~~~~~~~~
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:63:17: note:   candidate expects 1 argument, 3 provided
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:63:17: note: candidate: ‘constexpr v8::ScriptOrigin::ScriptOrigin(v8::ScriptOrigin&&)’
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:63:17: note:   candidate expects 1 argument, 3 provided
+../../../nan/nan_scriptorigin.h: In constructor ‘Nan::ScriptOrigin::ScriptOrigin(v8::Local<v8::Value>, v8::Local<v8::Integer>, v8::Local<v8::Integer>)’:
+../../../nan/nan_scriptorigin.h:33:54: error: no matching function for call to ‘v8::ScriptOrigin::ScriptOrigin(v8::Isolate*, v8::Local<v8::Value>&, int, int)’
+   33 |                    , To<int32_t>(column).FromMaybe(0)) {}
+      |                                                      ^
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:65:13: note: candidate: ‘v8::ScriptOrigin::ScriptOrigin(v8::Local<v8::Value>, int, int, bool, int, v8::Local<v8::Value>, bool, bool, bool, v8::Local<v8::Data>)’
+   65 |   V8_INLINE ScriptOrigin(Local<Value> resource_name,
+      |             ^~~~~~~~~~~~
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:65:39: note:   no known conversion for argument 1 from ‘v8::Isolate*’ to ‘v8::Local<v8::Value>’
+   65 |   V8_INLINE ScriptOrigin(Local<Value> resource_name,
+      |                          ~~~~~~~~~~~~~^~~~~~~~~~~~~
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:63:17: note: candidate: ‘constexpr v8::ScriptOrigin::ScriptOrigin(const v8::ScriptOrigin&)’
+   63 | class V8_EXPORT ScriptOrigin {
+      |                 ^~~~~~~~~~~~
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:63:17: note:   candidate expects 1 argument, 4 provided
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:63:17: note: candidate: ‘constexpr v8::ScriptOrigin::ScriptOrigin(v8::ScriptOrigin&&)’
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-message.h:63:17: note:   candidate expects 1 argument, 4 provided
+../src/binding.cpp: In function ‘std::string to_std_string(const v8::Local<v8::String>&)’:
+../src/binding.cpp:39:26: error: ‘class v8::String’ has no member named ‘Utf8Length’; did you mean ‘Utf8LengthV2’?
+   39 |   std::string str(v8str->Utf8Length(isolate), ' ');
+      |                          ^~~~~~~~~~
+      |                          Utf8LengthV2
+../src/binding.cpp:40:10: error: ‘class v8::String’ has no member named ‘WriteUtf8’; did you mean ‘WriteUtf8V2’?
+   40 |   v8str->WriteUtf8(isolate, &str[0]);
+      |          ^~~~~~~~~
+      |          WriteUtf8V2
+../src/binding.cpp: In static member function ‘static void Matcher::Match(const Nan::FunctionCallbackInfo<v8::Value>&)’:
+../src/binding.cpp:155:21: warning: ignoring return value of ‘v8::Maybe<bool> v8::Object::Set(v8::Local<v8::Context>, uint32_t, v8::Local<v8::Value>)’, declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  155 |           array->Set(context, i, New(match.matchIndexes->at(i)));
+      |           ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-object.h:274:37: note: declared here
+  274 |   V8_WARN_UNUSED_RESULT Maybe<bool> Set(Local<Context> context, uint32_t index,
+      |                                     ^~~
+../src/binding.cpp:159:18: warning: ignoring return value of ‘v8::Maybe<bool> v8::Object::Set(v8::Local<v8::Context>, uint32_t, v8::Local<v8::Value>)’, declared with attribute ‘warn_unused_result’ [-Wunused-result]
+  159 |       result->Set(context, result_count++, obj);
+      |       ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/autocookie/.electron-gyp/40.8.0/include/node/v8-object.h:274:37: note: declared here
+  274 |   V8_WARN_UNUSED_RESULT Maybe<bool> Set(Local<Context> context, uint32_t index,
+      |                                     ^~~
+make: *** [fuzzy-native.target.mk:133: Release/obj.target/fuzzy-native/src/binding.o] Error 1
+make: Leaving directory '/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/@pulsar-edit/fuzzy-native/build'
+Error: `make` failed with exit code: 2
+    at ChildProcess.<anonymous> (/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/node-gyp/lib/build.js:219:23)
+
+✖ Rebuild Failed
+
+An unhandled error occurred inside electron-rebuild
+node-gyp failed to rebuild '/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/@pulsar-edit/fuzzy-native'
+
+Error: node-gyp failed to rebuild '/home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/@pulsar-edit/fuzzy-native'
+    at ChildProcess.<anonymous> (file:///home/autocookie/pomaieco/cheesecrab/app/src/spaces/coding/syntaxvoid/node_modules/@electron/rebuild/lib/module-type/node-gyp/node-gyp.js:114:24)
+    at ChildProcess.emit (node:events:519:28)
+    at ChildProcess._handle.onexit (node:internal/child_process:293:12)
+error Command failed with exit code 255.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.

@@ -2285,7 +2285,7 @@ ansi-styles@^6.1.0:
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-6.2.3.tgz#c044d5dcc521a076413472597a1acb1f103c4041"
   integrity sha512-4Dj6M28JB+oAH8kFkTLUo+a2jwOFkuqb3yucU0CANcRRUbxS0cP0nZYCGjcc3BNXwRIsUVmDGgzawme7zvJHvg==
 
-any-promise@1.3.0:
+any-promise@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/any-promise/-/any-promise-1.3.0.tgz#abc6afeedcea52e809cdc0376aed3ce39635d17f"
   integrity sha512-7UvmKalWRt1wgjL1RrGxoSJW/0QZFIegpeGvZG9kjp8vrRu55XTHbwnqq2GpXm9uLbcuhxm3IqX9OB4MZR1b2A==
@@ -7575,10 +7575,10 @@ murmurhash-js@^1.0.0:
   resolved "https://registry.yarnpkg.com/murmurhash-js/-/murmurhash-js-1.0.0.tgz#b06278e21fc6c37fa5313732b0412bcb6ae15f51"
   integrity sha512-TvmkNhkv8yct0SVBSy+o8wYzXjE4Zz3PCesbfs8HiCXXdcTuocApFv11UWlNFWKYsP2okqrhb7JNlSm9InBhIw==
 
-nan@2.17.0, nan@2.19.0, nan@^2.14.2, nan@^2.18.0:
-  version "2.19.0"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.19.0.tgz#bb58122ad55a6c5bc973303908d5b16cfdd5a8c0"
-  integrity sha512-nO1xXxfh/RWNxfd/XPfbIfFk5vgLsAxUR9y5O0cHMJu/AW9U95JLXqthYHjEp+8gQ5p96K9jUp8nbVOxCdRbtw==
+nan@2.17.0, nan@2.25.0, nan@^2.14.2, nan@^2.18.0:
+  version "2.25.0"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.25.0.tgz#937ed345e63d9481362a7942d49c4860d27eeabd"
+  integrity sha512-0M90Ag7Xn5KMLLZ7zliPWP3rT90P6PN+IzVFS0VqmnPktBk3700xUVv8Ikm9EUaUE5SDWdp/BIxdENzVznpm1g==
 
 nanoid@^3.3.6:
   version "3.3.11"
@@ -9401,16 +9401,12 @@ spdx-license-ids@^3.0.0:
     debug "^4.1.1"
     multi-integer-range "^2.0.0"
     natural "^0.4.0"
-    spellchecker "https://github.com/pulsar-edit/node-spellchecker.git#da32e897e74691b7f43b70ddc0d171bad2d38208"
+    spellchecker "file:../../../../../../../.cache/yarn/v6/npm-spell-check-0.77.1-f86b4c85-e8db-4f2a-8e5b-0acdfa300a84-1773146048559/node_modules/spellchecker"
     spelling-manager "^1.1.0"
     underscore-plus "^1"
 
-"spellchecker@https://github.com/pulsar-edit/node-spellchecker.git#da32e897e74691b7f43b70ddc0d171bad2d38208":
-  version "3.7.1"
-  resolved "https://github.com/pulsar-edit/node-spellchecker.git#da32e897e74691b7f43b70ddc0d171bad2d38208"
-  dependencies:
-    any-promise "1.3.0"
-    nan "2.17.0"
+"spellchecker@file:packages/spellchecker":
+  version "1.0.0"
 
 spelling-manager@^1.1.0:
   version "1.3.0"
@@ -9792,6 +9788,9 @@ sylvester@^0.0.12:
     "@xterm/addon-fit" "^0.11.0"
     "@xterm/xterm" "^6.0.0"
     node-pty "^1.1.0"
+
+"syntaxvoid-ui-kit@file:packages/syntaxvoid-ui-kit":
+  version "0.1.0"
 
 tabbable@^5.1.5:
   version "5.3.3"
