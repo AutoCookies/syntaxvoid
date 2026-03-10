@@ -2,8 +2,12 @@ const path = require('path');
 const fs = require('fs-plus');
 const _ = require('underscore-plus');
 const { Emitter, Disposable, CompositeDisposable } = require('event-kit');
-const GitUtils = require('@pulsar-edit/git-utils');
-
+let GitUtils;
+try {
+  GitUtils = require('@pulsar-edit/git-utils');
+} catch (e) {
+  GitUtils = { open: () => null };
+}
 let nextId = 0;
 
 // Extended: Represents the underlying git operations performed by Pulsar.

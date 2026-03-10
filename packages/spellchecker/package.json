@@ -1,0 +1,6 @@
+{
+    "name": "spellchecker",
+    "version": "1.0.0",
+    "description": "Mock spellchecker for Electron 40 to prevent native binding crashes in SyntaxVoid",
+    "main": "lib/spellchecker.js"
+}
