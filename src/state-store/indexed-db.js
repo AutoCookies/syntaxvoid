@@ -5,6 +5,7 @@ module.exports = class IndexedDBStateStore {
     this.connected = false;
     this.databaseName = databaseName;
     this.version = version;
+    this.memoryFallback = new Map();
   }
 
   get dbPromise() {
@@ -27,11 +28,7 @@ module.exports = class IndexedDBStateStore {
           resolve(dbOpenRequest.result);
         };
         dbOpenRequest.onerror = error => {
-          atom.notifications.addFatalError('Could not connect to indexedDB', {
-            stack: new Error('Could not connect to indexedDB').stack,
-            dismissable: true
-          });
-          console.error('Could not connect to indexedDB', error);
+          console.warn('Could not connect to indexedDB, falling back to memory store', error);
           this.connected = false;
           resolve(null);
         };
@@ -52,7 +49,10 @@ module.exports = class IndexedDBStateStore {
   save(key, value) {
     return new Promise((resolve, reject) => {
       this.dbPromise.then(db => {
-        if (db == null) return resolve();
+        if (db == null) {
+          this.memoryFallback.set(key, { value: value, storedAt: new Date().toString() });
+          return resolve();
+        }
 
         const request = db
           .transaction(['states'], 'readwrite')
@@ -67,7 +67,10 @@ module.exports = class IndexedDBStateStore {
 
   load(key) {
     return this.dbPromise.then(db => {
-      if (!db) return;
+      if (!db) {
+        let result = this.memoryFallback.get(key);
+        return result ? result.value : null;
+      }
 
       return new Promise((resolve, reject) => {
         const request = db
