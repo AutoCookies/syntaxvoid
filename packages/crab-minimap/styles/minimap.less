@@ -1,0 +1,28 @@
+@import "ui-variables";
+
+atom-text-editor {
+  position: relative;
+}
+
+.crab-minimap {
+  position: absolute;
+  top: 4px;
+  right: 2px;
+  bottom: 4px;
+  width: 10px;
+  border-radius: 6px;
+  background-color: fade(@background-color-highlight, 35%);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.crab-minimap-viewport {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-radius: 6px;
+  // Use a generic info color so this works with any UI theme,
+  // even ones that don't define @accent-color.
+  background-color: fade(@text-color-info, 80%);
+}
+

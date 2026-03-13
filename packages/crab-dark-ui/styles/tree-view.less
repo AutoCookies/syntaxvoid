@@ -1,10 +1,29 @@
 .tree-view {
-  font-size: @font-size;
+  font-size: @font-size + 1px;
   background: @tree-view-background-color;
+  color: @text-color-subtle;
 
-  .selected:before {
-    background: #444;
-    box-shadow: inset -3px 0 0 rgba(0,0,0, .05);
+  padding-top: @component-padding / 2;
+
+  .list-item,
+  .list-nested-item > .list-item {
+    padding: 4px @component-padding 4px (@component-padding + @component-icon-padding);
+    border-radius: 0;
+    transition: background-color 140ms ease-out, color 140ms ease-out;
+  }
+
+  .list-item:hover:not(.selected) {
+    background-color: fade(@background-color-highlight, 55%);
+    color: @text-color;
+  }
+
+  .selected {
+    color: @text-color-highlight;
+
+    &:before {
+      background: @background-color-selected;
+      box-shadow: inset 3px 0 0 fade(@accent-color, 90%);
+    }
   }
 }
 
@@ -19,7 +38,7 @@
   box-shadow: inset -3px 0 0 rgba(0,0,0, .05);
 
   &:focus {
-    background: #282828;
+    background: darken(@tree-view-background-color, 4%);
 
     .selected:before {
       background: @background-color-selected;
