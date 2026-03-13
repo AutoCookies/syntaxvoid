@@ -98,6 +98,7 @@ jobs:
         run: corepack enable
 
       # ── Linux: install system dependencies ────────────────────────────────
+      # NOTE: Ubuntu 24.04 (Noble) renamed libasound2 → libasound2t64
       - name: Install Linux build deps
         if: matrix.platform == 'linux'
         run: |
@@ -106,7 +107,7 @@ jobs:
             libx11-dev libxkbfile-dev libsecret-1-dev \
             rpm fakeroot dpkg libnss3 libatk1.0-0 \
             libatk-bridge2.0-0 libgdk-pixbuf2.0-0 \
-            libgtk-3-0 libgbm1 libasound2
+            libgtk-3-0 libgbm1 libasound2t64
 
       # ── macOS: import code-signing certificate (optional) ─────────────────
       # Set the following repository secrets to enable code-signing:
@@ -133,16 +134,39 @@ jobs:
 
       # ── Set up crabpm (SyntaxVoid package manager) ────────────────────────
       # Cloned into `ppm/` — the path the build script expects.
-      - name: Set up crabpm
+      #
+      # Linux / Windows: normal install works fine.
+      #
+      # macOS: git-utils (a crabpm dependency) bundles an old libgit2/zlib that
+      # redefines the `fdopen` macro, which conflicts with Xcode 16+ SDK headers.
+      # We skip all native-module compilation with --ignore-scripts and then run
+      # the postinstall script manually so the bundled Node binary is still
+      # downloaded. crabpm's git integration is not needed for CI builds.
+      - name: Set up crabpm (Linux / Windows)
+        if: matrix.platform != 'mac'
         shell: bash
         run: |
           git clone --depth=1 https://github.com/AutoCookies/crabpm.git ppm
           cd ppm
           yarn install --ignore-engines
 
+      - name: Set up crabpm (macOS — skip native compilation)
+        if: matrix.platform == 'mac'
+        shell: bash
+        run: |
+          git clone --depth=1 https://github.com/AutoCookies/crabpm.git ppm
+          cd ppm
+          yarn install --ignore-engines --ignore-scripts
+          node script/postinstall.js
+
       # ── Install project dependencies ──────────────────────────────────────
       - name: Install dependencies
         run: yarn install --ignore-engines
+
+      # ── Windows: restore distutils (removed in Python 3.12, needed by node-gyp)
+      - name: Restore distutils (Windows)
+        if: matrix.platform == 'win'
+        run: pip install setuptools
 
       # ── Rebuild native Node modules for Electron ──────────────────────────
       - name: Build native modules

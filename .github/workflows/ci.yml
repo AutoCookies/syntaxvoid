@@ -42,16 +42,32 @@ jobs:
         run: corepack enable
 
       # crabpm is the SyntaxVoid package manager.
-      # Cloned into `ppm/` so the build script can find it at the expected path.
-      - name: Set up crabpm
+      # macOS: skip native compilation (git-utils/zutil.h breaks Xcode 16).
+      # Linux/Windows: normal install.
+      - name: Set up crabpm (Linux / Windows)
+        if: runner.os != 'macOS'
         shell: bash
         run: |
           git clone --depth=1 https://github.com/AutoCookies/crabpm.git ppm
           cd ppm
           yarn install --ignore-engines
 
+      - name: Set up crabpm (macOS — skip native compilation)
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          git clone --depth=1 https://github.com/AutoCookies/crabpm.git ppm
+          cd ppm
+          yarn install --ignore-engines --ignore-scripts
+          node script/postinstall.js
+
       - name: Install dependencies
         run: yarn install --ignore-engines
+
+      # Windows: Python 3.12+ dropped distutils which node-gyp requires.
+      - name: Restore distutils (Windows)
+        if: runner.os == 'Windows'
+        run: pip install setuptools
 
       - name: Build native modules
         run: yarn build
