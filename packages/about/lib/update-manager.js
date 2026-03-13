@@ -13,7 +13,7 @@ let UpdateManager = class UpdateManager {
       appVersion = appVersion.replace("v", "");
     }
 
-    return `https://github.com/pulsar-edit/pulsar/blob/master/CHANGELOG.md#${appVersion.replace(/\./g, "")}`;
+    return `https://github.com/AutoCookies/syntaxvoid/releases/tag/v${appVersion}`;
   }
 };
 

@@ -93,8 +93,8 @@ describe('About', () => {
   });
 
   describe('check for update appears', () => {
-    it('when "pulsar-updater" is enabled', async () => {
-      atom.packages.activatePackage('pulsar-updater');
+    it('when "crab-updater" is enabled', async () => {
+      atom.packages.activatePackage('crab-updater');
       await atom.workspace.open('atom://about');
       jasmine.attachToDOM(workspaceElement);
 

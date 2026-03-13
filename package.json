@@ -8,16 +8,16 @@
     "id": "syntaxvoid",
     "name": "SyntaxVoid",
     "urlWeb": "https://syntaxvoid.dev/",
-    "urlGH": "https://github.com/syntaxvoid-edit",
-    "urlForum": "https://github.com/orgs/syntaxvoid-edit/discussions"
+    "urlGH": "https://github.com/AutoCookies",
+    "urlForum": "https://github.com/AutoCookies/syntaxvoid/discussions"
   },
   "main": "./src/main-process/main.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/syntaxvoid-edit/syntaxvoid"
+    "url": "https://github.com/AutoCookies/syntaxvoid"
   },
   "bugs": {
-    "url": "https://github.com/syntaxvoid-edit/syntaxvoid/issues"
+    "url": "https://github.com/AutoCookies/syntaxvoid/issues"
   },
   "engines": {
     "node": ">=14"

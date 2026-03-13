@@ -1,7 +1,7 @@
 const { Disposable } = require('atom');
 const etch = require('etch');
 const { shell } = require('electron');
-const AtomLogo = require('./atom-logo');
+const AtomLogo = require('./crab-logo');
 const EtchComponent = require('../etch-component');
 
 const $ = etch.dom;
@@ -44,14 +44,13 @@ module.exports = class AboutView extends EtchComponent {
 
   handleTermsOfUseClick(e) {
     e.preventDefault();
-    shell.openExternal('https://atom.io/terms'); //If we use this then this URL will need updating but button disabled (L#182)
-    // TODO Update to Privacy Policy once `pulsar-edit.github.io` #161 is resolved
+    shell.openExternal('https://github.com/AutoCookies/syntaxvoid'); // Placeholder; adjust when SyntaxVoid has dedicated terms page
   }
 
   handleHowToUpdateClick(e) {
     e.preventDefault();
     shell.openExternal(
-            'https://github.com/pulsar-edit/pulsar/tree/master/packages/pulsar-updater#readme'
+      'https://github.com/AutoCookies/syntaxvoid/tree/main/packages/crab-updater#readme'
     );
   }
 
@@ -59,7 +58,7 @@ module.exports = class AboutView extends EtchComponent {
     e.preventDefault();
     atom.commands.dispatch(
       atom.views.getView(atom.workspace),
-      'pulsar-updater:check-for-update'
+      'crab-updater:check-for-update'
     );
   }
 
@@ -177,7 +176,7 @@ module.exports = class AboutView extends EtchComponent {
               { className: 'about-updates-item app-unsupported' },
               $.span(
                 { className: 'about-updates-label is-strong' },
-                'Updates have been moved to the package ', $.code({style: {'white-space': 'nowrap'}}, 'pulsar-updater'), '.',
+                'Updates have been moved to the package ', $.code({style: {'white-space': 'nowrap'}}, 'crab-updater'), '.',
                 $.br()
               ),
               $.a(
@@ -222,18 +221,18 @@ module.exports = class AboutView extends EtchComponent {
         $.a({ className: 'icon icon-heart', href: `${atom.branding.urlWeb}` + "community" }),
         $.span({ className: 'inline' }, ' by '),
         //$.a({ className: 'icon icon-logo-github', href: `${atom.branding.urlWeb}` }) Replace icon with Pulsar word logo and delete following line
-        $.a({ className: 'inline', href: `${atom.branding.urlWeb}` }, 'Pulsar Team')
+        $.a({ className: 'inline', href: `${atom.branding.urlWeb}` }, 'Crab Team')
       ),
     );
   }
 
   renderUpdateChecker() {
-    if (atom.packages.isPackageDisabled("pulsar-updater")) {
+    if (atom.packages.isPackageDisabled("crab-updater")) {
       return $.div(
         { className: 'about-updates-item app-unsupported' },
         $.span(
           { className: 'about-updates-label is-strong' },
-          'Enable `pulsar-updater` to check for updates'
+          'Enable `crab-updater` to check for updates'
         )
       );
     } else {
