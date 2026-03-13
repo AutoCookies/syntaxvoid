@@ -1,0 +1,8 @@
+{
+  "name": "language-docker",
+  "version": "0.1.0",
+  "description": "Syntax highlighting for Dockerfile and Containerfile.",
+  "license": "MIT",
+  "repository": "https://github.com/AutoCookies/syntaxvoid",
+  "engines": { "atom": "*" }
+}

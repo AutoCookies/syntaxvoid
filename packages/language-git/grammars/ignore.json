@@ -1,0 +1,28 @@
+{
+  "name": "Ignore",
+  "scopeName": "source.ignore",
+  "patterns": [
+    {
+      "match": "^#.*",
+      "name": "comment.line.number-sign.ignore"
+    }
+  ],
+  "fileTypes": [
+    "gitignore",
+    ".gitignore",
+    "gitattributes",
+    ".gitattributes",
+    "gitmodules",
+    ".gitmodules",
+    "npmignore",
+    ".npmignore",
+    "eslintignore",
+    ".eslintignore",
+    "prettierignore",
+    ".prettierignore",
+    "dockerignore",
+    ".dockerignore",
+    "hgignore",
+    ".hgignore"
+  ]
+}

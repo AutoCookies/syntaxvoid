@@ -1,0 +1,9 @@
+{
+  ".source.dockerfile": {
+    "editor": {
+      "commentStart": "# ",
+      "increaseIndentPattern": "^\\s*.*(:|-) ?(&\\w+)?(\\{[^}\"']*|\\([^)\"']*)?$",
+      "decreaseIndentPattern": "^\\s+\\}$"
+    }
+  }
+}

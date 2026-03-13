@@ -1,0 +1,7 @@
+{
+  ".source.powershell": {
+    "editor": {
+      "commentStart": "# "
+    }
+  }
+}

@@ -1,8 +1,11 @@
 {
-	"version": "https://github.com/microsoft/vscode-markdown-tm-grammar/commit/0812fc4b190efc17bfed0d5b4ff918eff8e4e377",
+	"version": "https://github.com/jlelong/vscode-latex-basics/commit/8795ab7e45ae21070a6914cb57d2f040fc49254f",
 	"name": "Markdown",
-	"scopeName": "source.gfm",
+	"scopeName": "text.tex.markdown_latex_combined",
 	"patterns": [
+		{
+			"include": "text.tex.latex"
+		},
 		{
 			"include": "#frontMatter"
 		},
@@ -1773,7 +1776,7 @@
 					"contentName": "meta.embedded.block.markdown",
 					"patterns": [
 						{
-							"include": "source.gfm"
+							"include": "text.html.markdown"
 						}
 					]
 				}
@@ -2723,6 +2726,9 @@
 		"inline": {
 			"patterns": [
 				{
+					"include": "text.tex.latex"
+				},
+				{
 					"include": "#ampersand"
 				},
 				{
@@ -3264,15 +3270,13 @@
 		}
 	},
 	"fileTypes": [
-		"markdown",
-		"md",
-		"mdown",
-		"mdwn",
-		"mkd",
-		"mkdn",
-		"mkdown",
-		"rmd",
-		"ron",
-		"workbook"
+		"sty",
+		"cls",
+		"bbx",
+		"cbx",
+		"tex",
+		"ltx",
+		"ctx",
+		"bib"
 	]
 }

@@ -1,0 +1,277 @@
+name: Build & Release
+
+# Triggers:
+#   1. Push a version tag  →  full build + public GitHub Release
+#   2. Manual trigger       →  build without publishing (for testing the pipeline)
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'          # stable:  v1.2.3
+      - 'v[0-9]+.[0-9]+.[0-9]+-*'         # pre-rel: v1.2.3-beta.1
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: 'Release channel'
+        required: true
+        default: 'regular'
+        type: choice
+        options:
+          - regular    # standard SyntaxVoid build
+          - next       # SyntaxVoidNext (canary) — runs alongside stable
+
+# Only one release job runs at a time per tag.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # ────────────────────────────────────────────────────────────────────────
+  # Build Matrix — one runner per platform
+  # ────────────────────────────────────────────────────────────────────────
+  build:
+    name: Build · ${{ matrix.name }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+
+          # ── Linux (x64) ──────────────────────────────────────────────────
+          - name: Linux x64
+            runner: ubuntu-latest
+            platform: linux
+            arch: x64
+            artifact_name: syntaxvoid-linux
+            artifact_glob: |
+              dist/*.AppImage
+              dist/*.deb
+              dist/*.rpm
+              dist/*.tar.gz
+
+          # ── Linux (ARM64) — cross-compiled on x64 runner ─────────────────
+          - name: Linux ARM64
+            runner: ubuntu-latest
+            platform: linux
+            arch: arm64
+            artifact_name: syntaxvoid-linux-arm64
+            artifact_glob: |
+              dist/*.AppImage
+              dist/*.deb
+              dist/*.rpm
+              dist/*.tar.gz
+
+          # ── Windows (x64) ────────────────────────────────────────────────
+          - name: Windows x64
+            runner: windows-latest
+            platform: win
+            arch: x64
+            artifact_name: syntaxvoid-windows
+            artifact_glob: |
+              dist/*.exe
+              dist/*.zip
+
+          # ── macOS (Universal: Intel + Apple Silicon) ──────────────────────
+          - name: macOS Universal
+            runner: macos-latest
+            platform: mac
+            arch: universal
+            artifact_name: syntaxvoid-macos
+            artifact_glob: |
+              dist/*.dmg
+              dist/*.zip
+
+    steps:
+      # ── Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history so electron-builder can read git tags
+
+      # ── Node.js ───────────────────────────────────────────────────────────
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Enable Corepack (Yarn)
+        run: corepack enable
+
+      # ── Linux: install system dependencies ────────────────────────────────
+      - name: Install Linux build deps
+        if: matrix.platform == 'linux'
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y \
+            libx11-dev libxkbfile-dev libsecret-1-dev \
+            rpm fakeroot dpkg libnss3 libatk1.0-0 \
+            libatk-bridge2.0-0 libgdk-pixbuf2.0-0 \
+            libgtk-3-0 libgbm1 libasound2
+
+      # ── macOS: import code-signing certificate (optional) ─────────────────
+      # Set the following repository secrets to enable code-signing:
+      #   MACOS_CERT_P12        base64-encoded .p12 certificate
+      #   MACOS_CERT_PASSWORD   password for the .p12
+      #   APPLE_ID              Apple ID email (for notarization)
+      #   APPLE_APP_PASSWORD    App-specific password
+      #   APPLE_TEAM_ID         Apple Developer Team ID
+      - name: Import macOS signing certificate
+        if: matrix.platform == 'mac' && env.MACOS_CERT_P12 != ''
+        env:
+          MACOS_CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
+          MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
+        run: |
+          echo "$MACOS_CERT_P12" | base64 --decode > certificate.p12
+          security create-keychain -p ci_keychain build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p ci_keychain build.keychain
+          security import certificate.p12 -k build.keychain \
+            -P "$MACOS_CERT_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: \
+            -s -k ci_keychain build.keychain
+          rm certificate.p12
+
+      # ── Set up crabpm (SyntaxVoid package manager) ────────────────────────
+      # Cloned into `ppm/` — the path the build script expects.
+      - name: Set up crabpm
+        shell: bash
+        run: |
+          git clone --depth=1 https://github.com/AutoCookies/crabpm.git ppm
+          cd ppm
+          yarn install --ignore-engines
+
+      # ── Install project dependencies ──────────────────────────────────────
+      - name: Install dependencies
+        run: yarn install --ignore-engines
+
+      # ── Rebuild native Node modules for Electron ──────────────────────────
+      - name: Build native modules
+        run: yarn build
+
+      # ── Determine flags ───────────────────────────────────────────────────
+      - name: Determine build flags
+        id: flags
+        shell: bash
+        run: |
+          FLAGS="--platform ${{ matrix.platform }}"
+          # Canary channel
+          if [[ "${{ github.event.inputs.channel }}" == "next" ]]; then
+            FLAGS="$FLAGS --next"
+          fi
+          # Architecture override (ARM64 cross-compile, universal macOS)
+          if [[ "${{ matrix.arch }}" == "arm64" ]]; then
+            FLAGS="$FLAGS --target arm64-appimage,deb,rpm,tar.gz"
+          fi
+          if [[ "${{ matrix.arch }}" == "universal" ]]; then
+            FLAGS="$FLAGS --target universal"
+          fi
+          echo "flags=$FLAGS" >> "$GITHUB_OUTPUT"
+
+      # ── Build Linux distributables ─────────────────────────────────────────
+      - name: Build (Linux)
+        if: matrix.platform == 'linux'
+        run: yarn dist ${{ steps.flags.outputs.flags }}
+
+      # ── Build Windows distributables ───────────────────────────────────────
+      - name: Build (Windows)
+        if: matrix.platform == 'win'
+        run: yarn dist ${{ steps.flags.outputs.flags }}
+
+      # ── Build macOS distributables ─────────────────────────────────────────
+      - name: Build (macOS)
+        if: matrix.platform == 'mac'
+        env:
+          # Disable auto-discovery when no cert is present (produces unsigned build)
+          CSC_IDENTITY_AUTO_DISCOVERY: ${{ secrets.MACOS_CERT_P12 != '' && 'true' || 'false' }}
+          APPLE_ID:           ${{ secrets.APPLE_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+          APPLE_TEAM_ID:      ${{ secrets.APPLE_TEAM_ID }}
+        run: yarn dist ${{ steps.flags.outputs.flags }}
+
+      # ── List produced files ────────────────────────────────────────────────
+      - name: List dist output
+        shell: bash
+        run: ls -lh dist/ || true
+
+      # ── Upload artifacts (kept 90 days, always; used by release job) ───────
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: |
+            dist/*.AppImage
+            dist/*.deb
+            dist/*.rpm
+            dist/*.tar.gz
+            dist/*.exe
+            dist/*.zip
+            dist/*.dmg
+          if-no-files-found: warn
+          retention-days: 90
+
+  # ────────────────────────────────────────────────────────────────────────
+  # Release — collect all artifacts and publish a GitHub Release
+  # Only runs when triggered by a version tag push.
+  # ────────────────────────────────────────────────────────────────────────
+  release:
+    name: Publish Release
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout (for release notes)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download all platform artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-files/
+          merge-multiple: true
+
+      - name: List release files
+        run: ls -lhR release-files/
+
+      - name: Determine release type
+        id: rel
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          if echo "$TAG" | grep -qE '-(alpha|beta|rc)'; then
+            echo "prerelease=true"  >> "$GITHUB_OUTPUT"
+          else
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name:   ${{ steps.rel.outputs.tag }}
+          name:       SyntaxVoid ${{ steps.rel.outputs.tag }}
+          prerelease: ${{ steps.rel.outputs.prerelease }}
+          draft:      false
+          generate_release_notes: true
+          body: |
+            ## SyntaxVoid ${{ steps.rel.outputs.tag }}
+
+            ### Downloads
+
+            | Platform | Format | Notes |
+            |---|---|---|
+            | Linux | `.AppImage` | Universal, no install needed |
+            | Linux | `.deb` | Debian / Ubuntu |
+            | Linux | `.rpm` | Fedora / RHEL |
+            | Linux | `.tar.gz` | Manual install |
+            | Windows | `.exe` | NSIS installer |
+            | Windows | `.zip` | Portable |
+            | macOS | `.dmg` | Drag-and-drop install |
+            | macOS | `.zip` | Portable |
+
+            > **Note**: macOS builds may be unsigned. Right-click → Open on first launch.
+
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for full details.
+          files: release-files/**/*
