@@ -1,0 +1,51 @@
+{
+  "name": "formatter",
+  "main": "./lib/main",
+  "version": "0.1.0",
+  "description": "Format the current document using the appropriate language formatter (Prettier, clang-format, black, gofmt, rustfmt …).",
+  "license": "MIT",
+  "repository": "https://github.com/AutoCookies/syntaxvoid",
+  "engines": { "atom": ">=1.0.0 <2.0.0" },
+  "dependencies": {
+    "prettier": "^3.3.3",
+    "clang-format": "^1.8.0"
+  },
+  "activationCommands": {
+    "atom-text-editor": [
+      "formatter:format-document",
+      "formatter:format-selection"
+    ]
+  },
+  "configSchema": {
+    "formatOnSave": {
+      "type": "boolean",
+      "default": false,
+      "description": "Automatically format the document every time it is saved."
+    },
+    "prettierPath": {
+      "type": "string",
+      "default": "prettier",
+      "description": "Path to the prettier executable (or just 'prettier' if it is on PATH)."
+    },
+    "clangFormatPath": {
+      "type": "string",
+      "default": "clang-format",
+      "description": "Path to clang-format."
+    },
+    "blackPath": {
+      "type": "string",
+      "default": "black",
+      "description": "Path to the Python black formatter."
+    },
+    "gofmtPath": {
+      "type": "string",
+      "default": "gofmt",
+      "description": "Path to gofmt."
+    },
+    "rustfmtPath": {
+      "type": "string",
+      "default": "rustfmt",
+      "description": "Path to rustfmt."
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "atom-text-editor": {
+    "shift-alt-f": "formatter:format-document",
+    "ctrl-shift-alt-f": "formatter:format-selection"
+  }
+}
