@@ -1,6 +1,7 @@
 'use strict';
 const IndexedDB = require('./state-store/indexed-db');
-const SQL = require('./state-store/sql');
+// SQL (better-sqlite3) is required lazily so embeds can use useLegacySessionStore
+// and avoid loading the native module when it is missing or built for another Electron.
 
 module.exports = class StateStore {
   constructor(databaseName, version, { config }) {
@@ -63,9 +64,12 @@ module.exports = class StateStore {
       if (!this.configDirPath) {
         throw new Error(`state-store: Must initialize with configDirPath`);
       }
-      this.sql ??= new SQL(this.databaseName, this.version, {
-        storagePath: this.configDirPath
-      });
+      if (!this.sql) {
+        const SQL = require('./state-store/sql');
+        this.sql = new SQL(this.databaseName, this.version, {
+          storagePath: this.configDirPath
+        });
+      }
       return this.sql;
     }
   }

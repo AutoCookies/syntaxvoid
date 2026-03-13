@@ -2,8 +2,25 @@ const path = require("path");
 const fs = require("fs");
 const MarkdownIt = require("markdown-it");
 const { TextEditor } = require("atom");
-const fuzzyNative = require("@pulsar-edit/fuzzy-native");
-
+let fuzzyNative;
+try {
+  fuzzyNative = require("@pulsar-edit/fuzzy-native");
+} catch (e) {
+  fuzzyNative = {
+    Matcher: class {
+      constructor(keys, candidates) {
+        this.candidates = candidates;
+      }
+      match(query) {
+        if (!query) return this.candidates.map((c, i) => ({ id: i, value: c, score: 1 }));
+        const q = query.toLowerCase();
+        return this.candidates
+          .map((c, i) => ({ id: i, value: c, score: c.toLowerCase().includes(q) ? 0.5 : 0 }))
+          .filter(r => r.score > 0);
+      }
+    }
+  };
+}
 // Helper Markdown Components
 const mdComponents = {
   deps: {
@@ -308,7 +325,7 @@ function renderMarkdown(content, givenOpts = {}) {
 
         const isSpace = () => {
           let code = state.src.charCodeAt(pos);
-          switch(code) {
+          switch (code) {
             case 0x09:
             case 0x20:
               return true;
@@ -338,7 +355,7 @@ function renderMarkdown(content, givenOpts = {}) {
       // until the specified token is reached. Which it will also strip to text,
       // then return
       let idx = initIdx;
-      while(idx < tokens.length) {
+      while (idx < tokens.length) {
         tokens[idx].type = "text";
         tokens[idx].content = "";
 
@@ -375,11 +392,11 @@ function renderMarkdown(content, givenOpts = {}) {
         // Here we can build an allow list of inline HTML elements to keep.
         if (
           tokens[idx].tag !== "breakline"
-          ) {
-            return "";
-          } else {
-            return tokens[idx].content;
-          }
+        ) {
+          return "";
+        } else {
+          return tokens[idx].content;
+        }
       }
     };
 
@@ -572,7 +589,7 @@ function convertToDOM(content) {
   ```
 */
 function setCandidates(matcherOrCandidates, candidates) {
-  if(candidates) {
+  if (candidates) {
     matcherOrCandidates.fuzzyMatcher.setCandidates(
       [...Array(candidates.length).keys()],
       candidates
@@ -635,10 +652,10 @@ class Matcher {
       `value` for each character in `query`. This can be expensive to calculate.
   */
   match(query, options = {}) {
-    let {numThreads, algorithm} = options;
+    let { numThreads, algorithm } = options;
     numThreads ||= this.numCpus;
     algorithm ||= 'fuzzaldrin';
-    return this.fuzzyMatcher.match(query, {...options, numThreads, algorithm});
+    return this.fuzzyMatcher.match(query, { ...options, numThreads, algorithm });
   }
 
   /*

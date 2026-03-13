@@ -1,25 +1,25 @@
 /** @babel */
 /** @jsx etch.dom */
 
-import {CompositeDisposable} from 'atom'
+import { CompositeDisposable } from 'atom'
 import etch from 'etch'
 
-function isSupported () {
+function isSupported() {
   return ['win32', 'darwin'].includes(process.platform)
 }
 
-function isDefaultProtocolClient () {
-  return require('electron').remote.app.isDefaultProtocolClient('atom', process.execPath, ['--uri-handler', '--'])
+function isDefaultProtocolClient() {
+  return require('@electron/remote').app.isDefaultProtocolClient('atom', process.execPath, ['--uri-handler', '--'])
 }
 
-function setAsDefaultProtocolClient () {
+function setAsDefaultProtocolClient() {
   // This Electron API is only available on Windows and macOS. There might be some
   // hacks to make it work on Linux; see https://github.com/electron/electron/issues/6440
-  return isSupported() && require('electron').remote.app.setAsDefaultProtocolClient('atom', process.execPath, ['--uri-handler', '--'])
+  return isSupported() && require('@electron/remote').app.setAsDefaultProtocolClient('atom', process.execPath, ['--uri-handler', '--'])
 }
 
 export default class UriHandlerPanel {
-  constructor () {
+  constructor() {
     this.handleChange = this.handleChange.bind(this)
     this.handleBecomeProtocolClient = this.handleBecomeProtocolClient.bind(this)
     this.isDefaultProtocolClient = isDefaultProtocolClient()
@@ -43,14 +43,14 @@ export default class UriHandlerPanel {
     )
   }
 
-  destroy () {
+  destroy() {
     this.subscriptions.dispose()
     return etch.destroy(this)
   }
 
-  update () {}
+  update() { }
 
-  render () {
+  render() {
     const schema = atom.config.getSchema('core.uriHandlerRegistration')
 
     return (
@@ -72,7 +72,7 @@ export default class UriHandlerPanel {
                     <button
                       className='btn btn-primary'
                       disabled={!isSupported() || this.isDefaultProtocolClient}
-                      style={{fontSize: '1.25em', display: 'block'}}
+                      style={{ fontSize: '1.25em', display: 'block' }}
                       onClick={this.handleBecomeProtocolClient}
                     >
                       Register as default atom:// protocol handler
@@ -94,7 +94,7 @@ export default class UriHandlerPanel {
                       onChange={this.handleChange}
                       value={atom.config.get('core.uriHandlerRegistration')}
                     >
-                      {schema.enum.map(({description, value}) => (
+                      {schema.enum.map(({ description, value }) => (
                         <option value={value}>{description}</option>
                       ))}
                     </select>
@@ -123,7 +123,7 @@ export default class UriHandlerPanel {
     )
   }
 
-  renderHistoryRow (item, idx) {
+  renderHistoryRow(item, idx) {
     return (
       <tr
         key={item.id}
@@ -139,7 +139,7 @@ export default class UriHandlerPanel {
     )
   }
 
-  renderItem (item) {
+  renderItem(item) {
     if (item.host === 'core') {
       return <em>core</em>
     } else {
@@ -147,12 +147,12 @@ export default class UriHandlerPanel {
     }
   }
 
-  handlePackageLinkClicked (evt) {
+  handlePackageLinkClicked(evt) {
     evt.preventDefault()
     atom.workspace.open(evt.target.getAttribute('href'))
   }
 
-  renderRegistrationDescription () {
+  renderRegistrationDescription() {
     if (this.isDefaultProtocolClient) {
       return 'Pulsar is already the default handler for atom:// URIs.'
     } else if (isSupported()) {
@@ -162,11 +162,11 @@ export default class UriHandlerPanel {
     }
   }
 
-  handleChange (evt) {
+  handleChange(evt) {
     atom.config.set('core.uriHandlerRegistration', evt.target.value)
   }
 
-  handleBecomeProtocolClient (evt) {
+  handleBecomeProtocolClient(evt) {
     evt.preventDefault()
     if (setAsDefaultProtocolClient()) {
       this.isDefaultProtocolClient = isDefaultProtocolClient()
@@ -176,35 +176,35 @@ export default class UriHandlerPanel {
     }
   }
 
-  focus () {
+  focus() {
     this.element.focus()
   }
 
-  show () {
+  show() {
     this.element.style.display = ''
   }
 
-  scrollUp () {
+  scrollUp() {
     this.element.scrollTop -= document.body.offsetHeight / 20
   }
 
-  scrollDown () {
+  scrollDown() {
     this.element.scrollTop += document.body.offsetHeight / 20
   }
 
-  pageUp () {
+  pageUp() {
     this.element.scrollTop -= this.element.offsetHeight
   }
 
-  pageDown () {
+  pageDown() {
     this.element.scrollTop += this.element.offsetHeight
   }
 
-  scrollToTop () {
+  scrollToTop() {
     this.element.scrollTop = 0
   }
 
-  scrollToBottom () {
+  scrollToBottom() {
     this.element.scrollTop = this.element.scrollHeight
   }
 }

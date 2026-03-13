@@ -417,15 +417,15 @@ class AtomEnvironment {
   registerDefaultOpeners() {
     this.workspace.addOpener(uri => {
       switch (uri) {
-        case 'atom://.pulsar/stylesheet':
+        case 'syntaxvoid://.syntaxvoid/stylesheet':
           return this.workspace.openTextFile(
             this.styles.getUserStyleSheetPath()
           );
-        case 'atom://.pulsar/keymap':
+        case 'syntaxvoid://.syntaxvoid/keymap':
           return this.workspace.openTextFile(this.keymaps.getUserKeymapPath());
-        case 'atom://.pulsar/config':
+        case 'syntaxvoid://.syntaxvoid/config':
           return this.workspace.openTextFile(this.config.getUserConfigPath());
-        case 'atom://.pulsar/init-script':
+        case 'syntaxvoid://.syntaxvoid/init-script':
           return this.workspace.openTextFile(this.getUserInitScriptPath());
       }
     });
@@ -1736,7 +1736,7 @@ or use Pane::saveItemAs for programmatic saving.`);
       } of fileLocationsToOpen) {
         fileOpenPromises.push(
           this.workspace &&
-            this.workspace.open(pathToOpen, { initialLine, initialColumn })
+          this.workspace.open(pathToOpen, { initialLine, initialColumn })
         );
       }
       await Promise.all(fileOpenPromises);

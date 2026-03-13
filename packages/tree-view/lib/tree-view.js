@@ -296,19 +296,19 @@ class TreeView {
     });
 
     this.element.addEventListener('mousedown', e => this.onMouseDown(e));
-    this.element.addEventListener('mouseup',   e => this.onMouseUp(e));
+    this.element.addEventListener('mouseup', e => this.onMouseUp(e));
     this.element.addEventListener('dragstart', e => this.onDragStart(e));
     this.element.addEventListener('dragenter', e => this.onDragEnter(e));
     this.element.addEventListener('dragleave', e => this.onDragLeave(e));
-    this.element.addEventListener('dragover',  e => this.onDragOver(e));
-    this.element.addEventListener('drop',      e => this.onDrop(e));
+    this.element.addEventListener('dragover', e => this.onDragOver(e));
+    this.element.addEventListener('drop', e => this.onDrop(e));
 
     atom.commands.add(this.element, {
-      'core:move-up':        (e) => this.moveUp(e),
-      'core:move-down':      (e) => this.moveDown(e),
-      'core:page-up':        (e) => this.pageUp(e),
-      'core:page-down':      (e) => this.pageDown(e),
-      'core:move-to-top':    (e) => this.scrollToTop(e),
+      'core:move-up': (e) => this.moveUp(e),
+      'core:move-down': (e) => this.moveDown(e),
+      'core:page-up': (e) => this.pageUp(e),
+      'core:page-down': (e) => this.pageDown(e),
+      'core:move-to-top': (e) => this.scrollToTop(e),
       'core:move-to-bottom': (e) => this.scrollToBottom(e),
 
       'tree-view:expand-item': () => this.openSelectedEntry({ pending: true }, true),
@@ -321,27 +321,27 @@ class TreeView {
       },
       'tree-view:collapse-all': () => this.collapseDirectory(true, true),
 
-      'tree-view:open-selected-entry':       () => this.openSelectedEntry(),
+      'tree-view:open-selected-entry': () => this.openSelectedEntry(),
       'tree-view:open-selected-entry-right': () => this.openSelectedEntryRight(),
-      'tree-view:open-selected-entry-left':  () => this.openSelectedEntryLeft(),
-      'tree-view:open-selected-entry-up':    () => this.openSelectedEntryUp(),
-      'tree-view:open-selected-entry-down':  () => this.openSelectedEntryDown(),
+      'tree-view:open-selected-entry-left': () => this.openSelectedEntryLeft(),
+      'tree-view:open-selected-entry-up': () => this.openSelectedEntryUp(),
+      'tree-view:open-selected-entry-down': () => this.openSelectedEntryDown(),
 
-      'tree-view:move':  () => this.moveSelectedEntry(),
-      'tree-view:copy':  () => this.copySelectedEntries(),
-      'tree-view:cut':   () => this.cutSelectedEntries(),
+      'tree-view:move': () => this.moveSelectedEntry(),
+      'tree-view:copy': () => this.copySelectedEntries(),
+      'tree-view:cut': () => this.cutSelectedEntries(),
       'tree-view:paste': () => this.pasteEntries(),
 
-      'tree-view:copy-full-path':       () => this.copySelectedEntryPath(false),
+      'tree-view:copy-full-path': () => this.copySelectedEntryPath(false),
       'tree-view:show-in-file-manager': () => this.showSelectedEntryInFileManager(),
-      'tree-view:open-in-new-window':   () => this.openSelectedEntryInNewWindow(),
-      'tree-view:copy-project-path':    () => this.copySelectedEntryPath(true),
+      'tree-view:open-in-new-window': () => this.openSelectedEntryInNewWindow(),
+      'tree-view:copy-project-path': () => this.copySelectedEntryPath(true),
 
       'tree-view:unfocus': () => this.unfocus(),
 
       'tree-view:toggle-vcs-ignored-files': () => toggleConfig(`tree-view.hideVcsIgnoredFiles`),
-      'tree-view:toggle-ignored-names':     () => toggleConfig(`tree-view.hideIgnoredNames`),
-      'tree-view:remove-project-folder':    (e) => this.removeProjectFolder(e)
+      'tree-view:toggle-ignored-names': () => toggleConfig(`tree-view.hideIgnoredNames`),
+      'tree-view:remove-project-folder': (e) => this.removeProjectFolder(e)
     });
 
     for (let i = 0; i < 9; i++) {
@@ -509,7 +509,9 @@ class TreeView {
 
         stats = _.pick(stats, ..._.keys(stats));
         for (let key of ['atime', 'birthtime', 'ctime', 'mtime']) {
-          stats[key] = stats[key].getTime();
+          if (stats[key]?.getTime) {
+            stats[key] = stats[key].getTime();
+          }
         }
 
         let directory = new Directory({
@@ -894,7 +896,7 @@ class TreeView {
         atom.confirm({
           message: `The root directory '${root.directory.name} can't be removed.`,
           buttons: ['OK']
-        }, () => {}); // noop
+        }, () => { }); // noop
         return;
       }
     }

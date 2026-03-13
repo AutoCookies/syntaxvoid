@@ -30,7 +30,7 @@ module.exports = {
     // When a read-writeable `.pulsar` folder exists above the app directory,
     // use that. The portability means that we don't have to use a different
     // name to distinguish the release channel.
-    const portableHomePath = path.join(getAppDirectory(), '..', '.pulsar');
+    const portableHomePath = path.join(getAppDirectory(), '..', '.syntaxvoid');
     if (fs.existsSync(portableHomePath)) {
       if (hasWriteAccess(portableHomePath)) {
         process.env.ATOM_HOME = portableHomePath;
@@ -60,9 +60,9 @@ module.exports = {
     // the launcher script or by the main process shortly after launch
     // (inferred via the version number).
     //
-    let folderName = '.pulsar';
+    let folderName = '.syntaxvoid';
     if (process.env.ATOM_CHANNEL === 'next') {
-      folderName = '.pulsar-next';
+      folderName = '.syntaxvoid-next';
     }
 
     process.env.ATOM_HOME = path.join(homePath, folderName);

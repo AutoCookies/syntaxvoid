@@ -9,7 +9,7 @@ const os = require('os');
 const fs = require('fs');
 const path = require('path');
 const semver = require('semver');
-const {BufferedProcess} = require('atom');
+const { BufferedProcess } = require('atom');
 
 /*
 A collection of methods for retrieving information about the user's system for
@@ -41,14 +41,14 @@ module.exports = {
   },
 
   macVersionText() {
-    return this.macVersionInfo().then(function(info) {
+    return this.macVersionInfo().then(function (info) {
       if (!info.ProductName || !info.ProductVersion) { return 'Unknown macOS version'; }
       return `${info.ProductName} ${info.ProductVersion}`;
     });
   },
 
   macVersionInfo() {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       let stdout = '';
       const plistBuddy = new BufferedProcess({
         command: '/usr/libexec/PlistBuddy',
@@ -62,11 +62,11 @@ module.exports = {
         stdout(output) { return stdout += output; },
         exit() {
           const [ProductVersion, ProductName] = Array.from(stdout.trim().split('\n'));
-          return resolve({ProductVersion, ProductName});
+          return resolve({ ProductVersion, ProductName });
         }
       });
 
-      return plistBuddy.onWillThrowError(function({handle}) {
+      return plistBuddy.onWillThrowError(function ({ handle }) {
         handle();
         return resolve({});
       });
@@ -74,7 +74,7 @@ module.exports = {
   },
 
   linuxVersionText() {
-    return this.linuxVersionInfo().then(function(info) {
+    return this.linuxVersionInfo().then(function (info) {
       if (info.DistroName && info.DistroVersion) {
         return `${info.DistroName} ${info.DistroVersion}`;
       } else {
@@ -84,7 +84,7 @@ module.exports = {
   },
 
   linuxVersionInfo() {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       let stdout = '';
 
       const lsbRelease = new BufferedProcess({
@@ -93,11 +93,11 @@ module.exports = {
         stdout(output) { return stdout += output; },
         exit(exitCode) {
           const [DistroName, DistroVersion] = Array.from(stdout.trim().split(' '));
-          return resolve({DistroName, DistroVersion});
+          return resolve({ DistroName, DistroVersion });
         }
       });
 
-      return lsbRelease.onWillThrowError(function({handle}) {
+      return lsbRelease.onWillThrowError(function ({ handle }) {
         handle();
         return resolve({});
       });
@@ -105,7 +105,7 @@ module.exports = {
   },
 
   winVersionText() {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       const data = [];
       const systemInfo = new BufferedProcess({
         command: 'systeminfo',
@@ -118,7 +118,7 @@ module.exports = {
         }
       });
 
-      return systemInfo.onWillThrowError(function({handle}) {
+      return systemInfo.onWillThrowError(function ({ handle }) {
         handle();
         return resolve('Unknown Windows version');
       });
@@ -130,7 +130,7 @@ module.exports = {
   */
 
   getNonCorePackages() {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       const nonCorePackages = atom.packages.getAvailablePackageMetadata().filter(p => !atom.packages.isBundledPackage(p.name));
       const devPackageNames = atom.packages.getAvailablePackagePaths().filter(p => p.includes(DEV_PACKAGE_PATH)).map(p => path.basename(p));
       return resolve(Array.from(nonCorePackages).map((pack) => `${pack.name} ${pack.version} ${Array.from(devPackageNames).includes(pack.name) ? '(dev)' : ''}`));
@@ -161,33 +161,43 @@ module.exports = {
       contentType: "application/json"
     });
     const apiURL = process.env.ATOM_API_URL || 'https://api.pulsar-edit.dev/api';
-    return fetch(`${apiURL}/${packageName}`, {headers: githubHeaders})
+    return fetch(`${apiURL}/${packageName}`, { headers: githubHeaders })
       .then(r => {
         if (r.ok) {
           return r.json();
         } else {
-          return Promise.reject(new Error(`Fetching updates resulted in status ${r.status}`));
+          return {}; // Silently ignore 404s
         }
-      });
+      })
+      .catch(() => ({}));
   },
 
   checkPackageUpToDate(packageName) {
     return this.getLatestPackageData(packageName).then(latestPackageData => {
       let isCore;
       const installedVersion = this.getPackageVersion(packageName);
-      let upToDate = (installedVersion != null) && semver.gte(installedVersion, latestPackageData?.releases?.latest);
+
+      let validInstalled = semver.valid(installedVersion);
+      let validLatest = semver.valid(latestPackageData?.releases?.latest);
+
+      let upToDate = true;
+      if (validInstalled && validLatest) {
+        upToDate = semver.gte(installedVersion, latestPackageData.releases.latest);
+      }
+
       const latestVersion = latestPackageData?.releases?.latest;
       const versionShippedWithPulsar = this.getPackageVersionShippedWithPulsar(packageName);
 
       if (isCore = (versionShippedWithPulsar != null)) {
-        // A core package is out of date if the version which is being used
-        // is lower than the version which normally ships with the version
-        // of Pulsar which is running. This will happen when there's a locally
-        // installed version of the package with a lower version than Pulsar's.
-        upToDate = (installedVersion != null) && semver.gte(installedVersion, versionShippedWithPulsar);
+        let validShipped = semver.valid(versionShippedWithPulsar);
+        if (validInstalled && validShipped) {
+          upToDate = semver.gte(installedVersion, versionShippedWithPulsar);
+        } else {
+          upToDate = true;
+        }
       }
 
-      return {isCore, upToDate, latestVersion, installedVersion, versionShippedWithPulsar};
-  });
+      return { isCore, upToDate, latestVersion, installedVersion, versionShippedWithPulsar };
+    });
   }
 };

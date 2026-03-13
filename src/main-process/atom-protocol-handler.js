@@ -30,6 +30,31 @@ module.exports = class AtomProtocolHandler {
 
   // Creates the 'atom' custom protocol handler.
   registerAtomProtocol() {
+    protocol.registerFileProtocol('syntaxvoid', (request, callback) => {
+      const relativePath = path.normalize(request.url.substr(13));
+
+      let filePath;
+      if (relativePath.indexOf('assets/') === 0) {
+        const assetsPath = path.join(process.env.ATOM_HOME, relativePath);
+        try {
+          const stat = fs.statSync(assetsPath);
+          if (stat && stat.isFile()) filePath = assetsPath;
+        } catch (e) { }
+      }
+
+      if (!filePath) {
+        for (let loadPath of this.loadPaths) {
+          filePath = path.join(loadPath, relativePath);
+          try {
+            const stat = fs.statSync(filePath);
+            if (stat && stat.isFile()) break;
+          } catch (e) { }
+        }
+      }
+
+      callback(filePath);
+    });
+
     protocol.registerFileProtocol('atom', (request, callback) => {
       const relativePath = path.normalize(request.url.substr(7));
 
@@ -39,7 +64,7 @@ module.exports = class AtomProtocolHandler {
         try {
           const stat = fs.statSync(assetsPath);
           if (stat && stat.isFile()) filePath = assetsPath;
-        } catch (e) {}
+        } catch (e) { }
       }
 
       if (!filePath) {
@@ -48,7 +73,7 @@ module.exports = class AtomProtocolHandler {
           try {
             const stat = fs.statSync(filePath);
             if (stat && stat.isFile()) break;
-          } catch (e) {}
+          } catch (e) { }
         }
       }
 

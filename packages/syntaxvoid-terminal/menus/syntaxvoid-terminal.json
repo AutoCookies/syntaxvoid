@@ -1,0 +1,31 @@
+{
+    "menu": [
+        {
+            "label": "View",
+            "submenu": [
+                {
+                    "label": "Toggle Terminal",
+                    "command": "syntaxvoid-terminal:toggle"
+                }
+            ]
+        },
+        {
+            "label": "Packages",
+            "submenu": [
+                {
+                    "label": "SyntaxVoid Terminal",
+                    "submenu": [
+                        {
+                            "label": "Toggle Terminal",
+                            "command": "syntaxvoid-terminal:toggle"
+                        },
+                        {
+                            "label": "New Terminal",
+                            "command": "syntaxvoid-terminal:new"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
