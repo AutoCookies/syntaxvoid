@@ -1,0 +1,7 @@
+{
+  ".text.pug": {
+    "editor": {
+      "commentStart": "//- "
+    }
+  }
+}

@@ -10,9 +10,9 @@
   cursor: default;
   overflow: auto;
   text-align: center;
-  font-size: 1.25em;
-  line-height: 1.4;
-  padding: 4em;
+  font-size: 1.15em; // Chỉnh lại font-size cho gọn gàng hơn
+  line-height: 1.5;
+  padding: 3em 2em; // Tối ưu padding cho các màn hình nhỏ gọn
   color: @text-color;
   background-color: @base-background-color;
 
@@ -21,7 +21,6 @@
   }
 
   a:focus {
-    // Don't use Bootstrap default here
     color: inherit;
   }
 
@@ -29,17 +28,12 @@
     -webkit-user-drag: none;
   }
 
-  .input-checkbox {
-    margin-top: -.2em;
-  }
-
+  // Tiện ích
   .min-width-min-content {
     min-width: min-content;
   }
-
-  // used to group different elements
   .group-start {
-    margin-top: 4em;
+    margin-top: 3.5em;
   }
   .group-item {
     margin-top: 1.5em;
@@ -48,138 +42,235 @@
 
 .about-container {
   width: 100%;
-  max-width: 500px;
-
-  .icon::before {
-    margin-right: 0;
-  }
+  max-width: 550px;
 }
 
 
-// Header --------------------------------
-
-.about-atom-io:hover {
-  .about-logo {
-    color: @atom-green;
-  }
-}
+// Header & Logo --------------------------------
 
 .about-logo {
   display: block;
   width: 100%;
-  max-width: 280px;
-  margin: 0 auto 1em auto;
+  max-width: 220px; // Thu nhỏ logo một chút để không chiếm quá nhiều diện tích
+  margin: 0 auto 1.5em auto;
   color: @text-color-highlight;
-  transition: color 0.2s;
+  transition: color 0.3s ease, transform 0.3s ease; // Thêm transition cho mượt
 }
+
+.about-atom-io {
+  display: inline-block;
+  border-radius: 50%;
+  
+  &:hover .about-logo {
+    color: @atom-green;
+    transform: scale(1.05); // Hiệu ứng phóng to nhẹ (crab bounce!) giúp UI có sức sống
+  }
+}
+
+// Thông tin Phiên bản (Version Pills) --------------------------------
 
 .about-header-info {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  column-gap: 30px;
+  gap: 15px; // Sử dụng gap hiện đại thay vì margin thủ công
+  margin-bottom: 1em;
 }
+
+// Biến các dải version thành dạng "Pill" (Viên thuốc) có thể click
 .about-version-container {
-  vertical-align: middle;
-  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4em 1em;
+  background-color: @background-color-highlight;
+  border: 1px solid @base-border-color;
+  border-radius: 20px; // Bo góc tròn
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  .about-version, .about-more-version {
+    font-size: 0.95em;
+    font-family: monospace; // Font code cho version nhìn chuyên nghiệp hơn
+    color: @text-color;
+  }
+
+  .about-copy-version {
+    opacity: 0.3; // Ẩn mờ icon copy đi
+    margin-left: 0.5em;
+    font-size: 0.9em;
+    transition: opacity 0.2s ease;
+  }
+
   &:hover {
-    color: lighten(@text-color, 15%);
+    background-color: lighten(@background-color-highlight, 5%);
+    border-color: @text-color-subtle;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    .about-copy-version {
+      opacity: 1; // Hiện rõ icon copy khi hover
+      color: @text-color-highlight;
+    }
   }
+
   &:active {
-    color: lighten(@text-color, 30%);
+    transform: scale(0.98); // Cảm giác bấm vật lý
   }
 }
 
-.about-version {
-  margin-right: .5em;
-  font-size: 1.25em;
-  vertical-align: middle;
+.about-header-release-notes {
+  font-size: 0.9em;
+  font-weight: bold;
+  color: @text-color-info;
+  text-decoration: none;
+  border-bottom: 1px dashed @text-color-info;
+  padding-bottom: 2px;
+  transition: color 0.2s, border-color 0.2s;
+
+  &:hover {
+    color: lighten(@text-color-info, 15%);
+    border-color: lighten(@text-color-info, 15%);
+    text-decoration: none;
+  }
 }
 
-.about-more-version {
-  color: @text-color-subtle;
-  font-size: .9em;
+// Nút Show More --------------------------------
+
+.show-more-expand {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  margin-top: 1em;
+  
+  .about-more-expand {
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: @text-color-subtle;
+  }
+
+  &:hover {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    .about-more-expand { color: @text-color-highlight; }
+  }
+}
+
+// Hộp chứa thông tin thêm (Electron, Chrome, Node)
+.show-more {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 1.5em;
+  padding: 1.5em;
+  background-color: darken(@base-background-color, 2%);
+  border-radius: @component-border-radius;
+  border: 1px solid @base-border-color;
+  
+  &.hidden {
+    display: none;
+  }
+
+  .about-more-info {
+    width: 100%;
+  }
+
+  .about-version-container {
+    width: 100%;
+    max-width: 300px;
+    justify-content: space-between; // Tách đều chữ và icon sang 2 bên
+    background-color: @base-background-color;
+  }
 }
 
 
-// Updates --------------------------------
+// Updates Box --------------------------------
 
 .about-updates {
   width: 100%;
-  max-width: 39em;
+  max-width: 450px; // Giới hạn độ rộng để hộp không bị bè
 }
 
 .about-updates-box {
   display: flex;
   align-items: center;
-  padding: @component-padding;
+  justify-content: space-between;
+  padding: 1.5em 2em;
   border: 1px solid @base-border-color;
   border-radius: (@component-border-radius * 2);
   background-color: @background-color-highlight;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); // Tạo chiều sâu (Depth)
 }
 
 .about-updates-status {
+  text-align: left; // Căn trái text trong hộp update để dễ đọc
   flex: 1;
-  margin-left: .5em;
-  text-align: center;
-}
 
-.about-updates-item,
-.about-default-update-message .about-updates-label {
-  display: block;
-}
+  .about-updates-label {
+    color: @text-color-subtle;
+    font-size: 0.95em;
+    line-height: 1.6;
 
-.about-updates-label {
-  color: @text-color-subtle;
-  &.is-strong {
-    color: @text-color;
+    &.is-strong {
+      color: @text-color-highlight;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.3em;
+    }
+  }
+
+  .about-updates-instructions {
+    font-size: 0.9em;
+    color: @text-color-info;
+    font-weight: bold;
+    cursor: pointer;
+    &:hover { text-decoration: underline; }
   }
 }
 
-.about-updates-version {
-  margin: 0 .4em;
-}
-
-.about-auto-updates {
-  margin-top: 1em;
-  input {
-    margin-right: .5em;
-  }
+.about-update-action-button {
+  margin-left: 1.5em;
+  padding: 0.5em 1.5em;
+  font-weight: bold;
+  white-space: nowrap; // Chống rớt dòng nút bấm
 }
 
 
-// Love --------------------------------
+// Footer & Love --------------------------------
+
+.about-actions .btn {
+  padding: 0.5em 2em;
+  font-size: 1em;
+}
 
 .about-love {
-  min-width: max-content;
-
-  .icon::before {
-    // Make these octicons look good inlined with text
-    position: relative;
-    width: auto;
-    height: auto;
-    margin-right: 0;
-    font-size: 1.5em;
-    vertical-align: text-top;
-  }
-
-  .icon-logo-github::before {
-    font-size: 3.6em;
-    height: .36em;
-  }
-}
-
-.about-credits {
+  margin-top: 4em;
+  margin-bottom: 2em;
+  font-size: 0.95em;
   color: @text-color-subtle;
-}
 
+  .icon {
+    vertical-align: middle;
+    margin: 0 0.2em;
+  }
 
-// the blue squirrel --------------------------------
+  .icon-heart {
+    color: #e06c75; // Màu đỏ hồng nhẹ nhàng cho trái tim
+    font-size: 1.1em;
+  }
 
-.about-release-notes {
-  color: @background-color-info;
-  &:hover {
-    color: lighten(@background-color-info, 15%);
+  a {
+    color: @text-color;
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &:hover {
+      color: @text-color-info;
+      text-decoration: underline;
+    }
   }
 }

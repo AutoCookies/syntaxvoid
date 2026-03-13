@@ -1,0 +1,212 @@
+.syntax--keyword {
+  color: #ff7a45;
+
+  &.syntax--storage {
+    color: #ff7a45;
+  }
+
+  &.syntax--type {
+    color: #ffd166;
+  }
+
+  &.syntax--operator {
+    color: #ff7a45;
+  }
+
+  &.syntax--function {
+    color: #ff5c5c;
+  }
+
+  &.syntax--variable {
+    color: #f2a285;
+  }
+
+  &.syntax--symbolic {
+    color: #d9d1ce;
+  }
+}
+
+.syntax--entity {
+  color: #d9d1ce;
+
+  &.syntax--variable {
+    color: #d9d1ce;
+  }
+
+  &.syntax--support {
+    color: #f2a285;
+  }
+
+  &.syntax--decorator:last-child {
+    color: #ffb86c;
+  }
+
+  &.syntax--label {
+    text-decoration: underline;
+  }
+
+  &.syntax--package {
+    color: #ffb86c;
+  }
+
+  &.syntax--function {
+    color: #ffb86c;
+  }
+
+  &.syntax--operator {
+    color: #ffb86c;
+
+    &.syntax--symbolic {
+      color: #d9d1ce;
+    }
+  }
+
+  &.syntax--type {
+    color: #ffd166;
+  }
+
+  &.syntax--tag {
+    color: #ff7a45;
+  }
+
+  &.syntax--attribute {
+    color: #f07167;
+  }
+}
+
+.syntax--punctuation {
+  color: #d9d1ce;
+
+  &.syntax--accessor.syntax--member {
+    color: #d9d1ce;
+  }
+}
+
+.syntax--string {
+  color: #84c98b;
+
+  &.syntax--immutable {
+    color: #84c98b;
+  }
+
+  &.syntax--part {
+    color: #ffb86c;
+  }
+
+  &.syntax--regexp {
+    color: #84c98b;
+
+    &.syntax--group {
+      color: #84c98b;
+      background-color: @syntax-background-color;
+    }
+
+    .syntax--constant.syntax--character.syntax--escape {
+      color: #84c98b;
+
+      &.syntax--code {
+        color: #ffb86c;
+      }
+    }
+
+    &.syntax--language {
+      color: #ff7a45;
+    }
+
+    &.syntax--variable {
+      color: #d9d1ce;
+    }
+
+    &.syntax--punctuation {
+      color: #f07167;
+    }
+  }
+}
+
+.syntax--constant {
+  color: #ef476f;
+
+  &.syntax--numeric {
+    color: #ef476f;
+  }
+
+  &.syntax--character {
+    color: #84c98b;
+
+    &.syntax--escape {
+      color: #84c98b;
+    }
+
+    &.syntax--code {
+      color: #ffb86c;
+    }
+  }
+}
+
+.syntax--text {
+  color: #d9d1ce;
+}
+
+.syntax--markup {
+  &.syntax--heading {
+    color: #f2a285;
+  }
+
+  &.syntax--quote {
+    color: #8c7b75;
+  }
+
+  &.syntax--raw {
+    color: #b5a6a1;
+  }
+
+  &.syntax--link {
+    color: #ffb86c;
+  }
+
+  &.syntax--alt {
+    color: #d9d1ce;
+  }
+
+  &.syntax--bold {
+    font-style: bold;
+  }
+
+  &.syntax--italic {
+    font-style: italic;
+  }
+
+  &.syntax--horizontal-rule {
+    color: #63544f;
+  }
+}
+
+.syntax--comment {
+  color: #63544f;
+
+  &.syntax--caption {
+    color: #8c7b75;
+    font-weight: bold;
+  }
+
+  &.syntax--term {
+    color: #8c7b75;
+  }
+
+  &.syntax--punctuation {
+    color: #63544f;
+    font-weight: normal;
+  }
+}
+
+.syntax--invalid:not(.syntax--punctuation) {
+  &.syntax--illegal {
+    color: #1a1614 !important;
+    background-color: #ef476f !important;
+  }
+
+  &.syntax--deprecated {
+    color: #ef476f !important;
+    text-decoration: underline !important;
+  }
+}

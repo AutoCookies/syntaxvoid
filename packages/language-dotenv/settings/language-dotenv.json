@@ -1,0 +1,7 @@
+{
+  ".source.dotenv": {
+    "editor": {
+      "commentStart": "# "
+    }
+  }
+}

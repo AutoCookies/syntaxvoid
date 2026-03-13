@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master, dev]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  pull_request:
+    branches: [main, master, dev]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── Quick smoke-check: does the project install + build native modules? ──
+  smoke:
+    name: Smoke check (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Enable Corepack (Yarn)
+        run: corepack enable
+
+      # crabpm is the SyntaxVoid package manager.
+      # macOS: skip native compilation (git-utils/zutil.h breaks Xcode 16).
+      # Linux/Windows: normal install.
+      - name: Set up crabpm (Linux / Windows)
+        if: runner.os != 'macOS'
+        shell: bash
+        run: |
+          git clone --depth=1 https://github.com/AutoCookies/crabpm.git ppm
+          cd ppm
+          yarn install --ignore-engines
+
+      - name: Set up crabpm (macOS — skip native compilation)
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          git clone --depth=1 https://github.com/AutoCookies/crabpm.git ppm
+          cd ppm
+          yarn install --ignore-engines --ignore-scripts
+          node script/postinstall.js
+
+      - name: Install dependencies
+        run: yarn install --ignore-engines
+
+      # Windows: Python 3.12+ dropped distutils which node-gyp requires.
+      - name: Restore distutils (Windows)
+        if: runner.os == 'Windows'
+        run: pip install setuptools
+
+      - name: Build native modules
+        run: yarn build
+
+      - name: Verify startup (--help)
+        # Headless check: electron --help should exit 0 and print usage
+        run: yarn check:smoke-launch
+        env:
+          DISPLAY: ':99'   # Linux needs a virtual display; no-op on Win/Mac
+        continue-on-error: true   # Not all CI runners have a GPU/display
+
+  # ── ESLint ────────────────────────────────────────────────────────────────
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+      - run: corepack enable
+      - run: yarn install --ignore-engines
+      - name: Run ESLint
+        run: npx eslint src/ packages/ --ext .js,.cjs,.mjs --max-warnings=0
+        continue-on-error: true   # Report but don't block PRs initially

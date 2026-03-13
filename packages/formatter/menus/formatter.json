@@ -1,0 +1,29 @@
+{
+  "context-menu": {
+    "atom-text-editor": [
+      {
+        "label": "Format Document",
+        "command": "formatter:format-document"
+      },
+      {
+        "label": "Format Selection",
+        "command": "formatter:format-selection"
+      }
+    ]
+  },
+  "menu": [
+    {
+      "label": "Edit",
+      "submenu": [
+        {
+          "label": "Format Document",
+          "command": "formatter:format-document"
+        },
+        {
+          "label": "Format Selection",
+          "command": "formatter:format-selection"
+        }
+      ]
+    }
+  ]
+}

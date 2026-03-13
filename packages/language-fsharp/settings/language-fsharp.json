@@ -1,0 +1,7 @@
+{
+  ".source.fsharp": {
+    "editor": {
+      "commentStart": "// "
+    }
+  }
+}

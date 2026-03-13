@@ -1,0 +1,12 @@
+{
+  ".source.ignore": {
+    "editor": {
+      "commentStart": "# "
+    }
+  },
+  ".text.git-rebase": {
+    "editor": {
+      "commentStart": "# "
+    }
+  }
+}

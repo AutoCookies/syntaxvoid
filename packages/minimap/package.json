@@ -1,0 +1,46 @@
+{
+  "name": "minimap",
+  "main": "./lib/main",
+  "version": "0.1.0",
+  "description": "A VS-Code style minimap for SyntaxVoid. Renders the full file on a canvas sidebar.",
+  "license": "MIT",
+  "repository": "https://github.com/AutoCookies/syntaxvoid",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "configSchema": {
+    "enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Enable or disable the minimap"
+    },
+    "width": {
+      "type": "integer",
+      "default": 100,
+      "minimum": 40,
+      "maximum": 240,
+      "description": "Width of the minimap in pixels"
+    },
+    "charHeight": {
+      "type": "integer",
+      "default": 2,
+      "minimum": 1,
+      "maximum": 4,
+      "description": "Height in pixels of each line in the minimap"
+    },
+    "charWidth": {
+      "type": "integer",
+      "default": 1,
+      "minimum": 1,
+      "maximum": 3,
+      "description": "Width in pixels of each character column in the minimap"
+    },
+    "viewportOpacity": {
+      "type": "number",
+      "default": 0.25,
+      "minimum": 0.05,
+      "maximum": 0.8,
+      "description": "Opacity of the viewport overlay"
+    }
+  }
+}

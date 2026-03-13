@@ -1,0 +1,41 @@
+// Minimap sidebar — rendered alongside every text editor.
+// Variable fallbacks are in variables.less; the active theme overrides them.
+@import "variables";
+
+.minimap-container {
+  position: relative;
+  flex: 0 0 auto;
+  overflow: hidden;            // clips the tall canvas to editor height
+  cursor: pointer;
+  border-left: 1px solid darken(@syntax-background-color, 4%);
+  background: @syntax-background-color;
+  user-select: none;
+
+  &:hover {
+    .minimap-viewport { opacity: 1 !important; }
+  }
+}
+
+// Inner div that holds the canvas and gets translateY applied.
+.minimap-scroller {
+  position: relative;
+  will-change: transform;
+}
+
+.minimap-canvas {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+// Screen-space overlay that shows which part of the file is visible.
+.minimap-viewport {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.12);
+  border-top:    1px solid rgba(255, 255, 255, 0.18);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  transition: opacity 0.1s ease;
+}

@@ -1,0 +1,76 @@
+{
+  ".source.gfm": {
+    "Insert bold text": {
+      "prefix": "bold",
+      "body": "**${1:${TM_SELECTED_TEXT}}**$0"
+    },
+    "Insert italic text": {
+      "prefix": "italic",
+      "body": "*${1:${TM_SELECTED_TEXT}}*$0"
+    },
+    "Insert inline code": {
+      "prefix": "code",
+      "body": "`${1:${TM_SELECTED_TEXT}}`$0"
+    },
+    "Insert fenced code block": {
+      "prefix": "fenced codeblock",
+      "body": "```${1|python,c,c++,c#,ruby,go,java,php,htm,css,javascript,json,markdown,console|}\n${TM_SELECTED_TEXT}$0\n```"
+    },
+    "Insert heading level 1": {
+      "prefix": "heading1",
+      "body": "# ${1:${TM_SELECTED_TEXT}}"
+    },
+    "Insert heading level 2": {
+      "prefix": "heading2",
+      "body": "## ${1:${TM_SELECTED_TEXT}}"
+    },
+    "Insert heading level 3": {
+      "prefix": "heading3",
+      "body": "### ${1:${TM_SELECTED_TEXT}}"
+    },
+    "Insert heading level 4": {
+      "prefix": "heading4",
+      "body": "#### ${1:${TM_SELECTED_TEXT}}"
+    },
+    "Insert heading level 5": {
+      "prefix": "heading5",
+      "body": "##### ${1:${TM_SELECTED_TEXT}}"
+    },
+    "Insert heading level 6": {
+      "prefix": "heading6",
+      "body": "###### ${1:${TM_SELECTED_TEXT}}"
+    },
+    "Insert unordered list": {
+      "prefix": "unordered list",
+      "body": "- ${1:first}\n- ${2:second}\n- ${3:third}\n$0"
+    },
+    "Insert ordered list": {
+      "prefix": "ordered list",
+      "body": "1. ${1:first}\n2. ${2:second}\n3. ${3:third}\n$0"
+    },
+    "Insert horizontal rule": {
+      "prefix": "horizontal rule",
+      "body": "----------\n"
+    },
+    "Insert link": {
+      "prefix": "link",
+      "body": "[${TM_SELECTED_TEXT:${1:text}}](${2:https://})$0"
+    },
+    "Insert image": {
+      "prefix": "image",
+      "body": "![${TM_SELECTED_TEXT:${1:alt}}](${2:https://})$0"
+    },
+    "Insert strikethrough": {
+      "prefix": "strikethrough",
+      "body": "~~${1:${TM_SELECTED_TEXT}}~~"
+    },
+    "Insert inline math": {
+      "prefix": "inline math",
+      "body": "$${1:${TM_SELECTED_TEXT}}$"
+    },
+    "Insert fenced math": {
+      "prefix": "fenced math",
+      "body": "$$\n${1:${TM_SELECTED_TEXT}}\n$$"
+    }
+  }
+}

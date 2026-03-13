@@ -1,0 +1,8 @@
+{
+  "name": "language-markdown-math",
+  "version": "0.1.0",
+  "description": "LaTeX math syntax highlighting in Markdown — inline $...$, block $$...$$, and ```math fences.",
+  "license": "MIT",
+  "repository": "https://github.com/AutoCookies/syntaxvoid",
+  "engines": { "atom": "*" }
+}

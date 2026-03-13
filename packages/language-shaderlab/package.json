@@ -1,0 +1,10 @@
+{
+  "name": "language-shaderlab",
+  "version": "0.1.0",
+  "description": "Syntax highlighting for shaderlab (ported from VS Code).",
+  "license": "MIT",
+  "repository": "https://github.com/AutoCookies/syntaxvoid",
+  "engines": {
+    "atom": "*"
+  }
+}
