@@ -54,11 +54,11 @@ describe('atom.themes', () => {
         4,
         {},
         [],
-        'atom-dark-ui'
+        'crab-dark-ui'
       ]);
 
       expect(atom.themes.getEnabledThemeNames()).toEqual([
-        'atom-dark-ui',
+        'crab-dark-ui',
         'atom-light-ui'
       ]);
     })
@@ -68,7 +68,7 @@ describe('atom.themes', () => {
     it('returns the theme directories before the themes are loaded', () => {
       atom.config.set('core.themes', [
         'theme-with-index-less',
-        'atom-dark-ui',
+        'crab-dark-ui',
         'atom-light-ui'
       ]);
 
@@ -77,7 +77,7 @@ describe('atom.themes', () => {
       // syntax theme is not a dir at this time, so only two.
       expect(paths.length).toBe(2);
       expect(paths[0]).toContain('atom-light-ui');
-      expect(paths[1]).toContain('atom-dark-ui');
+      expect(paths[1]).toContain('crab-dark-ui');
     });
 
     it('ignores themes that cannot be resolved to a directory', () => {
@@ -103,7 +103,7 @@ describe('atom.themes', () => {
 
       didChangeActiveThemesHandler.calls.reset();
       expect(document.querySelectorAll('style.theme')).toHaveLength(0);
-      atom.config.set('core.themes', ['atom-dark-ui']);
+      atom.config.set('core.themes', ['crab-dark-ui']);
 
       await waitForCondition(() => {
         return didChangeActiveThemesHandler.calls.count() === 1;
@@ -115,8 +115,8 @@ describe('atom.themes', () => {
         document
         .querySelector('style[priority="1"]')
         .getAttribute('source-path')
-      ).toMatch(/atom-dark-ui/);
-      atom.config.set('core.themes', ['atom-light-ui', 'atom-dark-ui']);
+      ).toMatch(/crab-dark-ui/);
+      atom.config.set('core.themes', ['atom-light-ui', 'crab-dark-ui']);
 
       await waitForCondition(() => {
         return didChangeActiveThemesHandler.calls.count() === 1;
@@ -128,7 +128,7 @@ describe('atom.themes', () => {
         document
         .querySelectorAll('style[priority="1"]')[0]
         .getAttribute('source-path')
-      ).toMatch(/atom-dark-ui/);
+      ).toMatch(/crab-dark-ui/);
       expect(
         document
         .querySelectorAll('style[priority="1"]')[1]
@@ -143,10 +143,10 @@ describe('atom.themes', () => {
       didChangeActiveThemesHandler.calls.reset();
       expect(document.querySelectorAll('style[priority="1"]')).toHaveLength(2);
 
-      // atom-dark-ui has a directory path, the syntax one doesn't
+      // crab-dark-ui has a directory path, the syntax one doesn't
       atom.config.set('core.themes', [
         'theme-with-index-less',
-        'atom-dark-ui'
+        'crab-dark-ui'
       ]);
 
       await waitForCondition(() => {
@@ -157,11 +157,11 @@ describe('atom.themes', () => {
 
       const importPaths = atom.themes.getImportPaths();
       expect(importPaths.length).toBe(1);
-      expect(importPaths[0]).toContain('atom-dark-ui');
+      expect(importPaths[0]).toContain('crab-dark-ui');
     });
 
     it('adds theme-* classes to the workspace for each active theme', async () => {
-      atom.config.set('core.themes', ['atom-dark-ui', 'atom-dark-syntax']);
+      atom.config.set('core.themes', ['crab-dark-ui', 'crab-dark-syntax']);
 
       let didChangeActiveThemesHandler = jasmine.createSpy();
       atom.themes.onDidChangeActiveThemes(didChangeActiveThemesHandler);
@@ -169,7 +169,7 @@ describe('atom.themes', () => {
       await atom.themes.activateThemes();
 
       const workspaceElement = atom.workspace.getElement();
-      expect(workspaceElement).toHaveClass('theme-atom-dark-ui');
+      expect(workspaceElement).toHaveClass('theme-crab-dark-ui');
 
       atom.themes.onDidChangeActiveThemes(
         (didChangeActiveThemesHandler = jasmine.createSpy())
@@ -189,7 +189,7 @@ describe('atom.themes', () => {
         'theme-theme-with-syntax-variables'
       );
       expect(workspaceElement).not.toHaveClass('theme-atom-dark-ui');
-      expect(workspaceElement).not.toHaveClass('theme-atom-dark-syntax');
+      expect(workspaceElement).not.toHaveClass('theme-crab-dark-syntax');
     });
   });
 
@@ -542,7 +542,7 @@ h2 {
   describe('when in safe mode', () => {
     describe('when the enabled UI and syntax themes are bundled with Atom', () => {
       beforeEach(async () => {
-        atom.config.set('core.themes', ['atom-light-ui', 'atom-dark-syntax']);
+        atom.config.set('core.themes', ['atom-light-ui', 'crab-dark-syntax']);
 
         await atom.themes.activateThemes();
       });
@@ -551,7 +551,7 @@ h2 {
         const activeThemeNames = atom.themes.getActiveThemeNames();
         expect(activeThemeNames.length).toBe(2);
         expect(activeThemeNames).toContain('atom-light-ui');
-        expect(activeThemeNames).toContain('atom-dark-syntax');
+        expect(activeThemeNames).toContain('crab-dark-syntax');
       });
     });
 

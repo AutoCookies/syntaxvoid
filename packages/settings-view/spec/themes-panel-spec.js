@@ -15,11 +15,11 @@ describe("ThemesPanel", function () {
   beforeEach(async () => {
     jasmine.useRealClock();
     atom.packages.loadPackage('atom-light-ui');
-    atom.packages.loadPackage('atom-dark-ui');
+    atom.packages.loadPackage('crab-dark-ui');
     atom.packages.loadPackage('atom-light-syntax');
-    atom.packages.loadPackage('atom-dark-syntax');
+    atom.packages.loadPackage('crab-dark-syntax');
     atom.packages.packageDirPaths.push(path.join(__dirname, 'fixtures'));
-    atom.config.set('core.themes', ['atom-dark-ui', 'atom-dark-syntax']);
+    atom.config.set('core.themes', ['crab-dark-ui', 'crab-dark-syntax']);
     reloadedHandler = jasmine.createSpy('reloadedHandler');
     atom.themes.onDidChangeActiveThemes(reloadedHandler);
     await atom.themes.activatePackages();
@@ -43,8 +43,8 @@ describe("ThemesPanel", function () {
   }); // Ensure works on promise and non-promise versions
 
   it("selects the active syntax and UI themes", function () {
-    expect(panel.refs.uiMenu.value).toBe('atom-dark-ui');
-    expect(panel.refs.syntaxMenu.value).toBe('atom-dark-syntax');
+    expect(panel.refs.uiMenu.value).toBe('crab-dark-ui');
+    expect(panel.refs.syntaxMenu.value).toBe('crab-dark-syntax');
   });
 
   describe("when a UI theme is selected", () => it("updates the 'core.themes' config key with the selected UI theme", function () {
@@ -53,7 +53,7 @@ describe("ThemesPanel", function () {
       child.dispatchEvent(new Event('change', {bubbles: true}));
     }
     waitsFor(() => reloadedHandler.callCount === 2);
-    runs(() => expect(atom.config.get('core.themes')).toEqual(['atom-light-ui', 'atom-dark-syntax']));
+    runs(() => expect(atom.config.get('core.themes')).toEqual(['atom-light-ui', 'crab-dark-syntax']));
 }));
 
   describe("when a syntax theme is selected", () => it("updates the 'core.themes' config key with the selected syntax theme", function () {

@@ -1,0 +1,11 @@
+{
+  "name": "crab-dark-syntax2",
+  "theme": "syntax",
+  "version": "0.29.1",
+  "description": "A dark crab-themed syntax color scheme for SyntaxVoid",
+  "repository": "https://github.com/AutoCookies/syntaxvoid",
+  "license": "MIT",
+  "engines": {
+    "atom": ">0.50.0"
+  }
+}

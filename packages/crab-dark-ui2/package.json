@@ -1,0 +1,12 @@
+{
+  "name": "crab-dark-ui2",
+  "theme": "ui",
+  "version": "0.1.0",
+  "description": "A deep-reef, crab-inspired dark UI theme for SyntaxVoid",
+  "license": "MIT",
+  "repository": "https://github.com/AutoCookies/syntaxvoid",
+  "engines": {
+    "atom": ">0.40.0"
+  }
+}
+

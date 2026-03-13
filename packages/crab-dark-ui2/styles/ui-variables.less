@@ -1,0 +1,98 @@
+// Crab Dark UI 2 – warm charcoal reef with armored orange shell
+
+// Text
+@text-color:            #F5E9E3;  // warm bone-white
+@text-color-subtle:     #B6A49C;  // soft warm gray
+@text-color-highlight:  #FFE0C2;  // warm cream
+@text-color-selected:   @text-color-highlight;
+
+@text-color-info:       #F2AE72;  // sand-amber highlight
+@text-color-success:    #74C174;  // seaweed green
+@text-color-warning:    #F2C14F;  // warning sand-gold
+@text-color-error:      #FF4B4B;  // vivid blood red
+
+@text-color-ignored:    @text-color-subtle;
+@text-color-added:      @text-color-success;
+@text-color-renamed:    @text-color-info;
+@text-color-modified:   @text-color-warning;
+@text-color-removed:    @text-color-error;
+
+// Backgrounds
+@background-color-info:    #3A3F52;
+@background-color-success: #274432;
+@background-color-warning: #4A3A23;
+@background-color-error:   #4A2124;
+@background-color-highlight: rgba(255, 224, 194, 0.06);
+@background-color-selected: #3A2B26;
+
+@app-background-color:      #151314;  // deep warm charcoal
+
+@tool-panel-background-color: #211D1E;
+@tool-panel-border-color:     rgba(0, 0, 0, 0.55);
+
+@base-background-color:       lighten(@tool-panel-background-color, 4%);
+@base-border-color:           rgba(0, 0, 0, 0.6);
+
+@pane-item-background-color:  @base-background-color;
+@pane-item-border-color:      @base-border-color;
+
+@input-background-color:      #1C1819;
+@input-border-color:          @base-border-color;
+
+@inset-panel-background-color: #181516;
+@inset-panel-border-color:     @base-border-color;
+
+@panel-heading-background-color: #231D1E;
+@panel-heading-border-color:     fadein(@base-border-color, 10%);
+
+@overlay-background-color:    #211D1E;
+@overlay-border-color:        @background-color-highlight;
+
+// Buttons & accents – terracotta / burnt orange / coral
+@button-background-color:         #3A2621;
+@button-background-color-hover:   #4A3026;
+@button-background-color-selected:#5A3829;
+@button-border-color:             @base-border-color;
+
+@accent-color:        #E6692B;  // burnt orange
+@accent-color-hover:  #FF7F4D;  // coral
+
+// Tabs
+@tab-bar-background-color:       #191516;
+@tab-bar-border-color:           darken(@tab-background-color-active, 10%);
+@tab-background-color:           #211C1D;
+@tab-background-color-active:    #1C1819;
+@tab-border-color:               #3A2C2E;
+
+// Tree view
+@tree-view-background-color:     #1B1819;
+@tree-view-border-color:         @tool-panel-border-color;
+
+// Scrollbars
+@scrollbar-background-color:     #141213;
+@scrollbar-color:                rgba(120, 104, 96, 0.55);
+
+// Site colors
+@ui-site-color-1: @background-color-success;  // green
+@ui-site-color-2: @background-color-info;     // muted blue/steel
+@ui-site-color-3: @background-color-warning;  // orange
+@ui-site-color-4: #DB2FF4;                    // purple accent
+@ui-site-color-5: #F5E11D;                    // yellow accent
+
+// Sizes
+@font-size: 11px;
+@input-font-size: 14px;
+
+@disclosure-arrow-size: 12px;
+
+@component-padding: 10px;
+@component-icon-padding: 5px;
+@component-icon-size: 16px;
+@component-line-height: 25px;
+@component-border-radius: 3px;
+
+@tab-height: 26px;
+
+// Other
+@font-family: system-ui;
+

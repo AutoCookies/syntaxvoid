@@ -110,8 +110,8 @@ Using this criteria, all 91 packages have been evaluated and categorized to dete
 |---------|-------------|----------|---------------------| -------------|
 | **[about]** | 2 | 0 | 0 | 7/11/18 |
 | **[archive-view]** | 10 | 0 | 0 | 6/3/18 |
-| **[atom-dark-syntax]** | 5 | 0 | 0 | 12/6/17 |
-| **[atom-dark-ui]** | 1 | 2 | 0 | 2/13/18 |
+| **[crab-dark-syntax]** | 5 | 0 | 0 | 12/6/17 |
+| **[crab-dark-ui]** | 1 | 2 | 0 | 2/13/18 |
 | **[atom-light-syntax]** | 1 | 0 | 0 | 10/17/16 |
 | **[atom-light-ui]** | 1 | 0 | 0 | 2/13/18 |
 | **[autoflow]** | 17 | 4 | 0 | 4/17/18 |
@@ -253,8 +253,8 @@ One alternative approach would be to break this core Atom functionality out of p
 
 [about]: https://github.com/atom/about
 [archive-view]: https://github.com/atom/archive-view
-[atom-dark-syntax]: https://github.com/atom/atom-dark-syntax
-[atom-dark-ui]: https://github.com/atom/atom-dark-ui
+[crab-dark-syntax]: https://github.com/AutoCookies/syntaxvoid/tree/main/packages/atom-dark-syntax
+[crab-dark-ui]: https://github.com/AutoCookies/syntaxvoid/tree/main/packages/atom-dark-ui
 [atom-light-syntax]: https://github.com/atom/atom-light-syntax
 [atom-light-ui]: https://github.com/atom/atom-light-ui
 [autocomplete-atom-api]: https://github.com/atom/autocomplete-atom-api
