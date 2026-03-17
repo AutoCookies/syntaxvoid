@@ -31,7 +31,7 @@ export default class IncompatiblePackagesComponent {
         atom.reload();
       } else if (event.target.classList.contains('view-settings')) {
         atom.workspace.open(
-          `atom://config/packages/${event.target.package.name}`
+          `syntaxvoid://config/packages/${event.target.package.name}`
         );
       }
     });

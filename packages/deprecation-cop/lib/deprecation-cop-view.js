@@ -529,7 +529,7 @@ export default class DeprecationCopView {
   }
 
   checkForUpdates() {
-    atom.workspace.open('atom://config/updates');
+    atom.workspace.open('syntaxvoid://config/updates');
   }
 
   disablePackage(packageName) {

@@ -85,6 +85,6 @@ describe("FileStats", function() {
         atom.packages.activatePackage("about")
       ]));});
 
-    it("doesn't throw an exception when accessing virtual filepaths", () => atom.project.setPaths(["atom://about"]));
+    it("doesn't throw an exception when accessing virtual filepaths", () => atom.project.setPaths(["syntaxvoid://about"]));
   });
 });

@@ -97,7 +97,7 @@ module.exports = (NotificationsLog = (function() {
 
     getElement() { return this.element; }
 
-    getURI() { return 'atom://notifications/log'; }
+    getURI() { return 'syntaxvoid://notifications/log'; }
 
     getTitle() { return 'Log'; }
 

@@ -85,15 +85,15 @@ export default class SearchSettingView {
             // funnily enough. So we will prompt a notification to go there
             atom.notifications.addInfo("Sorry, Pulsar is unable to link to this setting. Please select 'URI Handling' on the sidebar.")
           } else {
-            atom.workspace.open("atom://config/core")
+            atom.workspace.open("syntaxvoid://config/core")
           }
           break;
         case "editor":
-          atom.workspace.open("atom://config/editor")
+          atom.workspace.open("syntaxvoid://config/editor")
           break;
         default:
           // The handling for any packages name
-          atom.workspace.open(`atom://config/packages/${settingLocation}`)
+          atom.workspace.open(`syntaxvoid://config/packages/${settingLocation}`)
           break;
       }
     }

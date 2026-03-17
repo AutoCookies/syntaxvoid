@@ -49,7 +49,7 @@ export default class GeneralPanel {
   didClick (event) {
     const target = event.target.closest('.packages-open')
     if (target) {
-      atom.workspace.open('atom://config/packages')
+      atom.workspace.open('syntaxvoid://config/packages')
     }
   }
 

@@ -274,7 +274,7 @@ describe('IncompatiblePackagesComponent', () => {
             .querySelector('.incompatible-package:nth-child(2) button')
             .dispatchEvent(new CustomEvent('click', { bubbles: true }));
           expect(atom.workspace.open).toHaveBeenCalledWith(
-            'atom://config/packages/incompatible-2'
+            'syntaxvoid://config/packages/incompatible-2'
           );
         });
       });

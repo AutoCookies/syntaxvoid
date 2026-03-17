@@ -306,7 +306,7 @@ module.exports = class WindowEventHandler {
     if (uri && uri[0] !== '#') {
       if (/^https?:\/\//.test(uri)) {
         this.applicationDelegate.openExternal(uri);
-      } else if (uri.startsWith('atom://')) {
+      } else if (uri.startsWith('syntaxvoid://')) {
         this.atomEnvironment.uriHandlerRegistry.handleURI(uri);
       }
     }

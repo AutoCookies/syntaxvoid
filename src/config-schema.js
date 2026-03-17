@@ -82,21 +82,21 @@ const configSchema = {
         type: 'string',
         default: 'prompt',
         description:
-          'When should SyntaxVoid register itself as the default handler for atom:// URIs',
+          'When should SyntaxVoid register itself as the default handler for syntaxvoid:// URIs',
         enum: [
           {
             value: 'prompt',
             description:
-              'Prompt to register SyntaxVoid as the default atom:// URI handler'
+              'Prompt to register SyntaxVoid as the default syntaxvoid:// URI handler'
           },
           {
             value: 'always',
             description:
-              'Always become the default atom:// URI handler automatically'
+              'Always become the default syntaxvoid:// URI handler automatically'
           },
           {
             value: 'never',
-            description: 'Never become the default atom:// URI handler'
+            description: 'Never become the default syntaxvoid:// URI handler'
           }
         ]
       },

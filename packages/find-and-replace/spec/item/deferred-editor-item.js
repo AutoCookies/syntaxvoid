@@ -66,6 +66,6 @@ class DeferredEditorItem {
   }
 }
 
-DeferredEditorItem.uri = 'atom://find-and-replace/spec/deferred-editor'
+DeferredEditorItem.uri = 'syntaxvoid://find-and-replace/spec/deferred-editor'
 
 module.exports = DeferredEditorItem

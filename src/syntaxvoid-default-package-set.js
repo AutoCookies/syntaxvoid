@@ -7,10 +7,8 @@ const REQUIRED_PACKAGES = [
   'status-bar',
   'find-and-replace',
   'tabs',
-  'syntaxvoid-project-map',
   'welcome',
-  'about',
-  'x-terminal-reloaded'
+  'about'
 ];
 
 const OPTIONAL_DISABLED_BY_DEFAULT = [

@@ -1,5 +1,5 @@
 var path = require('path');
-var Promise = require('any-promise');
+var Promise = global.Promise;
 // var bindings = require('../build/Release/spellchecker.node');
 // var Spellchecker = bindings.Spellchecker;
 class Spellchecker {

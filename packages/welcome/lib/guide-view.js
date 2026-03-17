@@ -72,7 +72,7 @@ export default class GuideView {
                 <p>
                   <img
                     className="welcome-img"
-                    src="atom://welcome/assets/package.svg"
+                    src="syntaxvoid://welcome/assets/package.svg"
                   />
                 </p>
                 <p>
@@ -113,7 +113,7 @@ export default class GuideView {
                 <p>
                   <img
                     className="welcome-img"
-                    src="atom://welcome/assets/package.svg"
+                    src="syntaxvoid://welcome/assets/package.svg"
                   />
                 </p>
                 <p>
@@ -184,7 +184,7 @@ export default class GuideView {
                 <p>
                   <img
                     className="welcome-img"
-                    src="atom://welcome/assets/code.svg"
+                    src="syntaxvoid://welcome/assets/code.svg"
                   />
                 </p>
                 <p>
@@ -218,7 +218,7 @@ export default class GuideView {
                 <p>
                   <img
                     className="welcome-img"
-                    src="atom://welcome/assets/code.svg"
+                    src="syntaxvoid://welcome/assets/code.svg"
                   />
                 </p>
                 <p>
@@ -253,7 +253,7 @@ export default class GuideView {
                 <p>
                   <img
                     className="welcome-img"
-                    src="atom://welcome/assets/code.svg"
+                    src="syntaxvoid://welcome/assets/code.svg"
                   />
                 </p>
                 <p>
@@ -400,11 +400,11 @@ export default class GuideView {
   }
 
   didClickPackagesButton() {
-    atom.workspace.open('atom://config/install', { split: 'left' });
+    atom.workspace.open('syntaxvoid://config/install', { split: 'left' });
   }
 
   didClickThemesButton() {
-    atom.workspace.open('atom://config/themes', { split: 'left' });
+    atom.workspace.open('syntaxvoid://config/themes', { split: 'left' });
   }
 
   didClickStylingButton() {

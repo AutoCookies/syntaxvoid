@@ -4,9 +4,9 @@ import { CompositeDisposable } from 'atom';
 
 let WelcomeView, GuideView, ChangeLogView;
 
-const WELCOME_URI = 'atom://welcome/welcome';
-const GUIDE_URI = 'atom://welcome/guide';
-const CHANGELOG_URI = 'atom://welcome/changelog';
+const WELCOME_URI = 'syntaxvoid://welcome/welcome';
+const GUIDE_URI = 'syntaxvoid://welcome/guide';
+const CHANGELOG_URI = 'syntaxvoid://welcome/changelog';
 
 export default class WelcomePackage {
   async activate() {

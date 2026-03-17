@@ -182,49 +182,49 @@ describe("SettingsView", function () {
         openWithCommand('settings-view:editor');
         runs(() => openWithCommand('settings-view:core'));
         runs(() => expect(atom.workspace.getActivePaneItem().activePanel)
-          .toEqual({name: 'Core', options: {uri: 'atom://config/core'}}));
+          .toEqual({name: 'Core', options: {uri: 'syntaxvoid://config/core'}}));
       }));
 
       describe("settings-view:editor", () => it("opens the editor settings view", function () {
         openWithCommand('settings-view:editor');
         runs(() => expect(atom.workspace.getActivePaneItem().activePanel)
-          .toEqual({name: 'Editor', options: {uri: 'atom://config/editor'}}));
+          .toEqual({name: 'Editor', options: {uri: 'syntaxvoid://config/editor'}}));
       }));
 
       describe("settings-view:show-keybindings", () => it("opens the settings view to the keybindings page", function () {
         openWithCommand('settings-view:show-keybindings');
         runs(() => expect(atom.workspace.getActivePaneItem().activePanel)
-          .toEqual({name: 'Keybindings', options: {uri: 'atom://config/keybindings'}}));
+          .toEqual({name: 'Keybindings', options: {uri: 'syntaxvoid://config/keybindings'}}));
       }));
 
       describe("settings-view:change-themes", () => it("opens the settings view to the themes page", function () {
         openWithCommand('settings-view:change-themes');
         runs(() => expect(atom.workspace.getActivePaneItem().activePanel)
-          .toEqual({name: 'Themes', options: {uri: 'atom://config/themes'}}));
+          .toEqual({name: 'Themes', options: {uri: 'syntaxvoid://config/themes'}}));
       }));
 
       describe("settings-view:uninstall-themes", () => it("opens the settings view to the themes page", function () {
         openWithCommand('settings-view:uninstall-themes');
         runs(() => expect(atom.workspace.getActivePaneItem().activePanel)
-          .toEqual({name: 'Themes', options: {uri: 'atom://config/themes'}}));
+          .toEqual({name: 'Themes', options: {uri: 'syntaxvoid://config/themes'}}));
       }));
 
       describe("settings-view:uninstall-packages", () => it("opens the settings view to the install page", function () {
         openWithCommand('settings-view:uninstall-packages');
         runs(() => expect(atom.workspace.getActivePaneItem().activePanel)
-          .toEqual({name: 'Packages', options: {uri: 'atom://config/packages'}}));
+          .toEqual({name: 'Packages', options: {uri: 'syntaxvoid://config/packages'}}));
       }));
 
       describe("settings-view:install-packages-and-themes", () => it("opens the settings view to the install page", function () {
         openWithCommand('settings-view:install-packages-and-themes');
         runs(() => expect(atom.workspace.getActivePaneItem().activePanel)
-          .toEqual({name: 'Install', options: {uri: 'atom://config/install'}}));
+          .toEqual({name: 'Install', options: {uri: 'syntaxvoid://config/install'}}));
       }));
 
       describe("settings-view:check-for-package-updates", () => it("opens the settings view to the install page", function () {
         openWithCommand('settings-view:check-for-package-updates');
         runs(() => expect(atom.workspace.getActivePaneItem().activePanel)
-          .toEqual({name: 'Updates', options: {uri: 'atom://config/updates'}}));
+          .toEqual({name: 'Updates', options: {uri: 'syntaxvoid://config/updates'}}));
       }));
     });
 
@@ -246,8 +246,8 @@ describe("SettingsView", function () {
 
       beforeEach(() => settingsView = null);
 
-      it("opens the settings to the correct panel with atom://config/<panel-name> and that panel is keyboard-scrollable", function () {
-        waitsForPromise(() => atom.workspace.open('atom://config').then(s => settingsView = s));
+      it("opens the settings to the correct panel with syntaxvoid://config/<panel-name> and that panel is keyboard-scrollable", function () {
+        waitsForPromise(() => atom.workspace.open('syntaxvoid://config').then(s => settingsView = s));
 
         waitsFor(done => process.nextTick(done));
         runs(function () {
@@ -257,90 +257,90 @@ describe("SettingsView", function () {
           expectActivePanelToBeKeyboardScrollable();
         });
 
-        waitsForPromise(() => atom.workspace.open('atom://config/editor').then(s => settingsView = s));
+        waitsForPromise(() => atom.workspace.open('syntaxvoid://config/editor').then(s => settingsView = s));
 
         waits(1);
         runs(function () {
           expect(settingsView.activePanel)
-            .toEqual({name: 'Editor', options: {uri: 'atom://config/editor'}});
+            .toEqual({name: 'Editor', options: {uri: 'syntaxvoid://config/editor'}});
           expect(focusIsWithinActivePanel()).toBe(true);
           expectActivePanelToBeKeyboardScrollable();
         });
 
-        waitsForPromise(() => atom.workspace.open('atom://config/keybindings').then(s => settingsView = s));
+        waitsForPromise(() => atom.workspace.open('syntaxvoid://config/keybindings').then(s => settingsView = s));
 
         waits(1);
         runs(function () {
           expect(settingsView.activePanel)
-            .toEqual({name: 'Keybindings', options: {uri: 'atom://config/keybindings'}});
+            .toEqual({name: 'Keybindings', options: {uri: 'syntaxvoid://config/keybindings'}});
           expect(focusIsWithinActivePanel()).toBe(true);
           expectActivePanelToBeKeyboardScrollable();
         });
 
-        waitsForPromise(() => atom.workspace.open('atom://config/packages').then(s => settingsView = s));
+        waitsForPromise(() => atom.workspace.open('syntaxvoid://config/packages').then(s => settingsView = s));
 
         waits(1);
         runs(function () {
           expect(settingsView.activePanel)
-            .toEqual({name: 'Packages', options: {uri: 'atom://config/packages'}});
+            .toEqual({name: 'Packages', options: {uri: 'syntaxvoid://config/packages'}});
           expect(focusIsWithinActivePanel()).toBe(true);
           expectActivePanelToBeKeyboardScrollable();
         });
 
-        waitsForPromise(() => atom.workspace.open('atom://config/themes').then(s => settingsView = s));
+        waitsForPromise(() => atom.workspace.open('syntaxvoid://config/themes').then(s => settingsView = s));
 
         waits(1);
         runs(function () {
           expect(settingsView.activePanel)
-            .toEqual({name: 'Themes', options: {uri: 'atom://config/themes'}});
+            .toEqual({name: 'Themes', options: {uri: 'syntaxvoid://config/themes'}});
           expect(focusIsWithinActivePanel()).toBe(true);
           expectActivePanelToBeKeyboardScrollable();
         });
 
-        waitsForPromise(() => atom.workspace.open('atom://config/updates').then(s => settingsView = s));
+        waitsForPromise(() => atom.workspace.open('syntaxvoid://config/updates').then(s => settingsView = s));
 
         waits(1);
         runs(function () {
           expect(settingsView.activePanel)
-            .toEqual({name: 'Updates', options: {uri: 'atom://config/updates'}});
+            .toEqual({name: 'Updates', options: {uri: 'syntaxvoid://config/updates'}});
           expect(focusIsWithinActivePanel()).toBe(true);
           expectActivePanelToBeKeyboardScrollable();
         });
 
-        waitsForPromise(() => atom.workspace.open('atom://config/install').then(s => settingsView = s));
+        waitsForPromise(() => atom.workspace.open('syntaxvoid://config/install').then(s => settingsView = s));
 
         let hasSystemPanel = false;
         waits(1);
         runs(function () {
           expect(settingsView.activePanel)
-            .toEqual({name: 'Install', options: {uri: 'atom://config/install'}});
+            .toEqual({name: 'Install', options: {uri: 'syntaxvoid://config/install'}});
           expect(focusIsWithinActivePanel()).toBe(true);
           expectActivePanelToBeKeyboardScrollable();
           return hasSystemPanel = (settingsView.panelsByName['System'] != null);
         });
 
         if (hasSystemPanel) {
-          waitsForPromise(() => atom.workspace.open('atom://config/system').then(s => settingsView = s));
+          waitsForPromise(() => atom.workspace.open('syntaxvoid://config/system').then(s => settingsView = s));
 
           waits(1);
           runs(function () {
             expect(settingsView.activePanel)
-              .toEqual({name: 'System', options: {uri: 'atom://config/system'}});
+              .toEqual({name: 'System', options: {uri: 'syntaxvoid://config/system'}});
             expect(focusIsWithinActivePanel()).toBe(true);
             expectActivePanelToBeKeyboardScrollable();
           });
         }
       });
 
-      it("opens the package settings view with atom://config/packages/<package-name>", function () {
+      it("opens the package settings view with syntaxvoid://config/packages/<package-name>", function () {
         waitsForPromise(() => atom.packages.activatePackage(path.join(__dirname, 'fixtures', 'package-with-readme')));
 
-        waitsForPromise(() => atom.workspace.open('atom://config/packages/package-with-readme').then(s => settingsView = s));
+        waitsForPromise(() => atom.workspace.open('syntaxvoid://config/packages/package-with-readme').then(s => settingsView = s));
 
         waitsFor(done => process.nextTick(done));
         runs(() => expect(settingsView.activePanel)
           .toEqual({name: 'package-with-readme', options: {
-            uri: 'atom://config/packages/package-with-readme',
+            uri: 'syntaxvoid://config/packages/package-with-readme',
             pack: {
               name: 'package-with-readme',
               metadata: {
@@ -351,11 +351,11 @@ describe("SettingsView", function () {
           }}));
     });
 
-      it("doesn't use cached package detail when package re-activated and opens the package view with atom://config/packages/<package-name>", async () => {
+      it("doesn't use cached package detail when package re-activated and opens the package view with syntaxvoid://config/packages/<package-name>", async () => {
         jasmine.useRealClock();
         await atom.packages.activate();
         await atom.packages.activatePackage(path.join(__dirname, 'fixtures', 'package-with-readme'));
-        let settingsView = await atom.workspace.open('atom://config/packages/package-with-readme');
+        let settingsView = await atom.workspace.open('syntaxvoid://config/packages/package-with-readme');
 
         await wait(10);
 
@@ -364,7 +364,7 @@ describe("SettingsView", function () {
 
         await atom.packages.deactivatePackage('package-with-readme');
         await atom.packages.activatePackage(path.join(__dirname, 'fixtures', 'package-with-readme'));
-        await atom.workspace.open('atom://config/packages/package-with-readme');
+        await atom.workspace.open('syntaxvoid://config/packages/package-with-readme');
 
         let detailAfterReactivate = settingsView.getOrCreatePanel('package-with-readme');
         expect(settingsView.getOrCreatePanel('package-with-readme')).toBe(detailAfterReactivate);
@@ -377,34 +377,34 @@ describe("SettingsView", function () {
         const InstallPanel = require('../lib/install-panel');
         spyOn(InstallPanel.prototype, 'beforeShow');
 
-        waitsForPromise(() => atom.workspace.open('atom://config/install/package:something').then(s => settingsView = s));
+        waitsForPromise(() => atom.workspace.open('syntaxvoid://config/install/package:something').then(s => settingsView = s));
 
         waitsFor(() => settingsView.activePanel != null
         , 'The activePanel should be set', 5000);
 
         runs(function () {
           expect(settingsView.activePanel)
-            .toEqual({name: 'Install', options: {uri: 'atom://config/install/package:something'}});
-          expect(InstallPanel.prototype.beforeShow).toHaveBeenCalledWith({uri: 'atom://config/install/package:something'});});
+            .toEqual({name: 'Install', options: {uri: 'syntaxvoid://config/install/package:something'}});
+          expect(InstallPanel.prototype.beforeShow).toHaveBeenCalledWith({uri: 'syntaxvoid://config/install/package:something'});});
     });
 
       it("passes the URI to a pane's beforeShow() method after initialization", function () {
         const InstallPanel = require('../lib/install-panel');
         spyOn(InstallPanel.prototype, 'beforeShow');
 
-        waitsForPromise(() => atom.workspace.open('atom://config').then(s => settingsView = s));
+        waitsForPromise(() => atom.workspace.open('syntaxvoid://config').then(s => settingsView = s));
 
         waitsFor(done => process.nextTick(done));
 
         runs(() => expect(settingsView.activePanel).toEqual({name: 'Core', options: {}}));
 
-        waitsForPromise(() => atom.workspace.open('atom://config/install/package:something').then(s => settingsView = s));
+        waitsForPromise(() => atom.workspace.open('syntaxvoid://config/install/package:something').then(s => settingsView = s));
 
         waits(1);
         runs(function () {
           expect(settingsView.activePanel)
-            .toEqual({name: 'Install', options: {uri: 'atom://config/install/package:something'}});
-          expect(InstallPanel.prototype.beforeShow).toHaveBeenCalledWith({uri: 'atom://config/install/package:something'});});
+            .toEqual({name: 'Install', options: {uri: 'syntaxvoid://config/install/package:something'}});
+          expect(InstallPanel.prototype.beforeShow).toHaveBeenCalledWith({uri: 'syntaxvoid://config/install/package:something'});});
     });
   });
 

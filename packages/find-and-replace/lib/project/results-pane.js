@@ -360,4 +360,4 @@ class ResultsPaneView {
   }
 }
 
-module.exports.URI = "atom://find-and-replace/project-results";
+module.exports.URI = "syntaxvoid://find-and-replace/project-results";

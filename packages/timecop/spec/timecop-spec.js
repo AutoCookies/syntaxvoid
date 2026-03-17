@@ -51,7 +51,7 @@ describe('Timecop', () => {
       spyOn(atom.packages, 'hasLoadedInitialPackages').andReturn(true)
       spyOn(atom.packages, 'hasActivatedInitialPackages').andReturn(true)
 
-      timecopView = await atom.workspace.open('atom://timecop')
+      timecopView = await atom.workspace.open('syntaxvoid://timecop')
     })
 
     afterEach(() => jasmine.unspy(atom.packages, 'getLoadedPackages'))

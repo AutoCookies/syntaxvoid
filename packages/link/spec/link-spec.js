@@ -54,7 +54,7 @@ describe('link package', () => {
 
       const editor = atom.workspace.getActiveTextEditor();
       editor.setText(
-        '// atom://core/open/file?filename=sample.js&line=1&column=2 '
+        '// syntaxvoid://core/open/file?filename=sample.js&line=1&column=2 '
       );
 
       spyOn(shell, 'openExternal');
@@ -66,7 +66,7 @@ describe('link package', () => {
 
       expect(shell.openExternal).toHaveBeenCalled();
       expect(shell.openExternal.argsForCall[0][0]).toBe(
-        'atom://core/open/file?filename=sample.js&line=1&column=2'
+        'syntaxvoid://core/open/file?filename=sample.js&line=1&column=2'
       );
 
       shell.openExternal.reset();
@@ -75,7 +75,7 @@ describe('link package', () => {
 
       expect(shell.openExternal).toHaveBeenCalled();
       expect(shell.openExternal.argsForCall[0][0]).toBe(
-        'atom://core/open/file?filename=sample.js&line=1&column=2'
+        'syntaxvoid://core/open/file?filename=sample.js&line=1&column=2'
       );
 
       shell.openExternal.reset();
@@ -84,7 +84,7 @@ describe('link package', () => {
 
       expect(shell.openExternal).toHaveBeenCalled();
       expect(shell.openExternal.argsForCall[0][0]).toBe(
-        'atom://core/open/file?filename=sample.js&line=1&column=2'
+        'syntaxvoid://core/open/file?filename=sample.js&line=1&column=2'
       );
     });
 

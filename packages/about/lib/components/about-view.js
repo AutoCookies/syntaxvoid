@@ -176,7 +176,7 @@ module.exports = class AboutView extends EtchComponent {
               { className: 'about-updates-item app-unsupported' },
               $.span(
                 { className: 'about-updates-label is-strong' },
-                'Updates have been moved to the package ', $.code({style: {'white-space': 'nowrap'}}, 'crab-updater'), '.',
+                'Updates have been moved to the package ', $.code({ style: { 'white-space': 'nowrap' } }, 'crab-updater'), '.',
                 $.br()
               ),
               $.a(

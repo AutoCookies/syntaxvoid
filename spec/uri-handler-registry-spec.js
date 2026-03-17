@@ -17,21 +17,21 @@ describe('URIHandlerRegistry', () => {
     registry.registerHostHandler('test-package', testPackageSpy);
     registry.registerHostHandler('other-package', otherPackageSpy);
 
-    await registry.handleURI('atom://yet-another-package/path');
+    await registry.handleURI('syntaxvoid://yet-another-package/path');
     expect(testPackageSpy).not.toHaveBeenCalled();
     expect(otherPackageSpy).not.toHaveBeenCalled();
 
-    await registry.handleURI('atom://test-package/path');
+    await registry.handleURI('syntaxvoid://test-package/path');
     expect(testPackageSpy).toHaveBeenCalledWith(
-      url.parse('atom://test-package/path', true),
-      'atom://test-package/path'
+      url.parse('syntaxvoid://test-package/path', true),
+      'syntaxvoid://test-package/path'
     );
     expect(otherPackageSpy).not.toHaveBeenCalled();
 
-    await registry.handleURI('atom://other-package/path');
+    await registry.handleURI('syntaxvoid://other-package/path');
     expect(otherPackageSpy).toHaveBeenCalledWith(
-      url.parse('atom://other-package/path', true),
-      'atom://other-package/path'
+      url.parse('syntaxvoid://other-package/path', true),
+      'syntaxvoid://other-package/path'
     );
   });
 
@@ -44,11 +44,11 @@ describe('URIHandlerRegistry', () => {
     registry.onHistoryChange(changeSpy);
 
     const uris = [
-      'atom://one/something?asdf=1',
-      'atom://fake/nothing',
-      'atom://two/other/stuff',
-      'atom://one/more/thing',
-      'atom://two/more/stuff'
+      'syntaxvoid://one/something?asdf=1',
+      'syntaxvoid://fake/nothing',
+      'syntaxvoid://two/other/stuff',
+      'syntaxvoid://one/more/thing',
+      'syntaxvoid://two/more/stuff'
     ];
 
     for (const u of uris) {
@@ -69,11 +69,11 @@ describe('URIHandlerRegistry', () => {
         .reverse()
     );
 
-    await registry.handleURI('atom://another/url');
+    await registry.handleURI('syntaxvoid://another/url');
     expect(changeSpy.calls.count()).toBe(6);
     const history = registry.getRecentlyHandledURIs();
     expect(history.length).toBe(5);
-    expect(history[0].uri).toBe('atom://another/url');
+    expect(history[0].uri).toBe('syntaxvoid://another/url');
     expect(history[4].uri).toBe(uris[1]);
   });
 
@@ -81,7 +81,7 @@ describe('URIHandlerRegistry', () => {
     const invalidUris = [
       'atom:package/path',
       'atom:8080://package/path',
-      'user:pass@atom://package/path',
+      'user:pass@syntaxvoid://package/path',
       'smth://package/path'
     ];
 

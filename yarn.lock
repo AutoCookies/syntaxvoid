@@ -2004,12 +2004,12 @@
   dependencies:
     undici-types "~5.26.4"
 
-"@types/node@^24.9.0":
-  version "24.12.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-24.12.0.tgz#6222e028210e5322e4f4f6767f8d88e5ea3b33d2"
-  integrity sha512-GYDxsZi3ChgmckRT9HPU0WEhKLP08ev/Yfcq2AstjrDASOYCSXeyjDsHg4v5t4jOj7cyDX3vmprafKlWIG9MXQ==
+"@types/node@^20.9.0":
+  version "20.19.37"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.19.37.tgz#b4fb4033408dd97becce63ec932c9ec57a9e2919"
+  integrity sha512-8kzdPJ3FsNsVIurqBs7oodNnCEVbni9yUEkaHbgptDACOPW04jimGagZ51E6+lXUwJjgnBw+hyko/lkFWCldqw==
   dependencies:
-    undici-types "~7.16.0"
+    undici-types "~6.21.0"
 
 "@types/parse-json@^4.0.0":
   version "4.0.2"
@@ -2130,16 +2130,6 @@
   resolved "https://registry.yarnpkg.com/@xmldom/xmldom/-/xmldom-0.8.11.tgz#b79de2d67389734c57c52595f7a7305e30c2d608"
   integrity sha512-cQzWCtO6C8TQiYl1ruKNn2U6Ao4o4WBBcbL61yJl84x+j5sOWWFU9X7DpND8XZG3daDppSsigMdfAIl2upQBRw==
 
-"@xterm/addon-fit@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@xterm/addon-fit/-/addon-fit-0.11.0.tgz#ba4778b69fcc9044a060c2176bbe077657d7b37e"
-  integrity sha512-jYcgT6xtVYhnhgxh3QgYDnnNMYTcf8ElbxxFzX0IZo+vabQqSPAjC3c1wJrKB5E19VwQei89QCiZZP86DCPF7g==
-
-"@xterm/xterm@^6.0.0":
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@xterm/xterm/-/xterm-6.0.0.tgz#93637b0f2ee3a70718b5746a27c9c506af16745b"
-  integrity sha512-TQwDdQGtwwDt+2cgKDLn0IRaSxYu1tSUjgKarSDkUM0ZNiSRXFpjxEsvc/Zgc5kq5omJ+V0a8/kIM2WD3sMOYg==
-
 abbrev@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -2150,7 +2140,7 @@ abbrev@^3.0.0:
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-3.0.1.tgz#8ac8b3b5024d31464fe2a5feeea9f4536bf44025"
   integrity sha512-AO2ac6pjRB3SJmGJo+v5/aK6Omggp6fsLrs6wN9bd35ulu4cCwaAU9+7ZhXjeqHVkaHThLuzH0nZr0YpCDhygg==
 
-"about@file:packages/about":
+"about@file:./packages/about":
   version "1.9.1"
   dependencies:
     etch "^0.14.1"
@@ -2284,11 +2274,6 @@ ansi-styles@^6.1.0:
   version "6.2.3"
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-6.2.3.tgz#c044d5dcc521a076413472597a1acb1f103c4041"
   integrity sha512-4Dj6M28JB+oAH8kFkTLUo+a2jwOFkuqb3yucU0CANcRRUbxS0cP0nZYCGjcc3BNXwRIsUVmDGgzawme7zvJHvg==
-
-any-promise@1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/any-promise/-/any-promise-1.3.0.tgz#abc6afeedcea52e809cdc0376aed3ce39635d17f"
-  integrity sha512-7UvmKalWRt1wgjL1RrGxoSJW/0QZFIegpeGvZG9kjp8vrRu55XTHbwnqq2GpXm9uLbcuhxm3IqX9OB4MZR1b2A==
 
 anymatch@~3.1.2:
   version "3.1.3"
@@ -2558,7 +2543,7 @@ async@^1.5.2:
   resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
   integrity sha512-nSVgobk4rv61R9PUSDtYt7mPVB2olxNR5RWJcAsH676/ef11bUZwvu7+RGYrYauVdDPcO519v68wRhXQtxsV9w==
 
-async@^3.2.0, async@^3.2.4, async@^3.2.6:
+async@^3.2.0, async@^3.2.3, async@^3.2.4, async@^3.2.6:
   version "3.2.6"
   resolved "https://registry.yarnpkg.com/async/-/async-3.2.6.tgz#1b0728e14929d51b85b449b7f06e27c1145e38ce"
   integrity sha512-htCUDlxyyCLMgaM3xXg0C0LW2xqfuQ6p05pCEIsXuyQ+a1koYKTuBMzRNwmybfLgvJDMd0r1LTn4+E0Ti6C2AA==
@@ -2572,12 +2557,6 @@ at-least-node@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/at-least-node/-/at-least-node-1.0.0.tgz#602cd4b46e844ad4effc92a8011a3c46e0238dc2"
   integrity sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==
-
-"crab-dark-syntax@file:packages/atom-dark-syntax":
-  version "0.29.1"
-
-"crab-dark-ui@file:packages/atom-dark-ui":
-  version "0.53.3"
 
 atom-grammar-test@^0.6.3:
   version "0.6.4"
@@ -3298,6 +3277,15 @@ ci-info@^3.2.0:
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-3.9.0.tgz#4279a62028a7b1f262f3473fc9605f5e218c59b4"
   integrity sha512-NIxF55hv4nSqQswkAeiOi1r83xy8JldOFDTWiug55KBu9Jnblncd2U6ViHmYgHf01TPZS77NJBhBMKdWj9HQMQ==
 
+clang-format@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/clang-format/-/clang-format-1.8.0.tgz#7779df1c5ce1bc8aac1b0b02b4e479191ef21d46"
+  integrity sha512-pK8gzfu55/lHzIpQ1givIbWfn3eXnU7SfxqIwVgnn5jEM6j4ZJYjpFqFs4iSBPNedzRMmfjYjuQhu657WAXHXw==
+  dependencies:
+    async "^3.2.3"
+    glob "^7.0.0"
+    resolve "^1.1.6"
+
 classnames@2.2.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
@@ -3666,6 +3654,18 @@ cosmiconfig@^7.0.0:
     parse-json "^5.0.0"
     path-type "^4.0.0"
     yaml "^1.10.0"
+
+"crab-dark-syntax2@file:packages/crab-dark-syntax2":
+  version "0.29.1"
+
+"crab-dark-syntax@file:packages/crab-dark-syntax":
+  version "0.29.1"
+
+"crab-dark-ui2@file:packages/crab-dark-ui2":
+  version "0.1.0"
+
+"crab-dark-ui@file:packages/crab-dark-ui":
+  version "0.53.3"
 
 crc-32@^1.2.0:
   version "1.2.2"
@@ -4269,13 +4269,13 @@ electron-to-chromium@^1.5.227:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.237.tgz#eacf61cef3f6345d0069ab427585c5a04d7084f0"
   integrity sha512-icUt1NvfhGLar5lSWH3tHNzablaA5js3HVHacQimfP8ViEBOQv+L7DKEuHdbTZ0SKCO1ogTJTIL1Gwk9S6Qvcg==
 
-electron@40.8.0:
-  version "40.8.0"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-40.8.0.tgz#d149210300bf7df95e5d3db4a40d388e12ef7549"
-  integrity sha512-WoPq0Nr9Yx3g7T6VnJXdwa/rr2+VRyH3a+K+ezfMKBlf6WjxE/LmhMQabKbb6yjm9RbZhJBRcYyoLph421O2mQ==
+electron@30.0.9:
+  version "30.0.9"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-30.0.9.tgz#b11400e4642a4b635e79244ba365f1d401ee60b5"
+  integrity sha512-ArxgdGHVu3o5uaP+Tqj8cJDvU03R6vrGrOqiMs7JXLnvQHMqXJIIxmFKQAIdJW8VoT3ac3hD21tA7cPO10RLow==
   dependencies:
     "@electron/get" "^2.0.0"
-    "@types/node" "^24.9.0"
+    "@types/node" "^20.9.0"
     extract-zip "^2.0.1"
 
 emissary@^1.0.0, emissary@^1.2.0, emissary@^1.3.2, emissary@^1.3.3:
@@ -5051,6 +5051,12 @@ form-data@~2.3.2:
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
 
+"formatter@file:packages/formatter":
+  version "0.1.0"
+  dependencies:
+    clang-format "^1.8.0"
+    prettier "^3.3.3"
+
 formidable@^3.5.4:
   version "3.5.4"
   resolved "https://registry.yarnpkg.com/formidable/-/formidable-3.5.4.tgz#ac9a593b951e829b3298f21aa9a2243932f32ed9"
@@ -5438,7 +5444,7 @@ glob@^10.2.2:
     package-json-from-dist "^1.0.0"
     path-scurry "^1.11.1"
 
-glob@^7.0.6, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6, glob@^7.2.0, glob@^7.2.3:
+glob@^7.0.0, glob@^7.0.6, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6, glob@^7.2.0, glob@^7.2.3:
   version "7.2.3"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.2.3.tgz#b8df0fb802bbfa8e89bd1d938b4e16578ed44f2b"
   integrity sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==
@@ -6004,7 +6010,7 @@ is-ci@^3.0.0:
   dependencies:
     ci-info "^3.2.0"
 
-is-core-module@^2.0.0, is-core-module@^2.16.0:
+is-core-module@^2.0.0, is-core-module@^2.16.0, is-core-module@^2.16.1:
   version "2.16.1"
   resolved "https://registry.yarnpkg.com/is-core-module/-/is-core-module-2.16.1.tgz#2a98801a849f43e2add644fbb6bc6229b19a4ef4"
   integrity sha512-UfoeMA6fIJ8wTYFEUjelnaGI67v6+N7qXJEvQuIGa99l4xsCruSYOVSQ0uPANn4dAzm8lkYPaKLrrijLq7x23w==
@@ -6629,6 +6635,9 @@ ky@0.30.0:
   resolved "https://registry.yarnpkg.com/ky/-/ky-0.30.0.tgz#a3d293e4f6c4604a9a4694eceb6ce30e73d27d64"
   integrity sha512-X/u76z4JtDVq10u1JA5UQfatPxgPaVDMYTrgHyiTpGN2z4TMEJkIHsoSBBSg9SWZEIXTKsi9kHgiQ9o3Y/4yog==
 
+"language-bat@file:packages/language-bat":
+  version "0.1.0"
+
 "language-c@file:packages/language-c":
   version "0.60.20"
 
@@ -6638,20 +6647,47 @@ ky@0.30.0:
 "language-coffee-script@file:packages/language-coffee-script":
   version "0.50.0"
 
+"language-cpp@file:packages/language-cpp":
+  version "0.1.0"
+
 "language-csharp@file:packages/language-csharp":
   version "1.1.0"
 
 "language-css@file:packages/language-css":
   version "0.45.4"
 
+"language-dart@file:packages/language-dart":
+  version "0.1.0"
+
+"language-diff@file:packages/language-diff":
+  version "0.1.0"
+
+"language-docker@file:packages/language-docker":
+  version "0.1.0"
+
+"language-dotenv@file:packages/language-dotenv":
+  version "0.1.0"
+
+"language-fsharp@file:packages/language-fsharp":
+  version "0.1.0"
+
 "language-gfm@file:packages/language-gfm":
   version "0.90.8"
 
 "language-git@file:packages/language-git":
-  version "0.19.1"
+  version "0.19.2"
 
 "language-go@file:packages/language-go":
   version "0.47.3"
+
+"language-groovy@file:packages/language-groovy":
+  version "0.1.0"
+
+"language-handlebars@file:packages/language-handlebars":
+  version "0.1.0"
+
+"language-hlsl@file:packages/language-hlsl":
+  version "0.1.0"
 
 "language-html@file:packages/language-html":
   version "0.53.1"
@@ -6660,6 +6696,9 @@ ky@0.30.0:
 
 "language-hyperlink@file:packages/language-hyperlink":
   version "0.17.1"
+
+"language-ini@file:packages/language-ini":
+  version "0.1.0"
 
 "language-java@file:packages/language-java":
   version "0.32.1"
@@ -6670,11 +6709,26 @@ ky@0.30.0:
 "language-json@file:packages/language-json":
   version "1.0.5"
 
+"language-julia@file:packages/language-julia":
+  version "0.1.0"
+
+"language-latex@file:packages/language-latex":
+  version "0.1.0"
+
 "language-less@file:packages/language-less":
   version "0.34.3"
 
+"language-log@file:packages/language-log":
+  version "0.1.0"
+
+"language-lua@file:packages/language-lua":
+  version "0.1.0"
+
 "language-make@file:packages/language-make":
   version "0.23.0"
+
+"language-markdown-math@file:packages/language-markdown-math":
+  version "0.1.0"
 
 "language-mustache@file:packages/language-mustache":
   version "0.14.5"
@@ -6688,11 +6742,26 @@ ky@0.30.0:
 "language-php@file:packages/language-php":
   version "0.48.1"
 
+"language-powershell@file:packages/language-powershell":
+  version "0.1.0"
+
 "language-property-list@file:packages/language-property-list":
   version "0.9.1"
 
+"language-pug@file:packages/language-pug":
+  version "0.1.0"
+
 "language-python@file:packages/language-python":
   version "0.53.6"
+
+"language-r@file:packages/language-r":
+  version "0.1.0"
+
+"language-razor@file:packages/language-razor":
+  version "0.1.0"
+
+"language-restructuredtext@file:packages/language-restructuredtext":
+  version "0.1.0"
 
 "language-ruby-on-rails@file:packages/language-ruby-on-rails":
   version "0.25.3"
@@ -6706,6 +6775,9 @@ ky@0.30.0:
 "language-sass@file:packages/language-sass":
   version "0.62.2"
 
+"language-shaderlab@file:packages/language-shaderlab":
+  version "0.1.0"
+
 "language-shellscript@file:packages/language-shellscript":
   version "0.28.2"
 
@@ -6714,6 +6786,9 @@ ky@0.30.0:
 
 "language-sql@file:packages/language-sql":
   version "0.25.10"
+
+"language-swift@file:packages/language-swift":
+  version "0.1.0"
 
 "language-text@file:packages/language-text":
   version "0.7.4"
@@ -6726,6 +6801,9 @@ ky@0.30.0:
 
 "language-typescript@file:packages/language-typescript":
   version "0.6.4"
+
+"language-vb@file:packages/language-vb":
+  version "0.1.0"
 
 "language-xml@file:packages/language-xml":
   version "0.35.3"
@@ -7269,6 +7347,9 @@ mimic-response@^3.1.0:
   resolved "https://registry.yarnpkg.com/mimic-response/-/mimic-response-3.1.0.tgz#2d1d59af9c1b129815accc2c46a022a5ce1fa3c9"
   integrity sha512-z0yWI+4FDrrweS8Zmt4Ej5HdJmky15+L2e6Wgn3+iK5fWzb6T3fhNFq2+MeTRb064c6Wr4N/wv0DzQTjNzHNGQ==
 
+"minimap@file:packages/minimap":
+  version "0.1.0"
+
 minimatch@*:
   version "10.0.3"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-10.0.3.tgz#cf7a0314a16c4d9ab73a7730a0e8e3c3502d47aa"
@@ -7706,7 +7787,7 @@ node-addon-api@^6.1.0:
   resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-6.1.0.tgz#ac8470034e58e67d0c6f1204a18ae6995d9c0d76"
   integrity sha512-+eawOlIgy680F0kBzPUNFhMZGtJ1YmqM6l4+Crf4IkImjYrO/mqPwRMh352g23uIaQKFItcQ64I7KMaJxHgAVA==
 
-node-addon-api@^7.1.0, node-addon-api@^7.1.1:
+node-addon-api@^7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/node-addon-api/-/node-addon-api-7.1.1.tgz#1aba6693b0f255258a049d621329329322aad558"
   integrity sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==
@@ -7763,13 +7844,6 @@ node-gyp@^11.2.0:
     tar "^7.4.3"
     tinyglobby "^0.2.12"
     which "^5.0.0"
-
-node-pty@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/node-pty/-/node-pty-1.1.0.tgz#161936d45a47751c2e3b694c365e73017417a887"
-  integrity sha512-20JqtutY6JPXTUnL0ij1uad7Qe1baT46lyolh2sSENDd4sTzKZ4nmAFkeAARDKwmlLjPx6XKRlwRUxwjOy+lUg==
-  dependencies:
-    node-addon-api "^7.1.0"
 
 node-releases@^2.0.21:
   version "2.0.23"
@@ -8337,6 +8411,11 @@ prepend-http@^2.0.0:
   resolved "https://registry.yarnpkg.com/prepend-http/-/prepend-http-2.0.0.tgz#e92434bfa5ea8c19f41cdfd401d741a3c819d897"
   integrity sha512-ravE6m9Atw9Z/jjttRUZ+clIXogdghyZAuWJ3qEzjT+jI/dL1ifAqhZeC5VHzQp1MSt1+jxKkFNemj/iO7tVUA==
 
+prettier@^3.3.3:
+  version "3.8.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.8.1.tgz#edf48977cf991558f4fcbd8a3ba6015ba2a3a173"
+  integrity sha512-UOnG6LftzbdaHZcKoPFtOcCKztrQ57WkHDeRD9t/PTQtmT0NHSeWWepj6pS0z/N7+08BHFDQVUrfmfMRcZwbMg==
+
 proc-log@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/proc-log/-/proc-log-2.0.1.tgz#8f3f69a1f608de27878f91f5c688b225391cb685"
@@ -8813,6 +8892,15 @@ resolve@1.18.1:
   dependencies:
     is-core-module "^2.0.0"
     path-parse "^1.0.6"
+
+resolve@^1.1.6:
+  version "1.22.11"
+  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.22.11.tgz#aad857ce1ffb8bfa9b0b1ac29f1156383f68c262"
+  integrity sha512-RfqAvLnMl313r7c9oclB1HhUEAezcpLjz95wFH4LVuhk9JF/r22qmVP9AMmOU4vMX7Q8pN8jwNg/CSpdFnMjTQ==
+  dependencies:
+    is-core-module "^2.16.1"
+    path-parse "^1.0.7"
+    supports-preserve-symlinks-flag "^1.0.0"
 
 resolve@^1.10.1, resolve@^1.12.0, resolve@^1.14.2, resolve@^1.19.0, resolve@^1.20.0, resolve@^1.3.2:
   version "1.22.10"
@@ -9401,16 +9489,12 @@ spdx-license-ids@^3.0.0:
     debug "^4.1.1"
     multi-integer-range "^2.0.0"
     natural "^0.4.0"
-    spellchecker "https://github.com/pulsar-edit/node-spellchecker.git#da32e897e74691b7f43b70ddc0d171bad2d38208"
+    spellchecker "file:../../.cache/yarn/v6/npm-spell-check-0.77.1-5e38174e-fa00-4829-8dd6-1b497a9bc6db-1773752137558/node_modules/spellchecker"
     spelling-manager "^1.1.0"
     underscore-plus "^1"
 
-"spellchecker@https://github.com/pulsar-edit/node-spellchecker.git#da32e897e74691b7f43b70ddc0d171bad2d38208":
-  version "3.7.1"
-  resolved "https://github.com/pulsar-edit/node-spellchecker.git#da32e897e74691b7f43b70ddc0d171bad2d38208"
-  dependencies:
-    any-promise "1.3.0"
-    nan "2.17.0"
+"spellchecker@file:packages/spellchecker":
+  version "1.0.0"
 
 spelling-manager@^1.1.0:
   version "1.3.0"
@@ -9776,22 +9860,6 @@ sylvester@^0.0.12:
     fs-plus "^3.1.1"
     fuzzaldrin "^2.1.0"
     murmurhash-js "^1.0.0"
-
-"syntaxvoid-patch-governor@file:./packages/syntaxvoid-patch-governor":
-  version "0.1.0"
-
-"syntaxvoid-project-map@file:./packages/syntaxvoid-project-map":
-  version "1.0.0"
-
-"syntaxvoid-risk-overlay@file:./packages/syntaxvoid-risk-overlay":
-  version "0.1.0"
-
-"syntaxvoid-terminal@file:./packages/syntaxvoid-terminal":
-  version "0.1.0"
-  dependencies:
-    "@xterm/addon-fit" "^0.11.0"
-    "@xterm/xterm" "^6.0.0"
-    node-pty "^1.1.0"
 
 tabbable@^5.1.5:
   version "5.3.3"
@@ -10203,15 +10271,15 @@ undici-types@~5.26.4:
   resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-5.26.5.tgz#bcd539893d00b56e964fd2657a4866b221a65617"
   integrity sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==
 
+undici-types@~6.21.0:
+  version "6.21.0"
+  resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-6.21.0.tgz#691d00af3909be93a7faa13be61b3a5b50ef12cb"
+  integrity sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==
+
 undici-types@~7.14.0:
   version "7.14.0"
   resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-7.14.0.tgz#4c037b32ca4d7d62fae042174604341588bc0840"
   integrity sha512-QQiYxHuyZ9gQUIrmPo3IA+hUl4KYk8uSA7cHrcKd/l3p1OTpZcM0Tbp9x7FAtXdAYhlasd60ncPpgu6ihG6TOA==
-
-undici-types@~7.16.0:
-  version "7.16.0"
-  resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-7.16.0.tgz#ffccdff36aea4884cbfce9a750a0580224f58a46"
-  integrity sha512-Zz+aZWSj8LE6zoxD+xrjh4VfkIG8Ya6LvYkZqtUQGJPZjYl53ypCaUwWqo7eI0x66KBGeRo+mlBEkMSeSZ38Nw==
 
 undici@^7.12.0:
   version "7.16.0"

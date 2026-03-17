@@ -1540,19 +1540,19 @@ module.exports = class AtomApplication extends EventEmitter {
     }
   }
 
-  // Open an atom:// url.
+  // Open an syntaxvoid:// url.
   //
   // The host of the URL being opened is assumed to be the package name
   // responsible for opening the URL.  A new window will be created with
   // that package's `urlMain` as the bootstrap script.
   //
   // options -
-  //   :urlToOpen - The atom:// url to open.
+  //   :urlToOpen - The syntaxvoid:// url to open.
   //   :devMode - Boolean to control the opened window's dev mode.
   //   :safeMode - Boolean to control the opened window's safe mode.
   openUrl({ urlToOpen, devMode, safeMode, env }) {
     const parsedUrl = url.parse(urlToOpen, true);
-    if (parsedUrl.protocol !== 'atom:') return;
+    if (parsedUrl.protocol !== 'syntaxvoid:') return;
 
     const pack = this.findPackageWithName(parsedUrl.host, devMode);
     if (pack && pack.urlMain) {

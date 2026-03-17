@@ -1,7 +1,7 @@
 const {CompositeDisposable} = require('atom')
 
 let TimecopView = null
-const ViewURI = 'atom://timecop'
+const ViewURI = 'syntaxvoid://timecop'
 
 module.exports = {
   activate () {

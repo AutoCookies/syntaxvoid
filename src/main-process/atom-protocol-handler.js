@@ -5,7 +5,7 @@ const path = require('path');
 // Handles requests with 'atom' protocol.
 //
 // It's created by {AtomApplication} upon instantiation and is used to create a
-// custom resource loader for 'atom://' URLs.
+// custom resource loader for 'syntaxvoid://' URLs.
 //
 // The following directories are searched in order:
 //   * ~/.pulsar/assets

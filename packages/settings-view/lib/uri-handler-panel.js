@@ -59,7 +59,7 @@ export default class UriHandlerPanel {
           <div className='settings-panel'>
             <div className='section-container'>
               <div className='block section-heading icon icon-device-desktop'>URI Handling</div>
-              <div className='text icon icon-question'>These settings determine how Pulsar handles atom:// URIs.</div>
+              <div className='text icon icon-question'>These settings determine how Pulsar handles syntaxvoid:// URIs.</div>
               <div className='section-body'>
                 <div className='control-group'>
                   <div className='controls'>
@@ -75,7 +75,7 @@ export default class UriHandlerPanel {
                       style={{ fontSize: '1.25em', display: 'block' }}
                       onClick={this.handleBecomeProtocolClient}
                     >
-                      Register as default atom:// protocol handler
+                      Register as default syntaxvoid:// protocol handler
                     </button>
                   </div>
                 </div>
@@ -143,7 +143,7 @@ export default class UriHandlerPanel {
     if (item.host === 'core') {
       return <em>core</em>
     } else {
-      return <a href={`atom://config/packages/${item.host}`} onClick={this.handlePackageLinkClicked}>{item.host}</a>
+      return <a href={`syntaxvoid://config/packages/${item.host}`} onClick={this.handlePackageLinkClicked}>{item.host}</a>
     }
   }
 
@@ -154,11 +154,11 @@ export default class UriHandlerPanel {
 
   renderRegistrationDescription() {
     if (this.isDefaultProtocolClient) {
-      return 'Pulsar is already the default handler for atom:// URIs.'
+      return 'Pulsar is already the default handler for syntaxvoid:// URIs.'
     } else if (isSupported()) {
-      return 'Register Pulsar as the default handler for atom:// URIs.'
+      return 'Register Pulsar as the default handler for syntaxvoid:// URIs.'
     } else {
-      return 'Registration as the default handler for atom:// URIs is only supported on Windows and macOS.'
+      return 'Registration as the default handler for syntaxvoid:// URIs is only supported on Windows and macOS.'
     }
   }
 

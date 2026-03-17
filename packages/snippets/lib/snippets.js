@@ -142,7 +142,7 @@ module.exports = {
 
     this.subscriptions = new CompositeDisposable
     this.subscriptions.add(atom.workspace.addOpener(uri => {
-      if (uri === 'atom://.pulsar/snippets') {
+      if (uri === 'syntaxvoid://.pulsar/snippets') {
         return atom.workspace.openTextFile(this.getUserSnippetsPath())
       }
     }))

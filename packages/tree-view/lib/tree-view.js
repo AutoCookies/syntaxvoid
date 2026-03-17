@@ -21,7 +21,7 @@ const Directory = require('./directory');
 const DirectoryView = require('./directory-view');
 const RootDragAndDrop = require('./root-drag-and-drop');
 
-const TREE_VIEW_URI = 'atom://tree-view';
+const TREE_VIEW_URI = 'syntaxvoid://tree-view';
 
 function toggleConfig(keyPath) {
   return atom.config.set(keyPath, !atom.config.get(keyPath));

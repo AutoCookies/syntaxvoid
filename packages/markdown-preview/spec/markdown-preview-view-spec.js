@@ -385,7 +385,7 @@ end\
       const atomTextEditorStyles = [
         'atom-text-editor .line { color: brown; }\natom-text-editor .number { color: cyan; }',
         'atom-text-editor :host .something { color: black; }',
-        'atom-text-editor .hr { background: url(atom://markdown-preview/assets/hr.png); }'
+        'atom-text-editor .hr { background: url(syntaxvoid://markdown-preview/assets/hr.png); }'
       ]
 
       await preview.renderMarkdown();

@@ -1,0 +1,2 @@
+Starting crash reporter; crash reports will be saved to /home/autocookie/.syntaxvoid/crashdumps
+[71636:0317/200139.372166:WARNING:bluez_dbus_manager.cc(248)] Floss manager not present, cannot set Floss enable/disable.

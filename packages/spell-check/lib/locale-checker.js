@@ -215,7 +215,7 @@ class LocaleChecker {
                         className: 'btn',
                         onDidClick() {
                             return atom.workspace.open(
-                                'atom://config/packages/spell-check'
+                                'syntaxvoid://config/packages/spell-check'
                             );
                         },
                         text: 'Settings',

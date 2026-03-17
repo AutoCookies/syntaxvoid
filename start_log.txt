@@ -1,0 +1,60 @@
+Starting crash reporter; crash reports will be saved to /home/autocookie/.syntaxvoid/crashdumps
+[69924:0317/195739.163769:WARNING:bluez_dbus_manager.cc(248)] Floss manager not present, cannot set Floss enable/disable.
+[69978:0317/195739.430826:WARNING:runtime_features.cc(730)] AttributionReportingCrossAppWeb cannot be enabled in this configuration. Use --enable-features=ConversionMeasurement,AttributionReportingCrossAppWeb in addition.
+[69960:0317/195740.651668:WARNING:sandbox_linux.cc(420)] InitializeSandbox() called with multiple threads in process gpu-process.
+[69924:0317/195740.666657:INFO:CONSOLE(2)] "[SyntaxVoid] Entry script starting...", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (2)
+[69924:0317/195740.684326:INFO:CONSOLE(25)] "[SyntaxVoid] Startup sequence initiated (ReadyState: complete )", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (25)
+[69924:0317/195740.684369:INFO:CONSOLE(30)] "[SyntaxVoid] Requiring second-mate...", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (30)
+[69924:0317/195740.725178:INFO:CONSOLE(2)] "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security
+  Policy set or a policy with "unsafe-eval" enabled. This exposes users of
+  this app to unnecessary security risks.
+
+For more information and help, consult
+https://electronjs.org/docs/tutorial/security.
+This warning will not show up
+once the app is packaged.", source: node:electron/js2c/renderer_init (2)
+[69924:0317/195740.727330:INFO:CONSOLE(32)] "[SyntaxVoid] second-mate is ready.", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (32)
+[69924:0317/195740.727372:INFO:CONSOLE(40)] "[SyntaxVoid] ATOM_HOME: /home/autocookie/.syntaxvoid", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (40)
+[69924:0317/195740.732052:INFO:CONSOLE(2)] "The vm module of Node.js is deprecated in the renderer process and will be removed.", source: node:electron/js2c/renderer_init (2)
+[69924:0317/195740.733836:INFO:CONSOLE(54)] "[SyntaxVoid] Executing setupWindow...", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (54)
+[69924:0317/195740.733878:INFO:CONSOLE(94)] "[SyntaxVoid] setupWindow: Starting...", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (94)
+[69924:0317/195740.740104:INFO:CONSOLE(96)] "[SyntaxVoid] setupWindow: CompileCache required", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (96)
+[69924:0317/195740.740155:INFO:CONSOLE(98)] "[SyntaxVoid] setupWindow: AtomHome set", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (98)
+[69924:0317/195740.740357:INFO:CONSOLE(100)] "[SyntaxVoid] setupWindow: CompileCache installed", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (100)
+[69924:0317/195740.752197:INFO:CONSOLE(103)] "[SyntaxVoid] setupWindow: ModuleCache required", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (103)
+[69924:0317/195740.752896:INFO:CONSOLE(105)] "[SyntaxVoid] setupWindow: ModuleCache registered", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (105)
+[69924:0317/195740.752932:INFO:CONSOLE(107)] "[SyntaxVoid] setupWindow: Requiring document-register-element...", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (107)
+[69924:0317/195740.754857:INFO:CONSOLE(109)] "[SyntaxVoid] setupWindow: document-register-element ready", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (109)
+[69924:0317/195740.754926:INFO:CONSOLE(121)] "[SyntaxVoid] setupWindow: Grim/document.registerElement patched", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (121)
+[69924:0317/195740.754953:INFO:CONSOLE(124)] "[SyntaxVoid] setupWindow: Settings retrieved", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (124)
+[69924:0317/195740.755042:INFO:CONSOLE(127)] "[SyntaxVoid] setupWindow: Season required", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (127)
+[69924:0317/195740.755072:INFO:CONSOLE(129)] "[SyntaxVoid] setupWindow: CSON cache dir set", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (129)
+[69924:0317/195740.755233:INFO:CONSOLE(135)] "[SyntaxVoid] setupWindow: initScriptPath calculated: ../src/initialize-application-window.js", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (135)
+[69924:0317/195740.755264:INFO:CONSOLE(137)] "[SyntaxVoid] setupWindow: Requiring initialize script...", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (137)
+[69924:0317/195740.922267:INFO:CONSOLE(139)] "[SyntaxVoid] setupWindow: Initialize script required", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (139)
+[69924:0317/195740.922325:INFO:CONSOLE(143)] "[SyntaxVoid] setupWindow: Calling initialize()...", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (143)
+[69924:0317/195740.989982:INFO:CONSOLE(341)] "The keyword 'searchfield-cancel-button' used on the 'appearance' property was deprecated and has now been removed. It will no longer have any effect.", source: /home/autocookie/pomaieco/syntaxvoid/src/atom-environment.js (341)
+bash: cannot set terminal process group (-1): Inappropriate ioctl for device
+bash: no job control in this shell
+bash: /home/autocookie/.openclaw/completions/openclaw.bash: No such file or directory
+[69924:0317/195741.254478:INFO:CONSOLE(29)] "Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: file:///home/autocookie/pomaieco/syntaxvoid/static/icons/atomicons.woff", source: /home/autocookie/pomaieco/syntaxvoid/src/workspace-element.js (29)
+[69924:0317/195741.403504:INFO:CONSOLE(1)] "[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`", source: /home/autocookie/pomaieco/syntaxvoid/node_modules/baseline-browser-mapping/dist/index.cjs (1)
+[69960:0317/195742.464914:ERROR:gl_surface_presentation_helper.cc(260)] GetVSyncParametersIfAvailable() failed for 1 times!
+[69960:0317/195742.472722:ERROR:gl_surface_presentation_helper.cc(260)] GetVSyncParametersIfAvailable() failed for 2 times!
+[69924:0317/195742.480741:INFO:CONSOLE(145)] "[SyntaxVoid] setupWindow: initialize() promise resolved", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (145)
+[69924:0317/195742.481318:INFO:CONSOLE(56)] "[SyntaxVoid] setupWindow completed. Sending window:loaded.", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.js (56)
+[69924:0317/195742.500204:INFO:CONSOLE(0)] "Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: file:///home/autocookie/pomaieco/syntaxvoid/static/icons/octicons.woff", source: file:///home/autocookie/pomaieco/syntaxvoid/static/index.html (0)
+[70257:0317/195742.565822:WARNING:runtime_features.cc(730)] AttributionReportingCrossAppWeb cannot be enabled in this configuration. Use --enable-features=ConversionMeasurement,AttributionReportingCrossAppWeb in addition.
+[69924:0317/195742.592830:INFO:CONSOLE(575)] "Uncaught (in promise) Error: Fetching outdated packages and themes failed.", source: /home/autocookie/pomaieco/syntaxvoid/node_modules/settings-view/lib/package-manager.js (575)
+[69924:0317/195742.672534:INFO:CONSOLE(7)] "Uncaught ReferenceError: require is not defined", source: file:///home/autocookie/pomaieco/syntaxvoid/node_modules/github/lib/renderer.html?js=%2Fhome%2Fautocookie%2Fpomaieco%2Fsyntaxvoid%2Fnode_modules%2Fgithub%2Flib%2Fworker.js&managerWebContentsId=1&operationCountLimit=10&channelName=github%3Arenderer-ipc (7)
+[69924:0317/195742.672593:INFO:CONSOLE(15)] "Uncaught ReferenceError: process is not defined", source: file:///home/autocookie/pomaieco/syntaxvoid/node_modules/github/lib/renderer.html?js=%2Fhome%2Fautocookie%2Fpomaieco%2Fsyntaxvoid%2Fnode_modules%2Fgithub%2Flib%2Fworker.js&managerWebContentsId=1&operationCountLimit=10&channelName=github%3Arenderer-ipc (15)
+[69924:0317/195742.680691:INFO:CONSOLE(2)] "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security
+  Policy set or a policy with "unsafe-eval" enabled. This exposes users of
+  this app to unnecessary security risks.
+
+For more information and help, consult
+https://electronjs.org/docs/tutorial/security.
+This warning will not show up
+once the app is packaged.", source: node:electron/js2c/renderer_init (2)
+[69924:0317/195743.513594:INFO:CONSOLE(89)] "GitHub token doesn't have a required scope! Missing: read:org", source: /home/autocookie/pomaieco/syntaxvoid/node_modules/github/lib/models/github-login-model.js (89)
+[69960:0317/195745.660057:ERROR:gl_surface_presentation_helper.cc(260)] GetVSyncParametersIfAvailable() failed for 3 times!

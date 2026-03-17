@@ -137,13 +137,6 @@ module.exports = function start(resourcePath, devResourcePath, startTime) {
       'atom-application'
     ));
 
-    // SyntaxVoid Terminal Integration
-    try {
-      const terminalMain = require(path.join(args.resourcePath, 'packages', 'syntaxvoid-terminal', 'lib', 'main-process'));
-      terminalMain.initialize();
-    } catch (error) {
-      console.error('Failed to initialize SyntaxVoid Terminal:', error);
-    }
 
     AtomApplication.open(args);
   });

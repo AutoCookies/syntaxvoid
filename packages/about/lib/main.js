@@ -4,7 +4,7 @@ const About = require('./about');
 let updateManager;
 
 // The local storage key for the available update version.
-const AboutURI = 'atom://about';
+const AboutURI = 'syntaxvoid://about';
 
 module.exports = {
   activate() {

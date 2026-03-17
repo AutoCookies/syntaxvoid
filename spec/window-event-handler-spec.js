@@ -104,7 +104,7 @@ describe('WindowEventHandler', () => {
       expect(shell.openExternal).not.toHaveBeenCalled();
     });
 
-    it('opens the "atom://" links with URL handler', () => {
+    it('opens the "syntaxvoid://" links with URL handler', () => {
       const uriHandler = windowEventHandler.atomEnvironment.uriHandlerRegistry;
       expect(uriHandler).toBeDefined();
       spyOn(uriHandler, 'handleURI');
@@ -112,7 +112,7 @@ describe('WindowEventHandler', () => {
       const link = document.createElement('a');
       const linkChild = document.createElement('span');
       link.appendChild(linkChild);
-      link.href = 'atom://github.com';
+      link.href = 'syntaxvoid://github.com';
       jasmine.attachToDOM(link);
       const fakeEvent = {
         target: linkChild,
@@ -122,7 +122,7 @@ describe('WindowEventHandler', () => {
 
       windowEventHandler.handleLinkClick(fakeEvent);
       expect(uriHandler.handleURI).toHaveBeenCalled();
-      expect(uriHandler.handleURI.calls.argsFor(0)[0]).toBe('atom://github.com');
+      expect(uriHandler.handleURI.calls.argsFor(0)[0]).toBe('syntaxvoid://github.com');
     });
   });
 

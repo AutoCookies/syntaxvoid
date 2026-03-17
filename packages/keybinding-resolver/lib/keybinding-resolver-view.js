@@ -54,7 +54,7 @@ export default class KeyBindingResolverView {
   }
 
   getURI () {
-    return 'atom://keybinding-resolver'
+    return 'syntaxvoid://keybinding-resolver'
   }
 
   serialize () {
