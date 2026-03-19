@@ -49,6 +49,7 @@ const { getReleaseChannel } = require('./get-app-details.js');
 const UI = require('./ui.js');
 const I18n = require("./i18n.js");
 const packagejson = require("../package.json");
+const SyntaxErrorHighlighter = require('./syntax-error-highlighter');
 
 const { closeAllWatchers } = require('@pulsar-edit/pathwatcher');
 const stat = util.promisify(fs.stat);
@@ -209,6 +210,7 @@ class AtomEnvironment {
       styleManager: this.styles,
       enablePersistence: this.enablePersistence
     });
+    this.syntaxErrorHighlighter = new SyntaxErrorHighlighter(this.workspace);
 
     this.themes.workspace = this.workspace;
 
